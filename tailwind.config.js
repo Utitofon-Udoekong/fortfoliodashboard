@@ -17,7 +17,10 @@ module.exports = {
           light: {
             blue: "#00ADEE"
           },
-          clear_white: "#ffffff23"
+          clear_white: "#ffffff23",
+          green : "#4BDE97",
+          ash: "#B9B9B9",
+          red: "#DF1414"
         }
       }
     },

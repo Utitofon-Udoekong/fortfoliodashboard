@@ -1,4 +1,6 @@
 <script lang="ts">
+const route = useRoute()
+console.log(route.path,route.name)
 </script>
 <template>
     <div class="bg-brand-blue h-full w-1/6 p-4">
@@ -17,23 +19,23 @@
             <ul>
                 <li class="flex items-center text-gray-300 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
                     <span class="pr-3"><i-mdi-home-variant/></span>
-                    Dashboard
+                    <NuxtLink to="/dashboard">Dashboard</NuxtLink>
                 </li>
                 <li class="flex items-center text-gray-300 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
                     <span class="pr-3"><i-bx-bx-chart/></span>
-                    Investments
+                    <NuxtLink to="/dashboard/investment">Investments</NuxtLink>
                 </li>
                 <li class="flex items-center text-gray-300 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
                     <span class="pr-3"><i-ph-users-three/></span>
-                    Users
+                    <NuxtLink to="/dashboard/users">Users</NuxtLink>
                 </li>
                 <li class="flex items-center text-gray-300 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
                     <span class="pr-3"><i-ph-shield-check-light/></span>
-                    Manage KYC
+                    <NuxtLink to="/dashboard/kyc">Manage KYC</NuxtLink>
                 </li>
                 <li class="flex items-center text-gray-300 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
                     <span class="pr-3"><i-ph-file-arrow-up/></span>
-                    Transactions
+                    <NuxtLink to="/dashboard/transaction"> Transactions</NuxtLink>
                 </li>
             </ul>
         </div>

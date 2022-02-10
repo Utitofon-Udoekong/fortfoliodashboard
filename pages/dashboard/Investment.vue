@@ -1,7 +1,7 @@
 <template>
+ 
   <NuxtLayout name="dashboard">
-    <Activitycards />
-    <Table />
+    <p>Hi</p>
   </NuxtLayout>
 </template>
 
