@@ -1,9 +1,18 @@
+<script setup>
+let clamp = ref(false);
+const changeClamp = () => clamp.value = !clamp.value;
+provide("clamp", {
+    clamp,
+    changeClamp
+})
+</script>
 <template>
 <div class="flex h-screen relative">
         <Sidebar/>
-        <div class="w-5/6 h-full">
+        <div class="h-full" :class="clamp ? 'w-11/12' : 'w-5/6'">
             <Header />
-            <main class="h-5/6 px-5">
+            <main class="h-5/6 px-5 overflow-y-auto">
+                <Title/>
                 <slot/>
             </main>
         </div>

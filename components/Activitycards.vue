@@ -21,9 +21,6 @@ const details = [
 ];
 </script>
 <template>
-<div class="title">
-    <p class="text-2xl font-bold py-5">Dashboard</p>
-</div>
   <div class="flex gap-3 mb-12">
     <div
       class="card rounded-[10px] bg-white py-8 px-[50px] flex justify-around items-center w-full"
