@@ -60,7 +60,7 @@ const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
           <div class="px-4 py-5 flex-auto">
             <div class="tab-content tab-space">
               <div
-                v-bind:class="{ hidden: openTab !== 1, block: openTab === 1 }"
+                :class="{ hidden: openTab !== 1, block: openTab === 1 }"
               >
                 <div class="fortdollar mb-5">
                     <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
@@ -94,7 +94,7 @@ const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
                 </div>
               </div>
               <div
-                v-bind:class="{ hidden: openTab !== 2, block: openTab === 2 }"
+                :class="{ hidden: openTab !== 2, block: openTab === 2 }"
               >
                 <p class="text-sm text-gray-400 pb-3">
                   Currently Active Investment
@@ -111,7 +111,7 @@ const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
                 <p class="text-sm text-gray-400">AMOUNT</p>
               </div>
               <div
-                v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }"
+                :class="{ hidden: openTab !== 3, block: openTab === 3 }"
               >
                 <p class="text-sm text-gray-400 pb-3">
                   Currently Active Investment
@@ -131,6 +131,9 @@ const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
           </div>
         </div>
       </div>
+    </div>
+    <div>
+      <LineChart/>
     </div>
   </div>
 </template>

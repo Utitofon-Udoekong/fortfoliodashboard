@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 const props = defineProps({
-  checked: String
+  checked: String,
 })
 </script>
 <template>
-    <div class="flex items-center pl-6">
+    <div class="flex items-center pl-6" >
       <input
         type="checkbox"
         class="opacity-0 absolute h-5 w-5"

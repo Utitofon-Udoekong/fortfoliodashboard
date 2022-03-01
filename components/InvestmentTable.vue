@@ -4,7 +4,7 @@ const activities = [
   {
     userID: Math.floor(Math.random() * 121333 + 1234567),
     amount_invested: "50,000",
-    description: "FortShield Investment",
+    description: "Fortdollar 30% Annually for 2 months",
     payment_date: new Date().toISOString().substr(0, 10),
     due_date: new Date().toISOString().substr(0, 10),
     time: new Date().toLocaleTimeString(),
@@ -64,20 +64,22 @@ let classObject = computed(() => {
 
 </script>
 <template>
-  <div class="h-auto">
+  <div class="h-auto mt-10">
     <div class="table-form">
       <div class="flex flex-col">
         <div class="overflow-x-scroll lg:overflow-x-hidden">
           <div class="py-2 align-middle inline-block min-w-full">
             <div class="overflow-hidden border-b border-gray-200 sm:rounded-lg">
               <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-transparent">
+                <caption class="text-lg font-semibold">Recent Investment</caption>
+                <thead class="bg-white">
                   <tr>
+                    
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      <CheckboxComponent checked="checked" />
+                      Plan
                     </th>
                     <th
                       scope="col"
@@ -89,26 +91,15 @@ let classObject = computed(() => {
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      Payment for
+                      Amount 
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      Amount Invested
+                      Processed
                     </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
-                    >
-                      Payment Date
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
-                    >
-                      Due date
-                    </th>
+                    
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
@@ -124,19 +115,16 @@ let classObject = computed(() => {
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="(activity, index) in activities" :key="index" @contextmenu.prevent="selectRow(activity)" class="hover:bg-gray-300 cursor-pointer">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <CheckboxComponent checked="unchecked"  />
-                    </td>
+                  <tr v-for="(activity, index) in activities" :key="index" @click="selectRow(activity)" class="hover:bg-gray-300 cursor-pointer">
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
                         <div class="">
-                          <p>#{{ activity.userID }}</p>
+                          <div class="text-sm">{{ activity.description }}</div>
                         </div>
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">{{ activity.description }}</div>
+                      <div>#{{ activity.userID }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="text-sm">{{ activity.amount_invested }}</div>
@@ -144,9 +132,7 @@ let classObject = computed(() => {
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                       {{ activity.payment_date }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ activity.due_date }}
-                    </td>
+                    
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span
                         :class="
@@ -159,14 +145,15 @@ let classObject = computed(() => {
                       >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap relative">
-                      <i-mdi-dots-horizontal @click="open(index,$event)" class="cursor-pointer" role="button"
-                        aria-label="option" />
-                      <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
+                        <i-ic-baseline-arrow-forward-ios class="text-gray-400 cursor-pointer border border-gray-400 p-1 rounded-full w-auto" role="button"
+                        aria-label="option"/>
+                      <!-- <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
                         <ul class="py-1" >
                             <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'success',open(index,$event)">Approve payment</li>
                             <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'pending',open(index,$event)">Cancel payment</li>
                         </ul>
-                      </div>
+                        @click="open(index,$event)" 
+                      </div> -->
                     </td>
                   </tr>
                 </tbody>

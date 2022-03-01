@@ -22,31 +22,47 @@ const options = ref<ChartOptions<"line">>({
       text: "Total Investment",
     },
   },
+  backgroundColor: "#4F7995",
+  maintainAspectRatio: false,
+  scales: {
+    x: {
+      grid: {
+        display: false
+      }
+    },
+    y: {
+      grid: {
+        display: false
+      }
+    }
+  }
 });
 
 const testData = computed<ChartData<"line">>(() =>
-  // height: "366px",
   ({
     labels: [ "January", "February", "March", "April", "May", "June", "July", "Aug", "Sep", "Nov", "Dec", ],
     datasets: [
       {
         data: data.value,
-        fill: false,
+        fill: 'start',
         pointBackgroundColor: "#4A5568",
         borderWidth: 3,
         pointBorderWidth: 4,
         pointHoverRadius: 6,
         pointHoverBorderWidth: 8,
+        borderColor: '#03426d',
         pointHoverBorderColor: "rgb(74,85,104,0.2)",
         tension: 0.5,
+        label: "Dataset"
       },
     ],
+    
   })
 );
 </script>
 <template>
   <div>
-    <LineChart ref="lineRef" :chartData="testData" :options="options" />
+    <LineChart ref="lineRef" :chartData="testData" :options="options" :height="testData.labels.length * 20 + 70" />
   </div>
 </template>
 <style></style>

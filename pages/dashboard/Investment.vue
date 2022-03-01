@@ -1,12 +1,15 @@
 <template>
  
   <NuxtLayout name="dashboard">
-    <div class="flex gap-4">
+    <div class="pb-4">
+      <div class="flex gap-4">
       <InvestmentOverview/>
       <TopInvestments/>
     </div>
     <div>
-      <LineChart/>
+      
+      <InvestmentTable/>
+    </div>
     </div>
   </NuxtLayout>
 </template>

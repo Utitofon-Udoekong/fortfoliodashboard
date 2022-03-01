@@ -3,30 +3,31 @@ import CheckboxComponent from "./CheckboxComponent.vue";
 const activities = [
   {
     userID: Math.floor(Math.random() * 121333 + 1234567),
-    amount_invested: "50,000",
-    description: "FortShield Investment",
-    payment_date: new Date().toISOString().substr(0, 10),
-    due_date: new Date().toISOString().substr(0, 10),
-    time: new Date().toLocaleTimeString(),
-    status: "pending",
+    userName: "Adanna Felix",
+    email: "heyada@gmail.com",
+    phoneNumber: "+234 786 345 5432",
+    verification: "ID & utility bill",
+    createdat: new Date().toLocaleTimeString(),
+    status: "In-active",
   },
   {
     userID: Math.floor(Math.random() * 121333 + 1234567),
-    amount_invested: "50,000",
-    description: "FortShield Investment",
-    payment_date: new Date().toISOString().substr(0, 10),
-    due_date: new Date().toISOString().substr(0, 10),
-    time: new Date().toLocaleTimeString(),
-    status: "pending",
+    userName: "Ezegge onowu",
+    email: "mama@abc.mail",
+    phoneNumber: "+234 786 345 5432",
+    verification: "ID & utility bill",
+    createdat: new Date().toLocaleTimeString(),
+    status: "In-active",
   },
 ];
+
 interface editUser{
   userID: number;
-    amount_invested: String;
-    description: String;
-    payment_date: String;
-    due_date: String;
-    time: String;
+    userName: String;
+    email: String;
+    phoneNumber: String;
+    verification: String;
+    createdat: String;
     status: String;
 }
 let editableUser: editUser[] = []
@@ -89,25 +90,25 @@ let classObject = computed(() => {
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      Payment for
+                      User Name
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      Amount Invested
+                      Email Address
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      Payment Date
+                      Phone Number
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      Due date
+                      Verification
                     </th>
                     <th
                       scope="col"
@@ -136,26 +137,30 @@ let classObject = computed(() => {
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">{{ activity.description }}</div>
+                      <div class="text-sm">
+                        <span class="text-md text-blue-800 font-semibold bg-blue-700 bg-opacity-20 py-2 px-3 rounded-full">AF</span>
+                        {{ activity.userName }}
+                      </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">{{ activity.amount_invested }}</div>
+                      <div class="text-sm">{{ activity.email }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ activity.payment_date }}
+                      {{ activity.phoneNumber }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ activity.due_date }}
+                      {{ activity.verification }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span
                         :class="
-                          activity.status === 'pending'
-                            ? 'text-brand-red'
-                            : 'text-brand-green'
+                          activity.status === 'Active'
+                            ? 'text-brand-green': activity.status === 'Suspended' ?
+                            'text-brand-red'
+                            : 'text-yellow-400'
                         "
                         class="text-sm flex"
-                        ><i-mdi-music-note-whole /> {{ activity.status }}</span
+                        >{{ activity.status }}</span
                       >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap relative">
@@ -184,10 +189,10 @@ let classObject = computed(() => {
       <div class="bg-white p-10 max-w-lg h-auto z-40 mx-auto mt-20">
         <p class="text-xl font-semibold pb-5">Investment INFO</p>
         <p class="text-lg font-semibold pb-3">USERID: <span class="font-normal text-base">{{editableUser[0].userID}}</span></p>
-        <p class="text-lg font-semibold pb-3">DESCRIPTION: <span class="font-normal text-base">{{editableUser[0].description}}</span></p>
-        <p class="text-lg font-semibold pb-3">AMOUNT INVESTED: <span class="font-normal text-base">{{editableUser[0].amount_invested}}</span></p>
-        <p class="text-lg font-semibold pb-3">PAYMENT DATE: <span class="font-normal text-base">{{editableUser[0].payment_date}}</span></p>
-        <p class="text-lg font-semibold pb-3">DUE DATE: <span class="font-normal text-base">{{editableUser[0].due_date}}</span></p>
+        <p class="text-lg font-semibold pb-3">DESCRIPTION: <span class="font-normal text-base">{{editableUser[0].userName}}</span></p>
+        <p class="text-lg font-semibold pb-3">AMOUNT INVESTED: <span class="font-normal text-base">{{editableUser[0].email}}</span></p>
+        <p class="text-lg font-semibold pb-3">PAYMENT DATE: <span class="font-normal text-base">{{editableUser[0].phoneNumber}}</span></p>
+        <p class="text-lg font-semibold pb-3">DUE DATE: <span class="font-normal text-base">{{editableUser[0].verification}}</span></p>
         <p class="text-lg font-semibold">STATUS: <span class="font-normal text-base">{{editableUser[0].status}}</span></p>
       </div>
     </div>
