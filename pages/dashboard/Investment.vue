@@ -8,14 +8,14 @@
     </div>
     <div>
       
-      <InvestmentTable/>
+      <TablesInvestmentTable/>
     </div>
     </div>
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-import InvestmentOverview from '~~/components/InvestmentOverview.vue';
+// import InvestmentOverview from '~~/components/InvestmentOverview.vue';
 definePageMeta({
   layout: false,
 });

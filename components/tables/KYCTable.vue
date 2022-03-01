@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import CheckboxComponent from "./CheckboxComponent.vue";
+import CheckboxComponent from "../CheckboxComponent.vue";
 const activities = [
   {
     userID: Math.floor(Math.random() * 121333 + 1234567),
     amount_invested: "50,000",
-    description: "Fortdollar 30% Annually for 2 months",
+    description: "FortShield Investment",
     payment_date: new Date().toISOString().substr(0, 10),
     due_date: new Date().toISOString().substr(0, 10),
     time: new Date().toLocaleTimeString(),
@@ -64,42 +64,45 @@ let classObject = computed(() => {
 
 </script>
 <template>
-  <div class="h-auto mt-10">
+  <div class="h-auto">
     <div class="table-form">
       <div class="flex flex-col">
         <div class="overflow-x-scroll lg:overflow-x-hidden">
           <div class="py-2 align-middle inline-block min-w-full">
             <div class="overflow-hidden border-b border-gray-200 sm:rounded-lg">
               <table class="min-w-full divide-y divide-gray-200">
-                <caption class="text-lg font-semibold">Recent Investment</caption>
-                <thead class="bg-white">
+                <thead class="bg-transparent">
                   <tr>
-                    
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      Plan
+                      <CheckboxComponent checked="checked" />
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      User ID
+                      User
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      Amount 
+                      Document Type
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      Processed
+                      Documents
                     </th>
-                    
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
+                    >
+                      Submitted
+                    </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
@@ -115,16 +118,21 @@ let classObject = computed(() => {
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="(activity, index) in activities" :key="index" @click="selectRow(activity)" class="hover:bg-gray-300 cursor-pointer">
+                  <tr v-for="(activity, index) in activities" :key="index" @contextmenu.prevent="selectRow(activity)" class="hover:bg-gray-300 cursor-pointer">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <CheckboxComponent checked="unchecked"  />
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
-                        <div class="">
-                          <div class="text-sm">{{ activity.description }}</div>
+                        <span class="text-md mr-2 text-blue-800 font-semibold bg-blue-700 bg-opacity-20 py-2 px-3 rounded-full">AF</span>
+                        <div class="text-sm font-normal">
+                          <p>Esoh mansticks</p>
+                          <p>UID{{ activity.userID }}</p>
                         </div>
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div>#{{ activity.userID }}</div>
+                      <div class="text-sm">{{ activity.description }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="text-sm">{{ activity.amount_invested }}</div>
@@ -132,28 +140,28 @@ let classObject = computed(() => {
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                       {{ activity.payment_date }}
                     </td>
-                    
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span
                         :class="
-                          activity.status === 'pending'
-                            ? 'text-brand-red'
-                            : 'text-brand-green'
+                          activity.status === 'Approve'
+                            ? 'text-brand-green': activity.status === 'Rejected' ?
+                            'text-brand-red'
+                            : 'text-yellow-500'
                         "
                         class="text-sm flex"
                         ><i-mdi-music-note-whole /> {{ activity.status }}</span
                       >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap relative">
-                        <i-ic-baseline-arrow-forward-ios class="text-gray-400 cursor-pointer border border-gray-400 p-1 rounded-full w-auto" role="button"
-                        aria-label="option"/>
-                      <!-- <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
+                      <i-mdi-dots-horizontal @click="open(index,$event)" class="cursor-pointer" role="button"
+                        aria-label="option" />
+                      <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
                         <ul class="py-1" >
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'success',open(index,$event)">Approve payment</li>
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'pending',open(index,$event)">Cancel payment</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'Approve',open(index,$event)">Approve kyc</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'Rejected',open(index,$event)">Reject kyc</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'pending',open(index,$event)">Quick view</li>
                         </ul>
-                        @click="open(index,$event)" 
-                      </div> -->
+                      </div>
                     </td>
                   </tr>
                 </tbody>

@@ -1,7 +1,7 @@
 <template>
  
   <NuxtLayout name="dashboard">
-    <TransactionsTable/>
+    <TablesTransactionsTable/>
   </NuxtLayout>
 </template>
 

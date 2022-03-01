@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="dashboard">
-    <UsersTable/>
+    <TablesUsersTable/>
   </NuxtLayout>
 </template>
 

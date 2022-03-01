@@ -1,7 +1,7 @@
 <template>
  
   <NuxtLayout name="dashboard">
-    <KYCTable/>
+    <TablesKYCTable/>
   </NuxtLayout>
 </template>
 
