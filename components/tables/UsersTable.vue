@@ -48,6 +48,8 @@ const open = async (index: number, e: MouseEvent) => {
 }
 const topPos = ref(0)
 const leftPos = ref(0)
+const openTab = ref(1);
+const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
 
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20
@@ -67,18 +69,117 @@ let classObject = computed(() => {
 <template>
   <div class="h-auto">
     <!-- SHOW USER DATA -->
-    <div v-if="showUserData" class="w-full h-full">
-      <div class="bg-white p-10 h-auto relative">
+    <div v-if="showUserData" class="w-full h-full ">
+      <div class="bg-white p-10 h-auto relative rounded-md">
         <div class="closemodal absolute right-6 top-6 cursor-pointer" @click="toggleUserData">
           <i-ion-close-round class="text-black text-xl" />
         </div>
-        <p class="text-xl font-semibold pb-5">USER INFO</p>
-        <p class="text-lg font-semibold pb-3">USERID: <span class="font-normal text-base">{{editableUser[0].userID}}</span></p>
-        <p class="text-lg font-semibold pb-3">USERNAME: <span class="font-normal text-base">{{editableUser[0].userName}}</span></p>
-        <p class="text-lg font-semibold pb-3">EMAIL ADDRESS: <span class="font-normal text-base">{{editableUser[0].email}}</span></p>
-        <p class="text-lg font-semibold pb-3">PHONE NUMBER: <span class="font-normal text-base">{{editableUser[0].phoneNumber}}</span></p>
-        <p class="text-lg font-semibold pb-3">VERIFICATION: <span class="font-normal text-base">{{editableUser[0].verification}}</span></p>
-        <p class="text-lg font-semibold">STATUS: <span class="font-normal text-base">{{editableUser[0].status}}</span></p>
+        <div class="w-full">
+          <p class="title text-xl font-semibold tracking-wider pb-6">
+            Customer/ <span class="text-brand-light-blue">{{editableUser[0].userName}}</span>
+          </p>
+          <div class="flex flex-wrap">
+            <div class="w-full">
+              <div class="headers border-b border-gray-300 mb-4">
+                <ul class="flex list-none flex-wrap flex-row -mb-px">
+                  <li class="mr-2"><a :class="{
+                  'text-gray-500 hover:text-gray-600 border-transparent':
+                    openTab !== 1,
+                  'text-brand-light-blue border-brand-light-blue':
+                    openTab === 1,
+                }"
+                class="inline-block pb-2 px-4 text-sm font-medium text-center rounded-t-lg border-b-2"
+                @click="toggleTabs(1)" href="#">
+                  Personal Information
+                  </a></li>
+                  <li class="mr-2"><a :class="{
+                  'text-gray-500 hover:text-gray-600 border-transparent':
+                    openTab !== 2,
+                  'text-brand-light-blue border-brand-light-blue':
+                    openTab === 2,
+                }"
+                class="inline-block pb-2 px-4 text-sm font-medium text-center rounded-t-lg border-b-2"
+                @click="toggleTabs(2)" href="#">
+                  Verification
+                  </a></li>
+                </ul>
+              </div>
+              <div class="relative flex flex-col min-w-0 break-words w-full body">
+                <div class="px-4 py-5 flex-auto">
+                  <div class="tab-content tab-space">
+                    <div :class="{ hidden: openTab !== 1, block: openTab === 1 }" class="grid grid-cols-2 w-full gap-x-36 gap-y-4">
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400 pb-3">USERID: </p>
+                        <span class="font-normal text-black text-base">{{editableUser[0].userID}}</span>
+                      </span>
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400 pb-3">USERNAME: </p>
+                        <span class="font-normal text-black text-base">{{editableUser[0].userName}}</span>
+                      </span>
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400 pb-3">EMAIL ADDRESS: </p>
+                        <span class="font-normal text-black text-base">{{editableUser[0].email}}</span>
+                      </span>
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400 pb-3">PHONE NUMBER: </p>
+                        <span class="font-normal text-black text-base">{{editableUser[0].phoneNumber}}</span>
+                      </span>
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400 pb-3">VERIFICATION: </p>
+                        <span class="font-normal text-black text-base">{{editableUser[0].verification}}</span>
+                      </span>
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400" >STATUS: </p>
+                        <span class="font-normal text-sm px-12 rounded py-1" :class="
+                          editableUser[0].status === 'Active'
+                            ? 'text-brand-green bg-brand-green bg-opacity-25': editableUser[0].status === 'Deleted' ?
+                            'text-brand-red bg-brand-red bg-opacity-25'
+                            : 'text-yellow-400 bg-yellow-400 bg-opacity-25'
+                        ">{{editableUser[0].status}}</span>
+                      </span>
+                    </div>
+                    <div :class="{ hidden: openTab !== 2, block: openTab === 2 }" >
+                    <div class="title text-sm font-semibold text-gray-800 pb-3">
+                      UPLOADED DOCUMENTS
+                    </div>
+                      <div class="grid grid-cols-2 w-full gap-x-36 gap-y-4">
+                        <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400 pb-3">Document Type: </p>
+                        <span class="font-normal text-black text-base">{{editableUser[0].userID}}</span>
+                      </span>
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400 pb-3">Frontside: </p>
+                        <span class="font-normal text-black text-base">{{editableUser[0].userName}}</span>
+                      </span>
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400 pb-3">Back side: </p>
+                        <span class="font-normal text-black text-base">{{editableUser[0].email}}</span>
+                      </span>
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400 pb-3">Utility Bill: </p>
+                        <span class="font-normal text-black text-base">{{editableUser[0].phoneNumber}}</span>
+                      </span>
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400 pb-3">Submitted at: </p>
+                        <span class="font-normal text-black text-base">{{editableUser[0].verification}}</span>
+                      </span>
+                      <span class="flex justify-between">
+                        <p class="text-sm font-semibold text-gray-400" >Status: </p>
+                        <span class="font-normal text-sm px-12 rounded py-1" :class="
+                          editableUser[0].status === 'Active'
+                            ? 'text-brand-green bg-brand-green bg-opacity-25': editableUser[0].status === 'Deleted' ?
+                            'text-brand-red bg-brand-red bg-opacity-25'
+                            : 'text-yellow-400 bg-yellow-400 bg-opacity-25'
+                        ">{{editableUser[0].status}}</span>
+                      </span></div>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- SHOW TABLE -->

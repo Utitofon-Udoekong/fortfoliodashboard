@@ -10,7 +10,7 @@ const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
         <div class="title mb-3">
           <p class="font-semibold text-base">Top Investment Plans</p>
         </div>
-        <div class="border-b border-gray-400 mb-4">
+        <div class="border-b border-gray-400 mb-4 headers">
           <ul class="flex list-none flex-wrap flex-row -mb-px">
             <li class="mr-2 ml-5">
               <a
@@ -56,7 +56,7 @@ const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
             </li>
           </ul>
         </div>
-        <div class="relative flex flex-col min-w-0 break-words w-full mb-6">
+        <div class="relative flex flex-col min-w-0 break-words w-full mb-6 body">
           <div class="px-4 py-5 flex-auto">
             <div class="tab-content tab-space">
               <div

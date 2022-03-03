@@ -16,26 +16,26 @@ const {clamp, changeClamp} = inject("clamp")
         <hr class="border-none h-px bg-gray-500 my-6">
         <div>
             <ul :class="clamp ? 'flex flex-col items-center' : ''">
-                <li class="flex items-center text-gray-300 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
+                <NuxtLink :exact-active-class="'bg-brand-clear_white text-gray-50'" to="/dashboard" class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
                     <span class="pr-3"><i-mdi-home-variant/></span>
-                    <NuxtLink :class="clamp ? 'hidden' : 'block' " to="/dashboard">Dashboard</NuxtLink>
-                </li>
-                <li class="flex items-center text-gray-300 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
+                    <li :class="clamp ? 'hidden' : 'block' " >Dashboard</li>
+                </NuxtLink>
+                <NuxtLink :exact-active-class="'bg-brand-clear_white text-gray-50'" class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl" to="/dashboard/investment">
                     <span class="pr-3"><i-bx-bx-chart/></span>
-                    <NuxtLink :class="clamp ? 'hidden' : 'block' " to="/dashboard/investment">Investments</NuxtLink>
-                </li>
-                <li class="flex items-center text-gray-300 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
+                    <li  class="clamp ? 'hidden' : 'block' " >Investments</li>
+                </NuxtLink>
+                <NuxtLink :exact-active-class="'bg-brand-clear_white text-gray-50'" to="/dashboard/users" class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
                     <span class="pr-3"><i-ph-users-three/></span>
-                    <NuxtLink :class="clamp ? 'hidden' : 'block' " to="/dashboard/users">Users</NuxtLink>
-                </li>
-                <li class="flex items-center text-gray-300 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
+                    <li :class="clamp ? 'hidden' : 'block' " >Users</li>
+                </NuxtLink>
+                <NuxtLink :exact-active-class="'bg-brand-clear_white text-gray-50'" to="/dashboard/kyc" class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
                     <span class="pr-3"><i-ph-shield-check-light/></span>
-                    <NuxtLink :class="clamp ? 'hidden' : 'block' " to="/dashboard/kyc">Manage KYC</NuxtLink>
-                </li>
-                <li class="flex items-center text-gray-300 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
+                    <li :class="clamp ? 'hidden' : 'block' " >Manage KYC</li>
+                </NuxtLink>
+                <NuxtLink :exact-active-class="'bg-brand-clear_white text-gray-50'" to="/dashboard/transaction" class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
                     <span class="pr-3"><i-ph-file-arrow-up/></span>
-                    <NuxtLink :class="clamp ? 'hidden' : 'block' " to="/dashboard/transaction"> Transactions</NuxtLink>
-                </li>
+                    <li :class="clamp ? 'hidden' : 'block' " > Transactions</li>
+                </NuxtLink>
             </ul>
         </div>
         <!--   -->
