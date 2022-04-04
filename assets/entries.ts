@@ -1,4 +1,3 @@
-import { TableData } from "~~/utils/types/table";
 
 export const entryData = [{ "id": "1", "name": "Kathryne Verrell", "position": "Structural Analysis Engineer", "office": "Research and Development", "extension": "70", "startDate": "12/6/2021", "salary": "256929" },
 { "id": "2", "name": "Derk Tooze", "position": "Librarian", "office": "Training", "extension": "26", "startDate": "11/1/2021", "salary": "702848" },
