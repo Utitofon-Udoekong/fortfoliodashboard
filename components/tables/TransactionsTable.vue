@@ -1,71 +1,214 @@
 <script lang="ts" setup>
 import CheckboxComponent from "../CheckboxComponent.vue";
-const activities = [
-  {
-    userID: Math.floor(Math.random() * 121333 + 1234567),
-    amount_invested: "50,000",
-    description: "FortShield Investment",
-    payment_date: new Date().toISOString().substr(0, 10),
-    due_date: new Date().toISOString().substr(0, 10),
-    time: new Date().toLocaleTimeString(),
-    status: "Pending",
-  },
-  {
-    userID: Math.floor(Math.random() * 121333 + 1234567),
-    amount_invested: "50,000",
-    description: "FortShield Investment",
-    payment_date: new Date().toISOString().substr(0, 10),
-    due_date: new Date().toISOString().substr(0, 10),
-    time: new Date().toLocaleTimeString(),
-    status: "Pending",
-  },
+import { transactions } from "~~/assets/transactions";
+import { TransactionsTableData, TableHeader } from "~~/utils/types/table";
+import { array, object } from "alga-js";
+
+// states
+const columns = [
+  { name: "id", text: "User ID" },
+  { name: "payment_for", text: "Payment For" },
+  { name: "amount_invested", text: "Amount Invested" },
+  { name: "payment_date", text: "Payment Date" },
+  { name: "due_date", text: "Due Date" },
+  { name: "status", text: "Status" },
 ];
-interface editUser{
-  userID: number;
-    amount_invested: String;
-    description: String;
-    payment_date: String;
-    due_date: String;
-    time: String;
-    status: String;
-}
-let editableUser: editUser[] = []
-const selectRow = (user: editUser) => {
-  editableUser.push(user)
-  showModal.value = true;
-};
+let col: TransactionsTableData = reactive({
+  id: null,
+  payment_for: "",
+  amount_invested: null,
+  payment_date: "",
+  due_date: "",
+  status: "",
+});
+let sortCol: TransactionsTableData = reactive({
+  id: null,
+  payment_for: "",
+  amount_invested: null,
+  payment_date: "",
+  due_date: "",
+  status: "",
+});
+const transactionsData = ref<TransactionsTableData[]>(transactions);
+let filteredTransactions = ref<TransactionsTableData[]>([]);
+const showTransactions = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
+const currentTransactions = ref<number>(10);
+const searchInput = ref<string>("");
+const searchTransactions = ref<string[]>([]);
+const currentPage = ref<number>(1);
+const totalPages = ref<number>(1);
 let show = ref<number | null>(null);
+let showUserData = ref(false);
+
+const topPos = ref(0);
+const leftPos = ref(0);
+let editableUser: TransactionsTableData[] = [];
+const openTab = ref(1);
 let showModal = ref(false)
+// states------------------------------------------------------------------------------
+
+// methods
+const selectRow = (user: TransactionsTableData) => {
+  editableUser.push(user);
+  showUserData.value = true;
+};
+const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
+
+const getHeight = async (e: MouseEvent) => {
+  topPos.value = e.pageY + 20;
+  leftPos.value = e.pageX - 120;
+  // console.log(top.value, left.value)
+};
+const toggleUserData = () => {
+  showUserData.value = !showUserData.value;
+  editableUser.pop();
+};
+const open = async (index: number, e: MouseEvent) => {
+  await getHeight(e).then(() => {
+    show.value === null ? (show.value = index) : (show.value = null);
+  });
+};
+const uniqeColumnData = (column: string) => {
+  return array.unique(getCurrentUsers(), column);
+};
+const filterByColumn = () => {
+  const filterCol = object.removeBy(col, "");
+  let filterData = getCurrentUsers();
+  if (Object.entries(filterCol).length >= 1) {
+    filterData = array.filtered(getCurrentUsers(), filterCol);
+  }
+  paginateData(filterData);
+};
+const getAllEmployees = () => {};
+const paginateUsers = () => {
+  if (searchInput.value.length >= 3) {
+    searchTransactions.value = array.search(searchInput.value, transactionsData.value);
+    paginateData(searchTransactions.value);
+  } else {
+    searchTransactions.value = [];
+    paginateData(transactionsData.value);
+    col = {
+      id: null,
+  payment_for: "",
+  amount_invested: null,
+  payment_date: "",
+  due_date: "",
+  status: "",
+    };
+  }
+};
+const paginateData = (data: any) => {
+  filteredTransactions.value = array.paginate(
+    data,
+    currentPage.value,
+    currentTransactions.value
+  );
+  totalPages.value = array.pages(data, currentTransactions.value);
+};
+const paginateEvent = (page: number) => {
+  currentPage.value = page;
+  paginateUsers();
+};
+
+const searchEvent = () => {
+  currentPage.value = 1;
+  paginateUsers();
+};
+
+const getCurrentUsers = () => {
+  return searchTransactions.value.length <= 0 ? transactionsData.value : searchTransactions.value;
+};
+
+const sortByColumn = (column) => {
+  col = {
+    id: null,
+  payment_for: "",
+  amount_invested: null,
+  payment_date: "",
+  due_date: "",
+  status: "",
+  };
+  let sortedUsers = getCurrentUsers();
+  let sortedColumn = sortCol[column];
+  if (sortedColumn === "") {
+    sortCol[column] = "asc";
+    sortedUsers = array.sorted(getCurrentUsers(), column, "asc");
+  } else if (sortedColumn === "asc") {
+    sortCol[column] = "desc";
+    sortedUsers = array.sorted(getCurrentUsers(), column, "desc");
+  } else if (sortedColumn === "desc") {
+    sortCol[column] = "";
+  }
+  paginateData(sortedUsers);
+};
+
 const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop()
 };
-const open = async (index: number, e: MouseEvent) => {
-  await getHeight(e).then(()=>{
-    show.value === null ? show.value = index : show.value = null
-  })
-}
-const topPos = ref(0)
-const leftPos = ref(0)
+// methods------------------------------------------------------------------------------
 
-const getHeight = async (e: MouseEvent) => {
-  topPos.value = e.pageY + 20
-  leftPos.value = e.pageX - 120
-  // console.log(top.value, left.value)
-}
+// computed
+const showInfo = computed(() => {
+  // const getCurrentEntries = getCurrentEntries()
+  return array.show(getCurrentUsers(), currentPage.value, currentTransactions.value);
+});
+const tableHeader = computed<TableHeader[]>(() => {
+  return columns;
+});
+const tableData = computed<TransactionsTableData[]>(() => {
+  return filteredTransactions.value || [];
+});
+
+const showPagination = computed(() => {
+  return array.pagination(totalPages.value, currentPage.value, 3);
+});
 let classObject = computed(() => {
-  let top:string = `${topPos.value}px`
-  let left:string = `${leftPos.value}px`
+  let top: string = `${topPos.value}px`;
+  let left: string = `${leftPos.value}px`;
   return {
     top,
-    left 
-  }
-})
+    left,
+  };
+});
+
+// computed------------------------------------------------------------------------------
+
+// lifecycle
+onMounted(() => {
+  paginateData(transactionsData.value);
+});
+// lifecycle----------------------------------------------------------------------------------
+
+
 
 </script>
 <template>
   <div class="h-auto">
     <div class="table-form">
+      <div class="flex mb-3 justify-between">
+        <div class="flex items-center">
+          <span class="mr-1">Show</span>
+          <select v-model="currentTransactions" @change="paginateUsers" class="p-2 bg-blue-300 bg-opacity-25 rounded-md">
+            <option :value="users" v-for="(users, i) in showTransactions" :key="i" class="text-white">
+              {{ users }}
+            </option>
+          </select>
+          <span class="ml-1">Users</span>
+        </div>
+        <div class="search-component w-80 mb-3">
+          <div
+            class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2"
+          >
+            <input
+              type="search"
+              class="placeholder-gray-500 w-full bg-transparent text-base font-normal text-gray-500 outline-none focus:border-none"
+              placeholder="Search coming soon"
+              v-model="searchInput"
+            />
+          </div>
+        </div>
+      </div>
       <div class="flex flex-col">
         <div class="overflow-x-scroll lg:overflow-x-hidden">
           <div class="py-2 align-middle inline-block min-w-full">
@@ -80,40 +223,17 @@ let classObject = computed(() => {
                       <CheckboxComponent checked="checked" />
                     </th>
                     <th
+                    v-for="(headers, i) in tableHeader"
+                    :key="i"
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      User ID
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
-                    >
-                      Payment for
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
-                    >
-                      Amount Invested
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
-                    >
-                      Payment Date
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
-                    >
-                      Due date
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
-                    >
-                      Status
+                      <div class="flex items-center">
+                        <span>{{ headers.text }}</span>
+                        <span @click.prevent="sortByColumn(headers.name)">
+                          <i-mdi-filter-variant class="pointer-events-none" />
+                        </span>
+                      </div>
                     </th>
                     <th
                       scope="col"
@@ -124,38 +244,38 @@ let classObject = computed(() => {
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="(activity, index) in activities" :key="index" @contextmenu.prevent="selectRow(activity)" class="hover:bg-gray-300 cursor-pointer">
+                  <tr v-for="(transactions, index) in tableData" :key="index" @contextmenu.prevent="selectRow(transactions)" class="hover:bg-gray-300 cursor-pointer">
                     <td class="px-6 py-4 whitespace-nowrap">
                       <CheckboxComponent checked="unchecked"  />
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
                         <div class="">
-                          <p>#{{ activity.userID }}</p>
+                          <p>#{{ transactions.id }}</p>
                         </div>
                       </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">{{ activity.description }}</div>
+                    <td class="px-6 py-4 truncate whitespace-nowrap">
+                      <div class="text-sm truncate text-ellipsis">{{ transactions.payment_for }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">{{ activity.amount_invested }}</div>
+                      <div class="text-sm">{{ transactions.amount_invested }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ activity.payment_date }}
+                      {{ transactions.payment_date }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ activity.due_date }}
+                      {{ transactions.due_date }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span
                         :class="
-                          activity.status === 'Cancelled'
-                            ? 'text-brand-red' : activity.status === 'Pending' ? 'text-yellow-400'
+                          transactions.status === 'Cancelled'
+                            ? 'text-brand-red' : transactions.status === 'Pending' ? 'text-yellow-400'
                             : 'text-brand-green'
                         "
                         class="text-sm flex"
-                        ><i-mdi-music-note-whole /> {{ activity.status }}</span
+                        ><i-mdi-music-note-whole /> {{ transactions.status }}</span
                       >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap relative">
@@ -163,14 +283,101 @@ let classObject = computed(() => {
                         aria-label="option" />
                       <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
                         <ul class="py-1" >
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'success',open(index,$event)">Approve payment</li>
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'pending',open(index,$event)">Cancel payment</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="transactionsData[index].status = 'success',open(index,$event)">Approve payment</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="transactionsData[index].status = 'pending',open(index,$event)">Cancel payment</li>
                         </ul>
                       </div>
                     </td>
                   </tr>
                 </tbody>
               </table>
+              <div
+                class="py-3 px-6 table-controls h-full w-full items-center justify-between border border-t-gray-200"
+              >
+                <div class="table-control-cycle flex">
+                  <button
+                    @click.prevent="(currentPage = 1), paginateUsers()"
+                    :class="[
+                      'table-control previous border border-gray-300 rounded-md py-2 px-4 mr-3 text-black text-sm font-medium',
+                      {
+                        'text-gray-300 pointer-events-none': currentPage === 1,
+                      },
+                    ]"
+                  >
+                    First
+                  </button>
+                  <button
+                    :class="[
+                      'table-control previous border border-gray-300 rounded-md py-2 px-4 mr-3 text-black text-sm font-medium',
+                      {
+                        'text-gray-300 pointer-events-none': currentPage === 1,
+                      },
+                    ]"
+                    @click.prevent="
+                      currentPage < 1 ? (currentPage = 1) : (currentPage -= 1),
+                        paginateUsers()
+                    "
+                  >
+                    Previous
+                  </button>
+                  <div class="entries">
+                    <ul class="inline-flex">
+                      <li
+                        v-for="(pagination, i) in showPagination"
+                        :key="i"
+                        :class="[
+                          'p-1 px-2 border border-gray-300 rounded-sm',
+                          { 'text-blue-800': pagination === currentPage },
+                        ]"
+                      >
+                        <a
+                          href="#"
+                          @click.prevent="paginateEvent(pagination)"
+                          >{{ pagination }}</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <button
+                    @click.prevent="
+                      currentPage > totalPages
+                        ? (currentPage = totalPages)
+                        : (currentPage += 1),
+                        paginateUsers()
+                    "
+                    :class="[
+                      'table-control next ml-3 border border-gray-300 rounded-md py-2 px-4 text-black text-sm font-medium',
+                      {
+                        'text-gray-300 pointer-events-none':
+                          currentPage === totalPages,
+                      },
+                    ]"
+                  >
+                    Next
+                  </button>
+                  <button
+                    @click.prevent="(currentPage = totalPages), paginateUsers()"
+                    :class="[
+                      'table-control next ml-3 border border-gray-300 rounded-md py-2 px-4 text-black text-sm font-medium',
+                      {
+                        'text-gray-300 pointer-events-none':
+                          currentPage === totalPages,
+                      },
+                    ]"
+                  >
+                    Last
+                  </button>
+                </div>
+
+                <div class="entries my-3">
+                  <p
+                    class="text-gray-700 text-sm font-normal whitespace-nowrap"
+                  >
+                    Showing {{ showInfo.from }} to {{ showInfo.to }} of
+                    {{ showInfo.of }}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -183,8 +390,8 @@ let classObject = computed(() => {
       </div>
       <div class="bg-white p-10 max-w-lg h-auto z-40 mx-auto mt-20">
         <p class="text-xl font-semibold pb-5">Investment INFO</p>
-        <p class="text-lg font-semibold pb-3">USERID: <span class="font-normal text-base">{{editableUser[0].userID}}</span></p>
-        <p class="text-lg font-semibold pb-3">DESCRIPTION: <span class="font-normal text-base">{{editableUser[0].description}}</span></p>
+        <p class="text-lg font-semibold pb-3">USERID: <span class="font-normal text-base">{{editableUser[0].id}}</span></p>
+        <p class="text-lg font-semibold pb-3">DESCRIPTION: <span class="font-normal text-base">{{editableUser[0].payment_for}}</span></p>
         <p class="text-lg font-semibold pb-3">AMOUNT INVESTED: <span class="font-normal text-base">{{editableUser[0].amount_invested}}</span></p>
         <p class="text-lg font-semibold pb-3">PAYMENT DATE: <span class="font-normal text-base">{{editableUser[0].payment_date}}</span></p>
         <p class="text-lg font-semibold pb-3">DUE DATE: <span class="font-normal text-base">{{editableUser[0].due_date}}</span></p>

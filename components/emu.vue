@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { array, object } from "alga-js";
 import { entryData } from "assets/entries";
-import { TestTableData, TestTableHeader } from "~~/utils/types/table";
+import { TestTableData, TableHeader } from "~~/utils/types/table";
 
 
 // states
@@ -131,7 +131,7 @@ const showInfo = computed(() => {
     currentEntries.value
   );
 });
-const tableHeader = computed<TestTableHeader[]>(() => {
+const tableHeader = computed<TableHeader[]>(() => {
   return columns;
 });
 const tableData = computed<TestTableData[]>(() => {
@@ -304,9 +304,7 @@ onMounted(() => {
             :key="i"
             :class="['', { 'text-blue-800': pagination === currentPage }]"
           >
-            <a href="#" @click.prevent="paginateEvent(pagination)">{{
-              pagination
-            }}</a>
+            <a href="#" @click.prevent="paginateEvent(pagination)">{{ pagination }}</a>
           </li>
           <!-- next -->
           <li
@@ -319,23 +317,13 @@ onMounted(() => {
           >
             <a
               href="#"
-              @click.prevent="
-                currentPage > totalPages
-                  ? (currentPage = totalPages)
-                  : (currentPage += 1),
-                  paginateEntries()
-              "
+              @click.prevent=" currentPage > totalPages ? (currentPage = totalPages) : (currentPage += 1), paginateEntries() "
               >Next</a
             >
           </li>
           <!-- Last -->
           <li
-            :class="[
-              '',
-              {
-                'text-gray-400 pointer-events-none': currentPage === totalPages,
-              },
-            ]"
+            :class="[ '', { 'text-gray-400 pointer-events-none': currentPage === totalPages, }, ]"
           >
             <a
               href="#"
