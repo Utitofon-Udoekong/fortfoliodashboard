@@ -2,12 +2,12 @@
 import CheckboxComponent from "../CheckboxComponent.vue";
 import { users } from "~~/assets/users";
 import { UsersTableData, TableHeader } from "~~/utils/types/table";
-import { array, object } from "alga-js";
+import { array, file, object } from "alga-js";
 
 // states
 const columns = [
   { name: "id", text: "User ID" },
-  { name: "name", text: "User Name" },
+  { name: "userName", text: "User Name" },
   { name: "email", text: "Email Address" },
   { name: "phone", text: "Phone Number" },
   { name: "verification", text: "Verification" },
@@ -68,20 +68,20 @@ const open = async (index: number, e: MouseEvent) => {
   });
 };
 const uniqeColumnData = (column: string) => {
-  return array.unique(getCurrentUsers(), column);
+  return array.uniq(getCurrentUsers(), column);
 };
 const filterByColumn = () => {
   const filterCol = object.removeBy(col, "");
   let filterData = getCurrentUsers();
   if (Object.entries(filterCol).length >= 1) {
-    filterData = array.filtered(getCurrentUsers(), filterCol);
+    filterData = array.filter(getCurrentUsers(), filterCol);
   }
   paginateData(filterData);
 };
 const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
-    searchUsers.value = array.search(searchInput.value, usersData.value);
+    searchUsers.value = array.search(usersData.value, searchInput.value);
     paginateData(searchUsers.value);
   } else {
     searchUsers.value = [];
@@ -129,17 +129,25 @@ const sortByColumn = (column) => {
   };
   let sortedUsers = getCurrentUsers();
   let sortedColumn = sortCol[column];
-  if (sortedColumn === "") {
+  if (sortedColumn === "" || sortedColumn === null) {
     sortCol[column] = "asc";
-    sortedUsers = array.sorted(getCurrentUsers(), column, "asc");
+    sortedUsers = array.sortBy(getCurrentUsers(), column, "asc");
   } else if (sortedColumn === "asc") {
     sortCol[column] = "desc";
-    sortedUsers = array.sorted(getCurrentUsers(), column, "desc");
+    sortedUsers = array.sortBy(getCurrentUsers(), column, "desc");
   } else if (sortedColumn === "desc") {
     sortCol[column] = "";
   }
   paginateData(sortedUsers);
 };
+const checks = () => {
+  return Array.from(filteredUsers.value).filter(i => i.checked).map(i => i.id)
+}
+const print = () => file.printed(usersData.value)
+const exportFile = (format) => {
+  const genString = file.exported(usersData.value,format)
+  file.download(genString, format)
+}
 // methods------------------------------------------------------------------------------
 
 // computed
@@ -155,7 +163,11 @@ const tableData = computed<UsersTableData[]>(() => {
 });
 
 const showPagination = computed(() => {
-  return array.pagination(totalPages.value, currentPage.value, 3);
+  let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
+  const numberArray = stringArray.map((str) => {
+    return Number(str)
+  })
+  return numberArray
 });
 let classObject = computed(() => {
   let top: string = `${topPos.value}px`;
@@ -381,6 +393,13 @@ onMounted(() => {
           </select>
           <span class="ml-1">Users</span>
         </div>
+        <!-- implement print options -->
+        <div class="print-options">
+          <span @click="print">Printer</span>
+          <span @click="exportFile('csv')">CSV</span>
+          <span @click="exportFile('json')">JSON</span>
+          <span @click="exportFile('xml')">XML</span>
+        </div>
         <div class="search-component w-80 mb-3">
           <div
             class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2"
@@ -388,8 +407,9 @@ onMounted(() => {
             <input
               type="search"
               class="placeholder-gray-500 w-full bg-transparent text-base font-normal text-gray-500 outline-none focus:border-none"
-              placeholder="Search coming soon"
+              placeholder="Search"
               v-model="searchInput"
+              @keyup="searchEvent"
             />
           </div>
         </div>
@@ -415,7 +435,7 @@ onMounted(() => {
                     >
                       <div class="flex items-center">
                         <span>{{ headers.text }}</span>
-                        <span @click.prevent="sortByColumn(headers.name)">
+                        <span @click.prevent="sortByColumn(headers.name)" class="cursor-pointer pl-1">
                           <i-mdi-filter-variant class="pointer-events-none" />
                         </span>
                       </div>

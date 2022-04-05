@@ -25,8 +25,8 @@ export interface MainTableData{
 
 export interface InvestmentTableData{
     description: string
-    id: string
-    amountInvested: string
+    id: number
+    amountInvested: number
     processed: string
     status: string
 }

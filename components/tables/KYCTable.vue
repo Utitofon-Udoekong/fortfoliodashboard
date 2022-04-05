@@ -6,7 +6,7 @@ import { array, object } from "alga-js";
 
 // states
 const columns = [
-  { name: "id", text: "User" },
+  { name: "fullName", text: "User" },
   { name: "docType", text: "Document Type" },
   { name: "documents", text: "Documents" },
   { name: "submitted", text: "Submitted" },
@@ -72,20 +72,20 @@ const open = async (index: number, e: MouseEvent) => {
   });
 };
 const uniqeColumnData = (column: string) => {
-  return array.unique(getCurrentKYC(), column);
+  return array.uniq(getCurrentKYC(), column);
 };
 const filterByColumn = () => {
   const filterCol = object.removeBy(col, "");
   let filterData = getCurrentKYC();
   if (Object.entries(filterCol).length >= 1) {
-    filterData = array.filtered(getCurrentKYC(), filterCol);
+    filterData = array.filter(getCurrentKYC(), filterCol);
   }
   paginateData(filterData);
 };
 const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
-    searchKYC.value = array.search(searchInput.value, kycDataList.value);
+    searchKYC.value = array.search(kycDataList.value, searchInput.value);
     paginateData(searchKYC.value);
   } else {
     searchKYC.value = [];
@@ -135,10 +135,10 @@ const sortByColumn = (column) => {
   let sortedColumn = sortCol[column];
   if (sortedColumn === "") {
     sortCol[column] = "asc";
-    sortedUsers = array.sorted(getCurrentKYC(), column, "asc");
+    sortedUsers = array.sortBy(getCurrentKYC(), column, "asc");
   } else if (sortedColumn === "asc") {
     sortCol[column] = "desc";
-    sortedUsers = array.sorted(getCurrentKYC(), column, "desc");
+    sortedUsers = array.sortBy(getCurrentKYC(), column, "desc");
   } else if (sortedColumn === "desc") {
     sortCol[column] = "";
   }
@@ -148,7 +148,6 @@ const sortByColumn = (column) => {
 
 // computed
 const showInfo = computed(() => {
-  // const getCurrentEntries = getCurrentEntries()
   return array.show(getCurrentKYC(), currentPage.value, currentKYC.value);
 });
 const tableHeader = computed<TableHeader[]>(() => {
@@ -159,7 +158,11 @@ const tableData = computed<KYCTableData[]>(() => {
 });
 
 const showPagination = computed(() => {
-  return array.pagination(totalPages.value, currentPage.value, 3);
+  let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
+  const numberArray = stringArray.map((str) => {
+    return Number(str)
+  })
+  return numberArray
 });
 let classObject = computed(() => {
   let top: string = `${topPos.value}px`;
@@ -220,8 +223,9 @@ onMounted(() => {
             <input
               type="search"
               class="placeholder-gray-500 w-full bg-transparent text-base font-normal text-gray-500 outline-none focus:border-none"
-              placeholder="Search coming soon"
+              placeholder="Search"
               v-model="searchInput"
+              @keyup="searchEvent"
             />
           </div>
         </div>
@@ -247,7 +251,7 @@ onMounted(() => {
                     >
                     <div class="flex items-center">
                         <span>{{ headers.text }}</span>
-                        <span @click.prevent="sortByColumn(headers.name)">
+                        <span @click.prevent="sortByColumn(headers.name)" class="cursor-pointer pl-1">
                           <i-mdi-filter-variant class="pointer-events-none" />
                         </span>
                       </div>

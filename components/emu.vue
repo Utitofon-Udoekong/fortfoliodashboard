@@ -45,20 +45,20 @@ const totalPages = ref<number>(1);
 
 // methods
 const uniqColumnData = (column: string) => {
-  return array.unique(getCurrentEntries(), column);
+  return array.uniq(getCurrentEntries(), column);
 };
 const filterByColumn = () => {
   const filterCol = object.removeBy(col, "");
   let filterData = getCurrentEntries()
   if(Object.entries(filterCol).length >= 1) {
-    filterData = array.filtered( getCurrentEntries(), filterCol)
+    filterData = array.filter( getCurrentEntries(), filterCol)
   }
   paginateData(filterData)
 };
 const getAllEmployees = () => {};
 const paginateEntries = () => {
   if (searchInput.value.length >= 3) {
-    searchEntries.value = array.search(searchInput.value, entries.value);
+    searchEntries.value = array.search(entries.value,searchInput.value);
     paginateData(searchEntries.value);
   } else {
     searchEntries.value = [];
@@ -110,10 +110,10 @@ const sortByColumn = (column) => {
   let sortedColumn = sortCol[column]
   if(sortedColumn === ''){
     sortCol[column] = 'asc'
-    sortedEntries = array.sorted(getCurrentEntries(),column,'asc')
+    sortedEntries = array.sortBy(getCurrentEntries(),'asc',column)
   }else if(sortedColumn === 'asc'){
     sortCol[column] = 'desc'
-    sortedEntries = array.sorted(getCurrentEntries(),column,'desc')
+    sortedEntries = array.sortBy(getCurrentEntries(),'desc',column)
   }else if(sortedColumn === 'desc'){
     sortCol[column] = ''
   }
@@ -140,7 +140,11 @@ const tableData = computed<TestTableData[]>(() => {
 
 
 const showPagination = computed(() => {
-  return array.pagination(totalPages.value, currentPage.value, 3);
+  let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
+  const numberArray = stringArray.map((str) => {
+    return Number(str)
+  })
+  return numberArray
 });
 
 // computed------------------------------------------------------------------------------

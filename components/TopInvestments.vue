@@ -96,36 +96,70 @@ const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
               <div
                 :class="{ hidden: openTab !== 2, block: openTab === 2 }"
               >
-                <p class="text-sm text-gray-400 pb-3">
-                  Currently Active Investment
-                </p>
-                <p class="text-lg font-medium">49,395.395 USD</p>
-                <p class="text-sm text-gray-400 pb-6">AMOUNT</p>
-                <p class="text-lg font-medium">49,395.395 USD</p>
-                <p class="text-sm text-gray-400 pb-3">PAID PROFIT</p>
-                <hr />
-                <p class="text-sm text-gray-400 pt-2 pb-5">
-                  Investment made this month
-                </p>
-                <p class="text-lg font-medium">49,395.395 USD</p>
-                <p class="text-sm text-gray-400">AMOUNT</p>
+                <div class="fortdollar mb-5">
+                    <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
+                  <p class="">Fortdollar</p>
+                  <p>23%</p>
+                </div>
+
+                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                <div class="bg-brand-light-blue h-1.5 rounded-full" style="width: 23%"></div>
+                </div>
+                </div>
+
+                <div class="fortcrypto mb-5">
+                    <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
+                  <p class="">FortCrypto</p>
+                  <p>62%</p>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                <div class="bg-brand-blue h-1.5 rounded-full" style="width: 62%"></div>
+                </div>
+                </div>
+                
+                <div class="fortshield">
+                    <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
+                  <p class="">FortShield</p>
+                  <p>37%</p>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                <div class="bg-brand-green h-1.5 rounded-full" style="width: 37%"></div>
+                </div>
+                </div>
               </div>
               <div
                 :class="{ hidden: openTab !== 3, block: openTab === 3 }"
               >
-                <p class="text-sm text-gray-400 pb-3">
-                  Currently Active Investment
-                </p>
-                <p class="text-lg font-medium">49,395.395 USD</p>
-                <p class="text-sm text-gray-400 pb-6">AMOUNT</p>
-                <p class="text-lg font-medium">49,395.395 USD</p>
-                <p class="text-sm text-gray-400 pb-3">PAID PROFIT</p>
-                <hr />
-                <p class="text-sm text-gray-400 pt-2 pb-5">
-                  Investment made this month
-                </p>
-                <p class="text-lg font-medium">49,395.395 USD</p>
-                <p class="text-sm text-gray-400">AMOUNT</p>
+                <div class="fortdollar mb-5">
+                    <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
+                  <p class="">Fortdollar</p>
+                  <p>20%</p>
+                </div>
+
+                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                <div class="bg-brand-light-blue h-1.5 rounded-full" style="width: 20%"></div>
+                </div>
+                </div>
+
+                <div class="fortcrypto mb-5">
+                    <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
+                  <p class="">FortCrypto</p>
+                  <p>47%</p>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                <div class="bg-brand-blue h-1.5 rounded-full" style="width: 47%"></div>
+                </div>
+                </div>
+                
+                <div class="fortshield">
+                    <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
+                  <p class="">FortShield</p>
+                  <p>18%</p>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-1.5">
+                <div class="bg-brand-green h-1.5 rounded-full" style="width: 18%"></div>
+                </div>
+                </div>
               </div>
             </div>
           </div>

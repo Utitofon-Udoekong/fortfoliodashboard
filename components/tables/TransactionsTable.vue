@@ -69,20 +69,20 @@ const open = async (index: number, e: MouseEvent) => {
   });
 };
 const uniqeColumnData = (column: string) => {
-  return array.unique(getCurrentUsers(), column);
+  return array.uniq(getCurrentUsers(), column);
 };
 const filterByColumn = () => {
   const filterCol = object.removeBy(col, "");
   let filterData = getCurrentUsers();
   if (Object.entries(filterCol).length >= 1) {
-    filterData = array.filtered(getCurrentUsers(), filterCol);
+    filterData = array.filter(getCurrentUsers(), filterCol);
   }
   paginateData(filterData);
 };
 const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
-    searchTransactions.value = array.search(searchInput.value, transactionsData.value);
+    searchTransactions.value = array.search(transactionsData.value,searchInput.value);
     paginateData(searchTransactions.value);
   } else {
     searchTransactions.value = [];
@@ -130,12 +130,12 @@ const sortByColumn = (column) => {
   };
   let sortedUsers = getCurrentUsers();
   let sortedColumn = sortCol[column];
-  if (sortedColumn === "") {
+  if (sortedColumn === "" || sortedColumn === null) {
     sortCol[column] = "asc";
-    sortedUsers = array.sorted(getCurrentUsers(), column, "asc");
+    sortedUsers = array.sortBy(getCurrentUsers(), column, "asc");
   } else if (sortedColumn === "asc") {
     sortCol[column] = "desc";
-    sortedUsers = array.sorted(getCurrentUsers(), column, "desc");
+    sortedUsers = array.sortBy(getCurrentUsers(), column, "desc");
   } else if (sortedColumn === "desc") {
     sortCol[column] = "";
   }
@@ -161,7 +161,11 @@ const tableData = computed<TransactionsTableData[]>(() => {
 });
 
 const showPagination = computed(() => {
-  return array.pagination(totalPages.value, currentPage.value, 3);
+  let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
+  const numberArray = stringArray.map((str) => {
+    return Number(str)
+  })
+  return numberArray
 });
 let classObject = computed(() => {
   let top: string = `${topPos.value}px`;
@@ -203,8 +207,9 @@ onMounted(() => {
             <input
               type="search"
               class="placeholder-gray-500 w-full bg-transparent text-base font-normal text-gray-500 outline-none focus:border-none"
-              placeholder="Search coming soon"
+              placeholder="Search"
               v-model="searchInput"
+              @keyup="searchEvent"
             />
           </div>
         </div>
@@ -230,7 +235,7 @@ onMounted(() => {
                     >
                       <div class="flex items-center">
                         <span>{{ headers.text }}</span>
-                        <span @click.prevent="sortByColumn(headers.name)">
+                        <span @click.prevent="sortByColumn(headers.name)" class="cursor-pointer pl-1">
                           <i-mdi-filter-variant class="pointer-events-none" />
                         </span>
                       </div>
