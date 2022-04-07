@@ -1,4 +1,4 @@
-import { firebaseApp } from "~/config/firebase";
+import { firebaseApp } from "~~/config/firebase-admin";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default async function ({ store, redirect }) {

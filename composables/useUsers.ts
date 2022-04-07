@@ -1,0 +1,1 @@
+export const users = useFetch("/api/users")

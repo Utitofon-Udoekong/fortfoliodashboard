@@ -1,4 +1,4 @@
-import { auth } from "~/config/firebase";
+import { auth } from "~~/config/firebase-admin";
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 export const state = () => ({

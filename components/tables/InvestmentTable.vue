@@ -3,6 +3,7 @@ import CheckboxComponent from "../CheckboxComponent.vue";
 import { investment } from "~~/assets/investments";
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, object } from "alga-js";
+import { computed, onMounted, reactive, ref } from "vue";
 
 // states
 const columns = [
@@ -108,7 +109,7 @@ const paginateData = (data: any) => {
   );
   totalPages.value = array.pages(data, currentInvestment.value);
 };
-const paginateEvent = (page: number) => {
+const paginateEvent = (page: string | number) => {
   currentPage.value = page;
   paginateUsers();
 };
@@ -150,7 +151,7 @@ const sortByColumn = (column) => {
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
-  return array.show(
+  return array.pageInfo(
     getCurrentInvestment(),
     currentPage.value,
     currentInvestment.value
@@ -165,10 +166,13 @@ const tableData = computed<InvestmentTableData[]>(() => {
 
 const showPagination = computed(() => {
   let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
-  const numberArray = stringArray.map((str) => {
-    return Number(str);
+  const formatedArray = stringArray.map((str) => {
+    if(+str){
+      return Number(str);
+    }
+    return str
   });
-  return numberArray;
+  return formatedArray;
 });
 let classObject = computed(() => {
   let top: string = `${topPos.value}px`;

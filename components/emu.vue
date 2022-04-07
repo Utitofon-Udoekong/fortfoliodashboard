@@ -125,7 +125,7 @@ const sortByColumn = (column) => {
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
-  return array.show(
+  return array.pageInfo(
     getCurrentEntries(),
     currentPage.value,
     currentEntries.value
@@ -141,10 +141,13 @@ const tableData = computed<TestTableData[]>(() => {
 
 const showPagination = computed(() => {
   let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
-  const numberArray = stringArray.map((str) => {
-    return Number(str)
-  })
-  return numberArray
+  const formatedArray = stringArray.map((str) => {
+    if(+str){
+      return Number(str);
+    }
+    return str
+  });
+  return formatedArray;
 });
 
 // computed------------------------------------------------------------------------------

@@ -148,7 +148,7 @@ const sortByColumn = (column) => {
 
 // computed
 const showInfo = computed(() => {
-  return array.show(getCurrentKYC(), currentPage.value, currentKYC.value);
+  return array.pageInfo(getCurrentKYC(), currentPage.value, currentKYC.value);
 });
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
@@ -159,10 +159,13 @@ const tableData = computed<KYCTableData[]>(() => {
 
 const showPagination = computed(() => {
   let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
-  const numberArray = stringArray.map((str) => {
-    return Number(str)
-  })
-  return numberArray
+  const formatedArray = stringArray.map((str) => {
+    if(+str){
+      return Number(str);
+    }
+    return str
+  });
+  return formatedArray;
 });
 let classObject = computed(() => {
   let top: string = `${topPos.value}px`;

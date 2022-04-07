@@ -1,4 +1,4 @@
-import { db } from "~/config/firebase";
+import { db } from "~~/config/firebase-admin";
 import { collection, doc, getDoc, getDocs, limit, orderBy, query, setDoc, updateDoc } from 'firebase/firestore/lite';
 import dayjs from "dayjs";
 

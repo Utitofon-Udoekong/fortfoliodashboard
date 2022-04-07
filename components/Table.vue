@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import CheckboxComponent from "../CheckboxComponent.vue";
 const activities = [
   {
     userID: Math.floor(Math.random() * 121333 + 1234567),

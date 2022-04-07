@@ -153,7 +153,7 @@ const exportFile = (format) => {
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
-  return array.show(getCurrentUsers(), currentPage.value, currentUsers.value);
+  return array.pageInfo(getCurrentUsers(), currentPage.value, currentUsers.value);
 });
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
@@ -164,10 +164,13 @@ const tableData = computed<UsersTableData[]>(() => {
 
 const showPagination = computed(() => {
   let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
-  const numberArray = stringArray.map((str) => {
-    return Number(str)
-  })
-  return numberArray
+  const formatedArray = stringArray.map((str) => {
+    if(+str){
+      return Number(str);
+    }
+    return str
+  });
+  return formatedArray;
 });
 let classObject = computed(() => {
   let top: string = `${topPos.value}px`;
