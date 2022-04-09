@@ -67,9 +67,6 @@ const open = async (index: number, e: MouseEvent) => {
     show.value === null ? (show.value = index) : (show.value = null);
   });
 };
-const uniqeColumnData = (column: string) => {
-  return array.uniq(getCurrentUsers(), column);
-};
 const filterByColumn = () => {
   const filterCol = object.removeBy(col, "");
   let filterData = getCurrentUsers();
@@ -140,20 +137,24 @@ const sortByColumn = (column) => {
   }
   paginateData(sortedUsers);
 };
-const checks = () => {
-  return Array.from(filteredUsers.value).filter(i => i.checked).map(i => i.id)
-}
-const print = () => file.printed(usersData.value)
+// const checks = () => {
+//   return Array.from(filteredUsers.value).filter(i => i.checked).map(i => i.id)
+// }
+const print = () => file.printed(usersData.value);
 const exportFile = (format) => {
-  const genString = file.exported(usersData.value,format)
-  file.download(genString, format)
-}
+  const genString = file.exported(usersData.value, format);
+  file.download(genString, format);
+};
 // methods------------------------------------------------------------------------------
 
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
-  return array.pageInfo(getCurrentUsers(), currentPage.value, currentUsers.value);
+  return array.pageInfo(
+    getCurrentUsers(),
+    currentPage.value,
+    currentUsers.value
+  );
 });
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
@@ -165,10 +166,7 @@ const tableData = computed<UsersTableData[]>(() => {
 const showPagination = computed(() => {
   let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
   const formatedArray = stringArray.map((str) => {
-    if(+str){
-      return Number(str);
-    }
-    return str
+    return Number(str);
   });
   return formatedArray;
 });
@@ -386,34 +384,43 @@ onMounted(() => {
     </div>
     <!-- SHOW TABLE -->
     <div v-else class="table-form">
-      <div class="flex mb-3 justify-between">
+      <div class="flex mb-3 justify-between items-start">
         <div class="flex items-center">
           <span class="mr-1">Show</span>
-          <select v-model="currentUsers" @change="paginateUsers" class="p-2 bg-blue-300 bg-opacity-25 rounded-md">
-            <option :value="users" v-for="(users, i) in showUsers" :key="i" class="text-white">
+          <select
+            v-model="currentUsers"
+            @change="paginateUsers"
+            class="p-2 bg-blue-300 bg-opacity-25 rounded-md"
+          >
+            <option
+              :value="users"
+              v-for="(users, i) in showUsers"
+              :key="i"
+              class="text-white"
+            >
               {{ users }}
             </option>
           </select>
           <span class="ml-1">Users</span>
         </div>
         <!-- implement print options -->
-        <div class="print-options">
-          <span @click="print">Printer</span>
-          <span @click="exportFile('csv')">CSV</span>
-          <span @click="exportFile('json')">JSON</span>
-          <span @click="exportFile('xml')">XML</span>
-        </div>
-        <div class="search-component w-80 mb-3">
-          <div
-            class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2"
-          >
-            <input
-              type="search"
-              class="placeholder-gray-500 w-full bg-transparent text-base font-normal text-gray-500 outline-none focus:border-none"
-              placeholder="Search"
-              v-model="searchInput"
-              @keyup="searchEvent"
-            />
+        <div class="formaters">
+          <div class="print-options flex justify-end mb-3">
+            <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3" @click="print" > <i-system-uicons-printer/> Print </div>
+            <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md" @click="exportFile('csv')" > <i-ion-download /> Export </div>
+          </div>
+          <div class="search-component w-80 mb-3">
+            <div
+              class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2"
+            >
+              <input
+                type="search"
+                class="placeholder-gray-500 w-full bg-transparent text-base font-normal text-gray-500 outline-none focus:border-none"
+                placeholder="Search"
+                v-model="searchInput"
+                @keyup="searchEvent"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -438,7 +445,10 @@ onMounted(() => {
                     >
                       <div class="flex items-center">
                         <span>{{ headers.text }}</span>
-                        <span @click.prevent="sortByColumn(headers.name)" class="cursor-pointer pl-1">
+                        <span
+                          @click.prevent="sortByColumn(headers.name)"
+                          class="cursor-pointer pl-1"
+                        >
                           <i-mdi-filter-variant class="pointer-events-none" />
                         </span>
                       </div>
@@ -593,7 +603,7 @@ onMounted(() => {
                         <a
                           href="#"
                           @click.prevent="paginateEvent(pagination)"
-                          >{{ pagination }}</a
+                          >{{ isNaN(pagination) ? "..." : pagination }}</a
                         >
                       </li>
                     </ul>

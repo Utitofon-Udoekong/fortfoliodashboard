@@ -2,7 +2,7 @@
 import CheckboxComponent from "../CheckboxComponent.vue";
 import { transactions } from "~~/assets/transactions";
 import { TransactionsTableData, TableHeader } from "~~/utils/types/table";
-import { array, object } from "alga-js";
+import { array, file, object } from "alga-js";
 
 // states
 const columns = [
@@ -67,9 +67,6 @@ const open = async (index: number, e: MouseEvent) => {
   await getHeight(e).then(() => {
     show.value === null ? (show.value = index) : (show.value = null);
   });
-};
-const uniqeColumnData = (column: string) => {
-  return array.uniq(getCurrentUsers(), column);
 };
 const filterByColumn = () => {
   const filterCol = object.removeBy(col, "");
@@ -146,6 +143,12 @@ const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop()
 };
+
+const print = () => file.printed(transactionsData.value);
+const exportFile = (format) => {
+  const genString = file.exported(transactionsData.value, format);
+  file.download(genString, format);
+};
 // methods------------------------------------------------------------------------------
 
 // computed
@@ -163,10 +166,7 @@ const tableData = computed<TransactionsTableData[]>(() => {
 const showPagination = computed(() => {
   let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
   const formatedArray = stringArray.map((str) => {
-    if(+str){
-      return Number(str);
-    }
-    return str
+    return Number(str);
   });
   return formatedArray;
 });
@@ -203,17 +203,23 @@ onMounted(() => {
           </select>
           <span class="ml-1">Users</span>
         </div>
-        <div class="search-component w-80 mb-3">
-          <div
-            class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2"
-          >
-            <input
-              type="search"
-              class="placeholder-gray-500 w-full bg-transparent text-base font-normal text-gray-500 outline-none focus:border-none"
-              placeholder="Search"
-              v-model="searchInput"
-              @keyup="searchEvent"
-            />
+        <div class="formaters">
+          <div class="print-options flex justify-end mb-3">
+            <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3" @click="print" > <i-system-uicons-printer/> Print </div>
+            <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md" @click="exportFile('csv')" > <i-ion-download /> Export </div>
+          </div>
+          <div class="search-component w-80 mb-3">
+            <div
+              class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2"
+            >
+              <input
+                type="search"
+                class="placeholder-gray-500 w-full bg-transparent text-base font-normal text-gray-500 outline-none focus:border-none"
+                placeholder="Search"
+                v-model="searchInput"
+                @keyup="searchEvent"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -341,7 +347,7 @@ onMounted(() => {
                         <a
                           href="#"
                           @click.prevent="paginateEvent(pagination)"
-                          >{{ pagination }}</a
+                          >{{ isNaN(pagination) ? "..." : pagination }}</a
                         >
                       </li>
                     </ul>
