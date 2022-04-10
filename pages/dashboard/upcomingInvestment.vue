@@ -1,14 +1,14 @@
 <template>
   <NuxtLayout name="dashboard">
     <div class="py-4">
-      <TablesInvestmentTable />
+      <TablesUpcomingInvestmentTable />
     </div>
-    <div class="py-4">
+    <!-- <div class="py-4">
       <div class="flex gap-4">
         <InvestmentOverview />
         <TopInvestments />
       </div>
-    </div>
+    </div> -->
   </NuxtLayout>
 </template>
 

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const { clamp, changeClamp } = inject("clamp");
-const showDropDown = ref<boolean>(false)
-const toggleDropDown = () => showDropDown.value = !showDropDown.value
+const showDropDown = ref<boolean>(false);
+const toggleDropDown = () => (showDropDown.value = !showDropDown.value);
 </script>
 <template>
   <div
@@ -38,17 +38,22 @@ const toggleDropDown = () => showDropDown.value = !showDropDown.value
           to="/dashboard/investment"
         >
           <span class="pr-3"><i-bx-bx-chart /></span>
-          <li class="clamp ? 'hidden' : 'block'">Investments</li>
-          <span class="ml-10 cursor-pointer" @click="toggleDropDown"><i-uil-angle-up v-if="showDropDown"/><i-uil-angle-down v-else/></span>
+          <li :class="clamp ? 'hidden' : 'block'">Investments</li>
+          <span class="ml-10 cursor-pointer" @click.prevent="toggleDropDown"
+            ><i-uil-angle-up v-if="showDropDown" /><i-uil-angle-down v-else
+          /></span>
         </NuxtLink>
         <NuxtLink
-        v-if="showDropDown"
-          to=""
+          v-if="showDropDown"
+          to="/dashboard/upcomingInvestment"
           :exact-active-class="'bg-brand-clear_white text-gray-50'"
+          class="ml-5 flex items-center text-gray-400 hover:bg-brand-clear_white p-2 rounded-xl"
         >
+          <span class="pr-3 text-xs"><i-ph-arrow-line-up /></span>
           <li class="relative">
             <a
-              class="flex items-center text-xs p-2 ml-8 text-gray-400 text-ellipsis whitespace-nowrap rounded-xl hover:bg-brand-clear_white transition duration-300 ease-in-out"
+              :class="clamp ? 'hidden' : 'block'"
+              class="flex items-center text-xs "
               >Upcoming Investments</a
             >
           </li>
