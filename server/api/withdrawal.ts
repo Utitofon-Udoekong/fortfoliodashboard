@@ -1,6 +1,5 @@
-import { IncomingMessage, ServerResponse } from "http";
 
-export default (req: IncomingMessage, res: ServerResponse) => {
+export default (_: any,__: any) => {
     let withdrawals: any[]
     const {$db} = useNuxtApp()
     $db.collection("authUsers").doc().collection("withdrawals").onSnapshot((querysnapshot) => {
@@ -8,7 +7,7 @@ export default (req: IncomingMessage, res: ServerResponse) => {
         else{
             withdrawals = querysnapshot.docs.map(doc => {
                 return {
-                    id: doc.id,
+                    uid: doc.id,
                     ...doc.data()
                 }
             })

@@ -8,7 +8,7 @@ export default (req: IncomingMessage, res: ServerResponse) => {
         else{
             investments = querysnapshot.docs.map(doc => {
                 return {
-                    id: doc.id,
+                    uid: doc.id,
                     ...doc.data()
                 }
             })

@@ -1,6 +1,4 @@
-import { IncomingMessage, ServerResponse } from "http";
-
-export default async (req: IncomingMessage, res: ServerResponse) => {
+export default async (_: any,__: any) => {
     let users: any[]
     const {$db} = useNuxtApp()
     $db.collection("authUsers").onSnapshot((querysnapshot) => {
@@ -8,7 +6,7 @@ export default async (req: IncomingMessage, res: ServerResponse) => {
         else {
             users = querysnapshot.docs.map(doc => {
                 return {
-                    id: doc.id,
+                    uid: doc.id,
                     ...doc.data()
                 }
             })
