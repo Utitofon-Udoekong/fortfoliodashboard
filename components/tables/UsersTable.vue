@@ -4,6 +4,8 @@ import { users } from "~~/assets/users";
 import { UsersTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 
+const { data } = await useAsyncData('users', () => $fetch('/api/users'))
+
 // states
 const columns = [
   { name: "id", text: "User ID" },

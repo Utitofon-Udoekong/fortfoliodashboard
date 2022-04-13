@@ -4,6 +4,8 @@ import { kycData } from "~~/assets/kyc";
 import { KYCTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 
+const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
+
 // states
 const columns = [
   { name: "fullName", text: "User" },

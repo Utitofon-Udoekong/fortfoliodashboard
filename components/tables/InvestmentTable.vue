@@ -3,7 +3,7 @@ import { investment } from "~~/assets/investments";
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 import { computed, onMounted, reactive, ref } from "vue";
-// const zu = await useAsync
+const { data } = await useAsyncData('investments', () => $fetch('/api/investments'))
 // states
 const columns = [
   { name: "id", text: "User ID" },

@@ -3,7 +3,7 @@ import CheckboxComponent from "../CheckboxComponent.vue";
 import { transactions } from "~~/assets/transactions";
 import { TransactionsTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
-
+const { data } = await useAsyncData('transactions', () => $fetch('/api/transactions'))
 // states
 const columns = [
   { name: "id", text: "User ID" },
