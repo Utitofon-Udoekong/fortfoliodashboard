@@ -23,7 +23,7 @@ export interface MainTableData{
     status: string
 }
 
-export interface InvestmentTableData{
+export interface TransactionsTableData{
     description: string
     id: number
     amountInvested: number
@@ -49,7 +49,7 @@ export interface KYCTableData{
     status: string
 }
 
-export interface TransactionsTableData{
+export interface InvestmentTableData{
     id: number
     payment_for: string
     amount_invested: number

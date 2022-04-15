@@ -1,32 +1,35 @@
 <script lang="ts" setup>
-import { investment } from "~~/assets/investments";
+import CheckboxComponent from "../CheckboxComponent.vue";
+import { investments } from "~~/assets/investments";
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
-import { computed, onMounted, reactive, ref } from "vue";
 const { data } = await useAsyncData('investments', () => $fetch('/api/investments'))
 // states
 const columns = [
   { name: "id", text: "User ID" },
-  { name: "description", text: "Plan" },
-  { name: "amountInvested", text: "Amount" },
-  { name: "processed", text: "Processed" },
+  { name: "payment_for", text: "Payment For" },
+  { name: "amount_invested", text: "Amount Invested" },
+  { name: "payment_date", text: "Payment Date" },
+  { name: "due_date", text: "Due Date" },
   { name: "status", text: "Status" },
 ];
 let col: InvestmentTableData = reactive({
   id: null,
-  description: "",
-  amountInvested: null,
-  processed: "",
+  payment_for: "",
+  amount_invested: null,
+  payment_date: "",
+  due_date: "",
   status: "",
 });
 let sortCol: InvestmentTableData = reactive({
   id: null,
-  description: "",
-  amountInvested: null,
-  processed: "",
+  payment_for: "",
+  amount_invested: null,
+  payment_date: "",
+  due_date: "",
   status: "",
 });
-const investmentData = ref<InvestmentTableData[]>(investment);
+const investmentsData = ref<InvestmentTableData[]>(investments);
 let filteredInvestment = ref<InvestmentTableData[]>([]);
 const showInvestment = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentInvestment = ref<number>(10);
@@ -35,23 +38,19 @@ const searchInvestment = ref<string[]>([]);
 const currentPage = ref<number>(1);
 const totalPages = ref<number>(1);
 let show = ref<number | null>(null);
-let showInvestmentData = ref(false);
+let showUserData = ref(false);
 
 const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: InvestmentTableData[] = [];
 const openTab = ref(1);
-let showModal = ref(false);
+let showModal = ref(false)
 // states------------------------------------------------------------------------------
 
 // methods
-const toggleModal = () => {
-  showModal.value = !showModal.value;
-  editableUser.pop();
-};
 const selectRow = (user: InvestmentTableData) => {
   editableUser.push(user);
-  showInvestmentData.value = true;
+  showUserData.value = true;
 };
 const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
 
@@ -61,7 +60,7 @@ const getHeight = async (e: MouseEvent) => {
   // console.log(top.value, left.value)
 };
 const toggleUserData = () => {
-  showInvestmentData.value = !showInvestmentData.value;
+  showUserData.value = !showUserData.value;
   editableUser.pop();
 };
 const open = async (index: number, e: MouseEvent) => {
@@ -71,29 +70,27 @@ const open = async (index: number, e: MouseEvent) => {
 };
 const filterByColumn = () => {
   const filterCol = object.removeBy(col, "");
-  let filterData = getCurrentInvestment();
+  let filterData = getCurrentUsers();
   if (Object.entries(filterCol).length >= 1) {
-    filterData = array.filter(getCurrentInvestment(), filterCol);
+    filterData = array.filter(getCurrentUsers(), filterCol);
   }
   paginateData(filterData);
 };
 const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
-    searchInvestment.value = array.search(
-      investmentData.value,
-      searchInput.value
-    );
+    searchInvestment.value = array.search(investmentsData.value,searchInput.value);
     paginateData(searchInvestment.value);
   } else {
     searchInvestment.value = [];
-    paginateData(investmentData.value);
+    paginateData(investmentsData.value);
     col = {
       id: null,
-      description: "",
-      amountInvested: null,
-      processed: "",
-      status: "",
+  payment_for: "",
+  amount_invested: null,
+  payment_date: "",
+  due_date: "",
+  status: "",
     };
   }
 };
@@ -115,36 +112,41 @@ const searchEvent = () => {
   paginateUsers();
 };
 
-const getCurrentInvestment = () => {
-  return searchInvestment.value.length <= 0
-    ? investmentData.value
-    : searchInvestment.value;
+const getCurrentUsers = () => {
+  return searchInvestment.value.length <= 0 ? investmentsData.value : searchInvestment.value;
 };
 
 const sortByColumn = (column) => {
   col = {
     id: null,
-    description: "",
-    amountInvested: null,
-    processed: "",
-    status: "",
+  payment_for: "",
+  amount_invested: null,
+  payment_date: "",
+  due_date: "",
+  status: "",
   };
-  let sortedUsers = getCurrentInvestment();
+  let sortedUsers = getCurrentUsers();
   let sortedColumn = sortCol[column];
   if (sortedColumn === "" || sortedColumn === null) {
     sortCol[column] = "asc";
-    sortedUsers = array.sortBy(getCurrentInvestment(), column, "asc");
+    sortedUsers = array.sortBy(getCurrentUsers(), column, "asc");
   } else if (sortedColumn === "asc") {
     sortCol[column] = "desc";
-    sortedUsers = array.sortBy(getCurrentInvestment(), column, "desc");
+    sortedUsers = array.sortBy(getCurrentUsers(), column, "desc");
   } else if (sortedColumn === "desc") {
     sortCol[column] = "";
   }
   paginateData(sortedUsers);
 };
-// const print = () => file.printed(investmentData.value);
-const exportFile = (format: string) => {
-  const genString = file.exported(investmentData.value, format);
+
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+  editableUser.pop()
+};
+
+// const print = () => file.printed(investmentsData.value);
+const exportFile = (format) => {
+  const genString = file.exported(investmentsData.value, format);
   file.download(genString, format);
 };
 // methods------------------------------------------------------------------------------
@@ -152,11 +154,7 @@ const exportFile = (format: string) => {
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
-  return array.pageInfo(
-    getCurrentInvestment(),
-    currentPage.value,
-    currentInvestment.value
-  );
+  return array.pageInfo(getCurrentUsers(), currentPage.value, currentInvestment.value);
 });
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
@@ -168,7 +166,7 @@ const tableData = computed<InvestmentTableData[]>(() => {
 const showPagination = computed(() => {
   let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
   const formatedArray = stringArray.map((str) => {
-    return Number(str)
+    return Number(str);
   });
   return formatedArray;
 });
@@ -185,32 +183,25 @@ let classObject = computed(() => {
 
 // lifecycle
 onMounted(() => {
-  paginateData(investmentData.value);
+  paginateData(investmentsData.value);
 });
-// lifecycle---------------------
+// lifecycle----------------------------------------------------------------------------------
+
+
+
 </script>
 <template>
-  <div class="h-auto mt-4">
+  <div class="h-auto">
     <div class="table-form">
       <div class="flex mb-3 justify-between">
         <div class="flex items-center">
           <span class="mr-1">Show</span>
-          <select
-            v-model="currentInvestment"
-            @change="paginateUsers"
-            class="p-2 bg-blue-300 bg-opacity-25 rounded-md"
-          >
-            <option
-              :value="users"
-              v-for="(users, i) in showInvestment"
-              :key="i"
-              class="text-white"
-            >
+          <select v-model="currentInvestment" @change="paginateUsers" class="p-2 bg-blue-300 bg-opacity-25 rounded-md">
+            <option :value="users" v-for="(users, i) in showInvestment" :key="i" class="text-white">
               {{ users }}
             </option>
-            <option :value="showInfo.of" class="text-white">All</option>
           </select>
-          <span class="ml-1">Users</span>
+          <span class="ml-1">investments</span>
         </div>
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
@@ -237,23 +228,23 @@ onMounted(() => {
           <div class="py-2 align-middle inline-block min-w-full">
             <div class="overflow-hidden border-b border-gray-200 sm:rounded-lg">
               <table class="min-w-full divide-y divide-gray-200">
-                <caption class="text-lg font-semibold">
-                  Recent Investment
-                </caption>
-                <thead class="bg-white">
+                <thead class="bg-transparent">
                   <tr>
                     <th
-                      v-for="(headers, i) in tableHeader"
-                      :key="i"
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
+                    >
+                      <CheckboxComponent checked="checked" />
+                    </th>
+                    <th
+                    v-for="(headers, i) in tableHeader"
+                    :key="i"
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
                       <div class="flex items-center">
                         <span>{{ headers.text }}</span>
-                        <span
-                          @click.prevent="sortByColumn(headers.name)"
-                          class="cursor-pointer pl-1"
-                        >
+                        <span @click.prevent="sortByColumn(headers.name)" class="cursor-pointer pl-1">
                           <i-mdi-filter-variant class="pointer-events-none" />
                         </span>
                       </div>
@@ -267,55 +258,49 @@ onMounted(() => {
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr
-                    v-for="(data, index) in tableData"
-                    :key="index"
-                    @click="selectRow(data)"
-                    class="hover:bg-gray-300 cursor-pointer"
-                  >
+                  <tr v-for="(investments, index) in tableData" :key="index" @contextmenu.prevent="selectRow(investments)" class="hover:bg-gray-300 cursor-pointer">
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div>#{{ data.id }}</div>
+                      <CheckboxComponent checked="unchecked"  />
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
                         <div class="">
-                          <div class="text-sm">{{ data.description }}</div>
+                          <p>#{{ investments.id }}</p>
                         </div>
                       </div>
                     </td>
+                    <td class="px-6 py-4 truncate whitespace-nowrap">
+                      <div class="text-sm truncate text-ellipsis">{{ investments.payment_for }}</div>
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">{{ data.amountInvested }}</div>
+                      <div class="text-sm">{{ investments.amount_invested }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ data.processed }}
+                      {{ investments.payment_date }}
                     </td>
-
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                      {{ investments.due_date }}
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span
                         :class="
-                          data.status === 'Cancelled'
-                            ? 'text-brand-red'
-                            : data.status === 'Pending'
-                            ? 'text-yellow-400'
+                          investments.status === 'Cancelled'
+                            ? 'text-brand-red' : investments.status === 'Pending' ? 'text-yellow-400'
                             : 'text-brand-green'
                         "
                         class="text-sm flex"
-                        ><i-mdi-music-note-whole /> {{ data.status }}</span
+                        ><i-mdi-music-note-whole /> {{ investments.status }}</span
                       >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap relative">
-                      <i-ic-baseline-arrow-forward-ios
-                        class="text-gray-400 cursor-pointer border border-gray-400 p-1 rounded-full w-auto"
-                        role="button"
-                        aria-label="option"
-                      />
-                      <!-- <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
+                      <i-mdi-dots-horizontal @click="open(index,$event)" class="cursor-pointer" role="button"
+                        aria-label="option" />
+                      <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
                         <ul class="py-1" >
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'success',open(index,$event)">Approve payment</li>
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'pending',open(index,$event)">Cancel payment</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="investmentsData[index].status = 'success',open(index,$event)">Approve payment</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="investmentsData[index].status = 'pending',open(index,$event)">Cancel payment</li>
                         </ul>
-                        @click="open(index,$event)" 
-                      </div> -->
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -413,46 +398,20 @@ onMounted(() => {
       </div>
     </div>
     <!-- USER MODAL -->
-    <div
-      v-if="showModal"
-      class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 w-full h-full"
-    >
-      <div
-        class="closemodal p-4 fixed top-3 right-6 bg-white rounded-full cursor-pointer"
-      >
-        <i-ion-close-round class="text-black text-xl" @click="toggleModal" />
+    <div v-if="showModal" class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 w-full h-full">
+      <div class="closemodal p-4 fixed top-3 right-6 bg-white rounded-full cursor-pointer">
+        <i-ion-close-round class="text-black text-xl" @click="toggleModal"/>
       </div>
       <div class="bg-white p-10 max-w-lg h-auto z-40 mx-auto mt-20">
         <p class="text-xl font-semibold pb-5">Investment INFO</p>
-        <p class="text-lg font-semibold pb-3">
-          USERID:
-          <span class="font-normal text-base">{{ editableUser[0].id }}</span>
-        </p>
-        <p class="text-lg font-semibold pb-3">
-          DESCRIPTION:
-          <span class="font-normal text-base">{{
-            editableUser[0].description
-          }}</span>
-        </p>
-        <p class="text-lg font-semibold pb-3">
-          AMOUNT INVESTED:
-          <span class="font-normal text-base">{{
-            editableUser[0].amountInvested
-          }}</span>
-        </p>
-        <p class="text-lg font-semibold pb-3">
-          PROCESSED:
-          <span class="font-normal text-base">{{
-            editableUser[0].processed
-          }}</span>
-        </p>
-        <p class="text-lg font-semibold">
-          STATUS:
-          <span class="font-normal text-base">{{
-            editableUser[0].status
-          }}</span>
-        </p>
+        <p class="text-lg font-semibold pb-3">USERID: <span class="font-normal text-base">{{editableUser[0].id}}</span></p>
+        <p class="text-lg font-semibold pb-3">DESCRIPTION: <span class="font-normal text-base">{{editableUser[0].payment_for}}</span></p>
+        <p class="text-lg font-semibold pb-3">AMOUNT INVESTED: <span class="font-normal text-base">{{editableUser[0].amount_invested}}</span></p>
+        <p class="text-lg font-semibold pb-3">PAYMENT DATE: <span class="font-normal text-base">{{editableUser[0].payment_date}}</span></p>
+        <p class="text-lg font-semibold pb-3">DUE DATE: <span class="font-normal text-base">{{editableUser[0].due_date}}</span></p>
+        <p class="text-lg font-semibold">STATUS: <span class="font-normal text-base">{{editableUser[0].status}}</span></p>
       </div>
     </div>
   </div>
 </template>
+
