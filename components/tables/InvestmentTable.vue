@@ -3,7 +3,7 @@ import CheckboxComponent from "../CheckboxComponent.vue";
 import { investments } from "~~/assets/investments";
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
-const { data } = await useAsyncData('investments', () => $fetch('/api/investments'))
+
 // states
 const columns = [
   { name: "id", text: "User ID" },
@@ -184,6 +184,7 @@ let classObject = computed(() => {
 // lifecycle
 onMounted(() => {
   paginateData(investmentsData.value);
+  
 });
 // lifecycle----------------------------------------------------------------------------------
 
@@ -231,12 +232,6 @@ onMounted(() => {
                 <thead class="bg-transparent">
                   <tr>
                     <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
-                    >
-                      <CheckboxComponent checked="checked" />
-                    </th>
-                    <th
                     v-for="(headers, i) in tableHeader"
                     :key="i"
                       scope="col"
@@ -260,9 +255,6 @@ onMounted(() => {
                 <tbody class="bg-white divide-y divide-gray-200">
                   <tr v-for="(investments, index) in tableData" :key="index" @contextmenu.prevent="selectRow(investments)" class="hover:bg-gray-300 cursor-pointer">
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <CheckboxComponent checked="unchecked"  />
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
                         <div class="">
                           <p>#{{ investments.id }}</p>
@@ -270,7 +262,7 @@ onMounted(() => {
                       </div>
                     </td>
                     <td class="px-6 py-4 truncate whitespace-nowrap">
-                      <div class="text-sm truncate text-ellipsis">{{ investments.payment_for }}</div>
+                      <div class="text-sm truncate text-ellipsis">{{ investments.payment_for }} Investment</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="text-sm">{{ investments.amount_invested }}</div>

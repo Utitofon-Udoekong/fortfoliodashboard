@@ -22,6 +22,10 @@ module.exports = {
           ash: "#B9B9B9",
           red: "#DF1414"
         }
+      },
+      backgroundImage: {
+        'login-texture': "url('./assets/images/mansitting.jpg')",
+        'login-texture-f': "url('./assets/images/womantyping.jpg')",
       }
     },
   },

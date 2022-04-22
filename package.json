@@ -15,11 +15,14 @@
     "unplugin-vue-components": "^0.17.16"
   },
   "dependencies": {
+    "@vee-validate/rules": "^4.5.11",
     "alga-css": "^1.0.0-development7",
     "alga-js": "^0.1.0-wood-3",
     "firebase": "^9.6.6",
     "firebase-admin": "^10.0.2",
     "swiper": "^6.8.4",
-    "vue-chart-3": "^3.1.2"
+    "vee-validate": "^4.5.11",
+    "vue-chart-3": "^3.1.2",
+    "yup": "^0.32.11"
   }
 }

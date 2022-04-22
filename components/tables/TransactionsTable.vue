@@ -3,7 +3,7 @@ import { transactions } from "~~/assets/transactions";
 import { TransactionsTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 import { computed, onMounted, reactive, ref } from "vue";
-const { data } = await useAsyncData('transactionss', () => $fetch('/api/transactionss'))
+const { data } = await useAsyncData('transactions', () => $fetch('/api/transactions'))
 // states
 const columns = [
   { name: "id", text: "User ID" },
