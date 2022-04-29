@@ -1,85 +1,3 @@
-<template>
-  <div class="wrapper">
-    <div class="flex justify-center items-center">
-      <div
-        class=""
-      >
-        <h2 class="title p-2 text-center mb-6 text-white">
-          VeeValidate Tutorial
-        </h2>
-        <VForm
-          class="card p-5"
-          :validation-schema="schema"
-          :initial-values="initialValues"
-          v-slot="{ meta: formMeta, errors: formErrors }"
-          @submit="handleSubmit"
-        >
-          <button
-            class="p-2 bg-gray-900 text-white"
-            @click="debug = !debug"
-          >
-            {{ debug ? "Remove Debug" : "Show Debug" }}
-          </button>
-
-          <h2 class="title is-4 mt-2">Sign Up</h2>
-
-          <VTextInput
-            type="email"
-            name="email"
-            label="Email"
-            placeholder="Email"
-            :debug="debug"
-            leftIcon="fa-envelope"
-          />
-          <VTextInput
-            type="password"
-            name="password"
-            label="Password"
-            placeholder="Password"
-            :debug="debug"
-            leftIcon="fa-lock"
-          />
-          <VTextInput
-            type="password"
-            name="confirmed"
-            label="Confirm Password"
-            placeholder="Confirm Password"
-            :debug="debug"
-            leftIcon="fa-lock"
-          />
-
-          <template v-if="Object.keys(formErrors).length">
-            <p class="help is-danger has-text-weight-bold">
-              Please correct the following errors:
-            </p>
-            <ul>
-              <li
-                v-for="(message, field) in formErrors"
-                :key="field"
-                class="help is-danger"
-              >
-                {{ message }}
-              </li>
-            </ul>
-          </template>
-
-          <button
-            class="button mt-3 bg-gray-900 text-white p-2"
-            :class="{ 'is-primary': formMeta.valid }"
-            :disabled="!formMeta.valid"
-            type="submit"
-          >
-            Submit
-          </button>
-
-          <div class="debug" v-if="debug">
-            <pre>{{ formMeta }}</pre>
-          </div>
-        </VForm>
-      </div>
-    </div>
-  </div>
-</template>
 <script setup lang="ts">
 import { object, string, ref as yupRef } from "yup";
 import { configure } from "vee-validate";
@@ -93,7 +11,7 @@ onMounted(() => {
 });
 
 const existingEmail = async (value) => {
-  const result = await $fetch("/api/checkEmail?email=" + value);
+  const result = await $fetch("/api/checkemail?email=" + value);
   return result ? true : false;
 };
 
@@ -128,6 +46,87 @@ const schema = object({
 
 const initialValues = { email: "", password: "", confirmed: "" };
 </script>
+
+
+<template>
+  <div class="h-screen">
+    <div class="flex justify-center items-center">
+      <div
+        class=""
+      >
+        <h2 class="title p-2 text-center mb-6 ">
+          VeeValidate Tutorial
+        </h2>
+        <VForm
+          class="p-5 border border-gray-900 rounded-md"
+          :validation-schema="schema"
+          :initial-values="initialValues"
+          v-slot="{ meta: formMeta, errors: formErrors }"
+          @submit="handleSubmit"
+        >
+          <button
+            class="p-2 bg-gray-900 text-white"
+            @click="debug = !debug"
+          >
+            {{ debug ? "Remove Debug" : "Show Debug" }}
+          </button>
+
+          <h2 class="title is-4 mt-2">Sign Up</h2>
+
+          <VTextInput
+            type="email"
+            name="email"
+            label="Email"
+            placeholder="Email"
+            :debug="debug"
+          />
+          <VTextInput
+            type="password"
+            name="password"
+            label="Password"
+            placeholder="Password"
+            :debug="debug"
+          />
+          <VTextInput
+            type="password"
+            name="confirmed"
+            label="Confirm Password"
+            placeholder="Confirm Password"
+            :debug="debug"
+          />
+
+          <template v-if="Object.keys(formErrors).length">
+            <p class="help is-danger has-text-weight-bold">
+              Please correct the following errors:
+            </p>
+            <ul>
+              <li
+                v-for="(message, field) in formErrors"
+                :key="field"
+                class="help is-danger"
+              >
+                {{ message }}
+              </li>
+            </ul>
+          </template>
+
+          <button
+            class="button mt-3 bg-gray-900 text-white p-2"
+            :class="{ 'is-primary': formMeta.valid }"
+            :disabled="!formMeta.valid"
+            type="submit"
+          >
+            Submit
+          </button>
+
+          <div class="debug" v-if="debug">
+            <pre>{{ formMeta }}</pre>
+          </div>
+        </VForm>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .columns {

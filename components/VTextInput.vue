@@ -16,10 +16,6 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  leftIcon: {
-    type: String,
-    default: "",
-  },
   debug: {
     type: Boolean,
     default: false,
@@ -33,52 +29,37 @@ const props = defineProps({
       <label class="label">{{ label }}</label>
     </div>
     <div class="field-body">
-      <div class="field">
-        <p class="control has-icons-left has-icons-right">
-          <VField :name="name" v-slot="{ field, meta, errors }">
+      <div class="field border-2 relative focus-within:border-blue-800 hover:border-blue-800 rounded-md">
+          <VField class="relative" :name="name" v-slot="{ field, meta, errors }">
             <input
               v-bind="field"
-              class="input"
+              class="text-md border-2 appearance-none bg-transparent w-full mr-3 py-3 px-2 leading-tight focus:outline-none"
               :class="{
-                'is-success': meta.valid && meta.touched,
-                'is-danger': !meta.valid && meta.touched,
+                'border-green-600': meta.valid && meta.touched,
+                'border-red-600': !meta.valid && meta.touched,
               }"
               :placeholder="placeholder"
               :type="type"
             />
-            <span class="icon is-small is-left">
-              <i class="fas" :class="leftIcon"></i>
-            </span>
             <span
-              class="icon is-small is-right"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2"
               v-if="meta.valid && meta.touched"
             >
               <i-ic-baseline-chevron-left/>
             </span>
             <span
-              class="icon is-small is-right"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2"
               v-else-if="!meta.valid && meta.touched"
             >
               <i-ic-baseline-chevron-right/>
             </span>
-            <!-- <template v-if="Object.keys(errors).length">
-                <ul>
-                  <li
-                    v-for="(message, field) in errors"
-                    :key="field"
-                    class="help is-danger"
-                  >
-                    {{ message }}
-                  </li>
-                </ul>
-              </template> -->
+            
             <VErrorMessage :name="name" as="div" class="help is-danger" />
             <div class="debug" v-if="debug">
               <pre>{{ errors }}</pre>
               <pre>{{ meta }}</pre>
             </div>
           </VField>
-        </p>
       </div>
     </div>
   </div>
