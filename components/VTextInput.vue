@@ -29,11 +29,11 @@ const props = defineProps({
       <label class="label">{{ label }}</label>
     </div>
     <div class="field-body">
-      <div class="field border-2 relative focus-within:border-blue-800 hover:border-blue-800 rounded-md">
+      <div class="field border relative focus-within:border-blue-800">
           <VField class="relative" :name="name" v-slot="{ field, meta, errors }">
             <input
               v-bind="field"
-              class="text-md border-2 appearance-none bg-transparent w-full mr-3 py-3 px-2 leading-tight focus:outline-none"
+              class="text-md border rounded-sm appearance-none bg-transparent w-full mr-3 py-3 px-2 leading-tight focus:outline-none"
               :class="{
                 'border-green-600': meta.valid && meta.touched,
                 'border-red-600': !meta.valid && meta.touched,
@@ -45,13 +45,13 @@ const props = defineProps({
               class="absolute right-2 top-1/2 transform -translate-y-1/2"
               v-if="meta.valid && meta.touched"
             >
-              <i-ic-baseline-chevron-left/>
+              <i-ic-baseline-check/>
             </span>
             <span
               class="absolute right-2 top-1/2 transform -translate-y-1/2"
               v-else-if="!meta.valid && meta.touched"
             >
-              <i-ic-baseline-chevron-right/>
+              <i-iconoir-cancel/>
             </span>
             
             <VErrorMessage :name="name" as="div" class="help is-danger" />

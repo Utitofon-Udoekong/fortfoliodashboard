@@ -1,158 +1,149 @@
+<script setup lang="ts">
+import { object, string, ref as yupRef } from "yup";
+import { configure } from "vee-validate";
+// import { onMounted, ref } from "vue";
+
+const debug = ref(false);
+onMounted(() => {
+  debug.value =
+    useRouter().currentRoute.value.query.debug === "true" ? true : false;
+    
+});
+
+interface Login {
+    email: string,
+    password: string,
+    confirmed: string
+}
+
+const existingEmail = async (value: string) => {
+  const result = await $fetch("/api/checkemail?email=" + value);
+  return result ? true : false;
+};
+
+const handleSubmit = (values: Login, actions: { resetForm: () => void; }) => {
+  console.log(values);
+  actions.resetForm();
+};
+
+configure({
+  validateOnBlur: true, // controls if `blur` events should trigger validation with `handleChange` handler
+  validateOnChange: true, // controls if `change` events should trigger validation with `handleChange` handler
+  validateOnInput: false, // controls if `input` events should trigger validation with `handleChange` handler
+  validateOnModelUpdate: true, // controls if `update:modelValue` events should trigger validation with `handleChange` handler
+});
+
+const schema = object({
+  email: string()
+    .required()
+    .email()
+    .test(
+      "email-is-taken",
+      "Email is already taken",
+      async (value) => !(await existingEmail(value))
+    )
+    .label("Email Address"),
+  password: string().required().min(8).label("Your Password"),
+  confirmed: string()
+    .required()
+    .oneOf([yupRef("password")], "Passwords do not match") //Cross-Field Validation
+    .label("Your Confirmation Password"),
+});
+
+const initialValues = { email: "", password: "", confirmed: "" };
+</script>
+
+
 <template>
-  <div class="flex items-center justify-center h-screen">
-    <div class="text-center text-black max-w-full px-2 sm:px-0 sm:max-w-3xl">
-      <h1 class="text-2xl sm:text-5xl font-bold pb-3">
-        Oops, sorry this feature is not yet available on the website.
-      </h1>
-      <p class="text-lg pb-10">
-        Contact
-        <a href="tel:+234 807 073 8825" class="text-brand-blue"
-          >+234 807 073 8825</a
-        >
-        to process your request.
-      </p>
-      <button class="text-white p-4 rounded-md">
-        <a href="https://wa.link/rpdo9m" target="_blank">Chat us on WhatsApp</a>
-      </button>
-      <p class="pt-10 flex justify-center items-center">
-        <Icon icon="cil:arrow-left" class="pr-2" width="25" />Go back
-        <a href="/" class="text-brand-blue pl-2">home</a>
-      </p>
-    </div>
-  </div>
-  <div
-    class="bg-login-texture h-screen w-full bg-center bg-cover flex justify-center items-center bg-brand-lightblue bg-blend-overlay"
-  >
-    <div class="w-full flex md:flex-row flex-col justify-center items-center">
+  <div class="h-screen">
+    <Html>
+      <Head>
+        <Title>Login - Admin</Title>
+        <Meta name="description" content="Fortfolio Admin Signup page"/>
+      </Head>
+    </Html>
+    <div class="flex justify-center items-center h-full">
       <div
-        class="hidden md:block bg-login-texture w-1/3 h-96 bg-center bg-cover relative"
+        class=""
       >
-        <div
-          class="logo bg-white w-2/5 h-24 shadow-lg -mt-3 flex items-center justify-center absolute"
+        <h2 class="title p-2 text-center mb-6 ">
+          Login Admin
+        </h2>
+        <VForm
+          class="p-5 border border-brand-blue rounded-md"
+          :validation-schema="schema"
+          :initial-values="initialValues"
+          v-slot="{ meta: formMeta, errors: formErrors }"
+          @submit="handleSubmit"
         >
-          <a href="/">
-            <img
-              src="@/assets/images/logo-text.png"
-              class="w-4/5 h-auto"
-              alt="logo"
-            />
-          </a>
-        </div>
-      </div>
-      <div class="bg-white md:w-1/3 w-11/12 p-8 shadow-xl">
-        <p class="text-brand-lightblue text-3xl">Welcome to Fortfolio</p>
-        <p class="text-gray-600 pb-4">
-          Sign In by entering your information below
-        </p>
-        <div>
-          <form class="w-full" @submit.prevent="submitForm">
-            <div class="mb-4">
-              <label for="emailText" class="text-gray-700 font-semibold text-md"
-                >Email</label
-              >
-              <div
-                class="border-2 focus-within:border-brand-lightblue hover:border-brand-lightblue rounded-md"
-              >
-                <input
-                  class="text-md border-gray-300 appearance-none bg-transparent border-none w-full mr-3 py-3 px-2 leading-tight focus:outline-none"
-                  type="text"
-                  placeholder="Enter your email"
-                  aria-label="Email"
-                  id="emailText"
-                  v-model="state.email"
-                />
-              </div>
-              <small v-if="v$.email.$error" class="text-red-600">{{
-                v$.email.$errors[0].$message
-              }}</small>
-            </div>
-            <div class="mb-2">
-              <label for="password" class="text-gray-700 font-semibold text-md"
-                >Password</label
-              >
-              <div
-                class="relative border-2 border-gray-300 focus-within:border-brand-lightblue hover:border-brand-lightblue rounded-md"
-              >
-                <input
-                  class="text-md appearance-none bg-transparent border-none w-full mr-3 py-3 px-2 leading-tight focus:outline-none"
-                  :type="showPassword ? 'text' : 'password'"
-                  placeholder="Password"
-                  aria-label="password"
-                  id="password"
-                  v-model="state.password"
-                />
-                <div>
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="25"
-                    height="25"
-                    fill="#333"
-                    class="inline-block absolute right-2 top-2 cursor-pointer"
-                    @click="showPassword = !showPassword"
-                  >
-                    <path :d="showPassword ? mdiEye : mdiEyeOff" />
-                  </svg>
-                </div>
-              </div>
-              <small v-if="v$.password.$error" class="text-red-600">{{
-                v$.password.$errors[0].$message
-              }}</small>
-            </div>
-            <div class="mb-8">
-              <input type="checkbox" id="check" class="mr-2" />
-              <label for="check">Remember me</label>
-            </div>
-            <button
-              @click.prevent="submitForm"
-              type="submit"
-              class="bg-brand-lightblue text-white text-lg font-semibold p-3 w-full rounded-md"
-            >
-              Login
-            </button>
-            <p class="text-center text-gray-600 pt-4">
-              Don't have an account?
-              <a href="/signup" class="text-brand-lightblue">Sign up</a> or go
-              <a href="/" class="text-brand-lightblue">Home</a>
+          <button
+            class="p-2 bg-gray-900 text-white"
+            @click="debug = !debug"
+          >
+            {{ debug ? "Remove Debug" : "Show Debug" }}
+          </button>
+
+          <h2 class="title font-semibold text-md my-2">Login</h2>
+
+          <VTextInput
+            type="email"
+            name="email"
+            label="Email"
+            placeholder="Email"
+            :debug="debug"
+          />
+          <VTextInput
+            type="password"
+            name="password"
+            label="Password"
+            placeholder="Password"
+            :debug="debug"
+          />
+          <VTextInput
+            type="password"
+            name="confirmed"
+            label="Confirm Password"
+            placeholder="Confirm Password"
+            :debug="debug"
+          />
+
+          <template v-if="Object.keys(formErrors).length">
+            <p class="help is-danger has-text-weight-bold font-semibold pt-4">
+              Please correct the following errors:
             </p>
-          </form>
-        </div>
+            <ul>
+              <li
+                v-for="(message, field) in formErrors"
+                :key="field"
+                class="text-red-500"
+              >
+                {{ message }}
+              </li>
+            </ul>
+          </template>
+
+          <div class="flex justify-between items-center">
+            <button
+              class="button my-3 bg-gray-900 text-white p-2"
+              :class="{ 'is-primary': formMeta.valid }"
+              :disabled="!formMeta.valid"
+              type="submit"
+            >
+              Submit
+            </button>
+            <NuxtLink
+              to="/signup"
+              class="hover:underline-current text-brand-light-blue text-sm"
+              >Signup</NuxtLink
+            >
+          </div>
+
+          <div class="debug" v-if="debug">
+            <pre>{{ formMeta }}</pre>
+          </div>
+        </VForm>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-const state = reactive({
-  email: "",
-  password: "",
-});
-const alpha = helpers.regex(
-  /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
-);
-const incorrectPasswordMessage =
-  "Password must be atleast 8 characters, contain a number, a special character, and an uppercase letter.";
-const rules = computed(() => {
-  return {
-    email: { required, email },
-    password: {
-      required,
-      alpha: helpers.withMessage(incorrectPasswordMessage, alpha),
-    },
-  };
-});
-
-const showPassword = ref(false);
-
-const v$ = useVuelidate(rules, state);
-const submitForm = async () => {
-  await this.v$.$validate();
-  if (!this.v$.$error) this.$router.push("/constructionpage");
-  else console.log("error");
-};
-</script>
-
-<style>
-button {
-  background: #00af9c;
-}
-</style>

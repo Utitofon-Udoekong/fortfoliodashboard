@@ -56,15 +56,15 @@ const initialValues = { email: "", password: "", confirmed: "" };
         <Meta name="description" content="Fortfolio Admin Signup page"/>
       </Head>
     </Html>
-    <div class="flex justify-center items-center">
+    <div class="flex justify-center items-center h-full">
       <div
         class=""
       >
         <h2 class="title p-2 text-center mb-6 ">
-          VeeValidate Tutorial
+          Register Admin
         </h2>
         <VForm
-          class="p-5 border border-gray-900 rounded-md"
+          class="p-5 border border-brand-blue rounded-md"
           :validation-schema="schema"
           :initial-values="initialValues"
           v-slot="{ meta: formMeta, errors: formErrors }"
@@ -102,14 +102,14 @@ const initialValues = { email: "", password: "", confirmed: "" };
           />
 
           <template v-if="Object.keys(formErrors).length">
-            <p class="help is-danger has-text-weight-bold">
+            <p class="help is-danger has-text-weight-bold font-semibold pt-4">
               Please correct the following errors:
             </p>
             <ul>
               <li
                 v-for="(message, field) in formErrors"
                 :key="field"
-                class="help is-danger"
+                class="text-red-500"
               >
                 {{ message }}
               </li>
@@ -134,16 +134,3 @@ const initialValues = { email: "", password: "", confirmed: "" };
   </div>
 </template>
 
-<style scoped>
-.columns {
-  min-height: 100vh;
-}
-
-.wrapper {
-  min-width: 100%;
-  min-height: 100%;
-  background-image: url("~/assets/images/hero-2.jpg");
-  background-size: cover;
-  background-position: center;
-}
-</style>
