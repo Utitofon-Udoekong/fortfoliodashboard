@@ -1,7 +1,7 @@
+const {$db} = useNuxtApp()
 
-export default async (_: any,__: any) => {
+export default async (_: any,res: any) => {
     let users: any[]
-    const {$db} = useNuxtApp()
    
     $db.collection("authUsers").onSnapshot((querysnapshot) => {
         if(querysnapshot.empty) return "No snapshot found for investments"
@@ -14,5 +14,7 @@ export default async (_: any,__: any) => {
             })
         }
     })
-    return users
+    res.writeHead(200, { 'Content-Type': 'application/json' })
+    res.write(JSON.stringify(users))
+    res.end()
 }

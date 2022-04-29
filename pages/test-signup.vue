@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
-    <div class="columns is-mobile is-vcentered is-centered is-gapless">
+    <div class="flex justify-center items-center">
       <div
-        class="column is-11-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd"
+        class=""
       >
-        <h2 class="title is-2 has-text-centered mb-6 has-text-white">
+        <h2 class="title p-2 text-center mb-6 text-white">
           VeeValidate Tutorial
         </h2>
         <VForm
@@ -15,7 +15,7 @@
           @submit="handleSubmit"
         >
           <button
-            class="toggle-debug button is-link is-inverted is-pulled-right p-2"
+            class="p-2 bg-gray-900 text-white"
             @click="debug = !debug"
           >
             {{ debug ? "Remove Debug" : "Show Debug" }}
@@ -64,7 +64,7 @@
           </template>
 
           <button
-            class="button mt-3"
+            class="button mt-3 bg-gray-900 text-white p-2"
             :class="{ 'is-primary': formMeta.valid }"
             :disabled="!formMeta.valid"
             type="submit"
@@ -83,16 +83,17 @@
 <script setup lang="ts">
 import { object, string, ref as yupRef } from "yup";
 import { configure } from "vee-validate";
+// import { onMounted, ref } from "vue";
 
 const debug = ref(false);
-
 onMounted(() => {
   debug.value =
     useRouter().currentRoute.value.query.debug === "true" ? true : false;
+    
 });
 
 const existingEmail = async (value) => {
-  const result = await $fetch("/api/checkemail?email=" + value);
+  const result = await $fetch("/api/checkEmail?email=" + value);
   return result ? true : false;
 };
 

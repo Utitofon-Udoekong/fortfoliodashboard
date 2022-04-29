@@ -1,8 +1,8 @@
 import { IncomingMessage, ServerResponse } from "http";
+const {$db} = useNuxtApp()
 
 export default (req: IncomingMessage, res: ServerResponse) => {
     let investments: any[]
-    const {$db} = useNuxtApp()
     $db.collection("authUsers").doc().collection("investments").onSnapshot((querysnapshot) => {
         if(querysnapshot.empty) return "No snapshot found for investments"
         else{
