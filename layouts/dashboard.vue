@@ -12,7 +12,7 @@ provide("clamp", {
         <div class="h-full" :class="clamp ? 'w-11/12' : 'w-5/6'">
             <Header />
             <main class="h-5/6 px-5 overflow-y-auto">
-                <Title/>
+                <BaseTitle/>
                 <slot/>
             </main>
         </div>

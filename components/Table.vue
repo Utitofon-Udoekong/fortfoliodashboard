@@ -76,12 +76,6 @@ let classObject = computed(() => {
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      <CheckboxComponent checked="checked" />
-                    </th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
-                    >
                       User ID
                     </th>
                     <th
@@ -124,9 +118,6 @@ let classObject = computed(() => {
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                   <tr v-for="(activity, index) in activities" :key="index" @contextmenu.prevent="selectRow(activity)" class="hover:bg-gray-300 cursor-pointer">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <CheckboxComponent checked="unchecked"  />
-                    </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
                         <div class="">

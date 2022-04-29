@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import CheckboxComponent from "../CheckboxComponent.vue";
 import { investments } from "~~/assets/investments";
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";

@@ -50,6 +50,12 @@ const initialValues = { email: "", password: "", confirmed: "" };
 
 <template>
   <div class="h-screen">
+    <Html>
+      <Head>
+        <Title>Register - Admin</Title>
+        <Meta name="description" content="Fortfolio Admin Signup page"/>
+      </Head>
+    </Html>
     <div class="flex justify-center items-center">
       <div
         class=""

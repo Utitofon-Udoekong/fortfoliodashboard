@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import CheckboxComponent from "../CheckboxComponent.vue";
 import { users } from "~~/assets/users";
 import { UsersTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
@@ -434,12 +433,6 @@ onMounted(() => {
                 <thead class="bg-transparent">
                   <tr>
                     <th
-                      scope="col"
-                      class="pr-3 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
-                    >
-                      <CheckboxComponent checked="checked" />
-                    </th>
-                    <th
                       v-for="(headers, i) in tableHeader"
                       :key="i"
                       scope="col"
@@ -470,9 +463,6 @@ onMounted(() => {
                     @contextmenu.prevent="selectRow(data)"
                     class="hover:bg-gray-300 cursor-pointer"
                   >
-                    <td class="pr-3 py-4 whitespace-nowrap">
-                      <CheckboxComponent checked="unchecked" />
-                    </td>
                     <td class="px-3 py-4 whitespace-nowrap">
                       <div class="flex items-center">
                         <div class="">
