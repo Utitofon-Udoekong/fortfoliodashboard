@@ -2,7 +2,7 @@
 import { object, string, ref as yupRef } from "yup";
 import { configure } from "vee-validate";
 // import { onMounted, ref } from "vue";
-
+const {$auth} = useNuxtApp()
 const debug = ref(false);
 onMounted(() => {
   debug.value =
