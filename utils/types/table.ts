@@ -31,13 +31,35 @@ export interface TransactionsTableData{
     status: string
 }
 
+// [
+//     {
+//       "uuid": "P7X6dGy88HTQyuQcQlZYdknZmEH2",
+//       "firstName": "Etini",
+//       "phoneNumber": "+123456",
+//       "id": "0a93749",
+//       "createdat": {
+//         "_seconds": 1651498533,
+//         "_nanoseconds": 697159000
+//       },
+//       "email": "meet@gmail.com",
+//       "balance": 0,
+//       "isVerified": false,
+//       "lastName": "Archibong",
+//       "displayName": "EA"
+//     },
+//   ]
+
 export interface UsersTableData{
-    id: number
-    userName: string
+    id: String
+    firstName: string
+    lastName: string
     email: string
-    phone: string
-    verification: string
-    status: string
+    phoneNumber: string
+    isVerified: boolean
+    createdat: object
+    balance: number
+    displayName: string,
+    kyc: object
 }
 
 export interface KYCTableData{

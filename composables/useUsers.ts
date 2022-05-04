@@ -1,3 +1,3 @@
-export default () => {
-    return useFetch("api/users")
+export const useUsers = () => {
+    return useAsyncData("users", () => $fetch("/api/users"))
 } 
