@@ -50,7 +50,7 @@ const apps = getApps()
 
 if (!apps.length) {
     initializeApp({
-        credential: cert('./certs.json') // 👈 Path to your JSON Firebase certificate
+        credential: cert('./serviceAccount.json') // 👈 Path to your JSON Firebase certificate
     })
 }
 

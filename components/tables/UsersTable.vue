@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // import { users } from "~~/assets/users";
-import { UsersTableData, TableHeader } from "~~/utils/types/table";
+import { TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 const usersDataListOmo = await useUsers();
 const { data } = await useAsyncData("users", () => $fetch("/api/users"));
@@ -13,7 +13,7 @@ const columns = [
   { name: "verification", text: "Verification" },
   { name: "isVerified", text: "Status" },
 ];
-let col: UsersTableData = reactive({
+let col = reactive({
   id: "",
   firstName: "",
   lastName: "",
@@ -25,7 +25,7 @@ let col: UsersTableData = reactive({
   displayName: "",
   kyc: {},
 });
-let sortCol: UsersTableData = reactive({
+let sortCol = reactive({
   id: "",
   firstName: "",
   lastName: "",
@@ -37,8 +37,8 @@ let sortCol: UsersTableData = reactive({
   displayName: "",
   kyc: {},
 });
-const usersData = ref<UsersTableData[]>(usersDataListOmo);
-let filteredUsers = ref<UsersTableData[]>([]);
+const usersData = ref<[]>(usersDataListOmo);
+let filteredUsers = ref<any[]>([]);
 const showUsers = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentUsers = ref<number>(10);
 const searchInput = ref<string>("");
@@ -50,12 +50,12 @@ let showUserData = ref(false);
 
 const topPos = ref(0);
 const leftPos = ref(0);
-let editableUser: UsersTableData[] = [];
+let editableUser: any[] = [];
 const openTab = ref(1);
 // states------------------------------------------------------------------------------
 
 // methods
-const selectRow = (user: UsersTableData) => {
+const selectRow = (user) => {
   editableUser.push(user);
   showUserData.value = true;
 };
@@ -105,7 +105,7 @@ const paginateUsers = () => {
     };
   }
 };
-const paginateData = (data: any) => {
+const paginateData = (data) => {
   filteredUsers.value = array.paginate(
     data,
     currentPage.value,
@@ -175,7 +175,7 @@ const showInfo = computed(() => {
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
 });
-const tableData = computed<UsersTableData[]>(() => {
+const tableData = computed<any[]>(() => {
   return filteredUsers.value || [];
 });
 
