@@ -37,7 +37,8 @@ let sortCol = reactive({
   displayName: "",
   kyc: {},
 });
-const usersData = ref<[]>(usersDataListOmo);
+
+const usersData = ref<any[]>(data.value);
 let filteredUsers = ref<any[]>([]);
 const showUsers = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentUsers = ref<number>(10);
@@ -201,7 +202,7 @@ const printdata = () =>
   console.table([{ data: data.value }, { omolist: usersDataListOmo.value }]);
 // lifecycle
 onMounted(() => {
-  paginateData(usersData.value);
+  // paginateData(usersData.value);
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>
@@ -403,6 +404,7 @@ onMounted(() => {
     <!-- SHOW TABLE -->
     <div v-else class="table-form">
       <div class="flex mb-3 justify-between items-start">
+        <!-- <p>{{data}}</p> -->
         <div class="flex items-center">
           <span class="mr-1">Show</span>
           <select
@@ -583,7 +585,7 @@ onMounted(() => {
               <div
                 class="py-3 px-6 table-controls h-full w-full items-center justify-between border border-t-gray-200"
               >
-                <div class="table-control-cycle flex">
+                <!-- <div class="table-control-cycle flex">
                   <button
                     @click.prevent="(currentPage = 1), paginateUsers()"
                     :class="[
@@ -656,16 +658,16 @@ onMounted(() => {
                   >
                     Last
                   </button>
-                </div>
+                </div> -->
 
-                <div class="entries my-3">
+                <!-- <div class="entries my-3">
                   <p
                     class="text-gray-700 text-sm font-normal whitespace-nowrap"
                   >
                     Showing {{ showInfo.from }} to {{ showInfo.to }} of
                     {{ showInfo.of }}
                   </p>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

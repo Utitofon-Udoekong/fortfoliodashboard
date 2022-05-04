@@ -1,18 +1,27 @@
-// import { IncomingMessage, ServerResponse } from "http";
-// const {$db} = useNuxtApp()
 
-// export default (req: IncomingMessage, res: ServerResponse) => {
-//     let investments: any[]
-//     $db.collection("authUsers").doc().collection("investments").onSnapshot((querysnapshot) => {
-//         if(querysnapshot.empty) return "No snapshot found for investments"
-//         else{
-//             investments = querysnapshot.docs.map(doc => {
-//                 return {
-//                     uid: doc.id,
-//                     ...doc.data()
-//                 }
-//             })
-//         }
-//     })
-//     return investments
-// }
+import { IncomingMessage, ServerResponse } from "http";
+
+
+import { getFirestore } from 'firebase-admin/firestore'
+import { initializeApp, getApps, cert } from 'firebase-admin/app'
+
+const apps = getApps()
+
+if (!apps.length) {
+    initializeApp({
+        credential: cert('./serviceAccount.json') // 👈 Path to your JSON Firebase certificate
+    })
+}
+
+export default async (request:IncomingMessage, response:ServerResponse) => {
+    const db = getFirestore()
+    const usersSnap = await db.collection('authUsers').get()
+    const users = []
+    usersSnap.docs.map(async doc => {
+        await db.collection("authUsers").doc(doc.id).collection("investments").get().then((docos) => {
+            users.push(docos.docs)
+        })
+    })
+    
+    return users
+}
