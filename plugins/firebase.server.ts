@@ -21,6 +21,7 @@ export default defineNuxtPlugin(() => {
     }
 
     const firebaseApp = app;
+    console.log("server")
     const auth = getAuth(firebaseApp);
     const db = getFirestore(firebaseApp);
     const storage = getStorage(firebaseApp).bucket()

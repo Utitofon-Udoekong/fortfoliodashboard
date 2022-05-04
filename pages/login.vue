@@ -2,7 +2,11 @@
 import { object, string, ref as yupRef } from "yup";
 import { configure } from "vee-validate";
 // import { onMounted, ref } from "vue";
-const {$auth} = useNuxtApp()
+
+const { data } = await useAsyncData('users', () => $fetch('/api/users'))
+const mama = () => {
+  console.log(data)
+}
 const debug = ref(false);
 onMounted(() => {
   debug.value =
@@ -53,7 +57,6 @@ const schema = object({
 const initialValues = { email: "", password: "", confirmed: "" };
 </script>
 
-
 <template>
   <div class="h-screen">
     <Html>
@@ -78,9 +81,9 @@ const initialValues = { email: "", password: "", confirmed: "" };
         >
           <button
             class="p-2 bg-gray-900 text-white"
-            @click="debug = !debug"
+            @click="mama"
           >
-            {{ debug ? "Remove Debug" : "Show Debug" }}
+            <!-- {{ debug ? "Remove Debug" : "Show Debug" }} -->
           </button>
 
           <h2 class="title font-semibold text-md my-2">Login</h2>

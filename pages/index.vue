@@ -5,7 +5,7 @@
 <script setup lang="ts">
 const router = useRouter();
 onMounted(() => {
-    router.push("/dashboard")
+    router.push("/login")
 })
 
 </script>
