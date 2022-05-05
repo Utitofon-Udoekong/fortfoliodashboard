@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
+import { useUser } from "~~/store/users";
 // import AdminFunctions from "../../helpers/customFunctions"
-const { data } = await useAsyncData("users", () => $fetch("/api/users"));
+// const { data } = await useAsyncData("users", () => $fetch("/api/users"));
 // states
+const store = useUser()
 const columns = [
   { name: "id", text: "User ID" },
   { name: "firstName", text: "User Name" },
@@ -37,7 +39,7 @@ let sortCol = reactive({
   kyc: {},
 });
 
-const usersData = ref<any[]>(data.value);
+const usersData = ref<any[]>(store.users);
 let filteredUsers = ref<any[]>([]);
 const showUsers = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentUsers = ref<number>(10);
@@ -198,6 +200,7 @@ let classObject = computed(() => {
 
 // lifecycle
 onMounted(() => {
+  // store.setuser()
   if(usersData.value.length > 0){
     paginateData(usersData.value);
   }

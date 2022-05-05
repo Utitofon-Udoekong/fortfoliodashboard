@@ -1,6 +1,27 @@
 import { getAuth, UserRecord } from "firebase-admin/auth"
+const {$auth} = useNuxtApp()
 
 class AdminFunction {
+    async register(email:string, password: string){
+        await $auth.createUser({
+            email: email,
+            password: password
+        }).then((record) => {
+            $auth.setCustomUserClaims(record.uid, {admin: true})
+        }).catch((error) => {
+            return console.log("Error encountered registering user", error)
+        })
+    }
+    async login(email:string, password: string){
+        await $auth.createUser({
+            email: email,
+            password: password
+        }).then((record) => {
+            $auth.setCustomUserClaims(record.uid, {admin: true})
+        }).catch((error) => {
+            return console.log("Error encountered registering user", error)
+        })
+    }
     async getUserAuthInfo(uid: string) {
         await getAuth()
             .getUser(uid)
@@ -62,10 +83,10 @@ class AdminFunction {
             })
             .then((_) => {
                 // See the UserRecord reference doc for the contents of userRecord.
-                return console.log('Successfully updated user password');
+                return 'Successfully disabled user'
             })
             .catch((error) => {
-                return console.log('Error updating user:', error);
+                return "Error disabling user " + error
             });
     }
     async enableUser(uid: string) {
@@ -75,10 +96,10 @@ class AdminFunction {
             })
             .then((_) => {
                 // See the UserRecord reference doc for the contents of userRecord.
-                return console.log('Successfully updated user password');
+                return 'Successfully deleted user'
             })
             .catch((error) => {
-                return console.log('Error updating user:', error);
+                return "Error deleting user " + error
             });
     }
 
