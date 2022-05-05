@@ -57,10 +57,14 @@ if (!apps.length) {
 export default async (request:IncomingMessage, response:ServerResponse) => {
     const db = getFirestore()
     const usersSnap = await db.collection('authUsers').get()
-    const users = []
+    let users = []
     usersSnap.docs.map(async doc => {
-        await db.collection("authUsers").doc(doc.id).collection("kyc").get().then((docos) => {
-            users.push(docos.docs)
+        const sub = await db.collection("authUsers").doc(doc.id).collection("kyc").get()
+        users = sub.docs.map(doc => {
+            return {
+                uuid: doc.id,
+                ...doc.data()
+            }
         })
     })
     
