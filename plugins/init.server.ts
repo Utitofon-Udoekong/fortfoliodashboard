@@ -5,4 +5,5 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   const users = useUser(nuxtApp.$pinia)
   await users.setuser()
   console.log("initing user")
+  console.log(users.getUsers)
 })

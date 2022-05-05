@@ -13,13 +13,13 @@ if (!apps.length) {
 
 export default async (request:IncomingMessage, response:ServerResponse) => {
     const db = getFirestore()
-    const usersSnap = await db.collection('authUsers').get()
-    const users = usersSnap.docs.map(async doc => {
-        // const collection = await db.collection('authUsers').doc(doc.id).listCollections()
+    const usersSnap = await db.collection('authUsers').where("isVerified","==",false).get();
+    const users = usersSnap.docs.map(async (doc) => {
+        // const colList = await db.collection('authUsers').doc(doc.id).listCollections()
         return {
             uuid: doc.id,
             ...doc.data(),
-            ...db.collection('authUsers').doc(doc.id).listCollections()
+            // ...colList
         }
     })
     
