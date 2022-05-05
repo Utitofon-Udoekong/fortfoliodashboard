@@ -503,7 +503,7 @@ onMounted(() => {
                           class="text-md text-blue-800 font-semibold bg-blue-700 bg-opacity-20 py-2 px-3 rounded-full"
                           >{{data.displayName}}</span
                         >
-                        {{ data.firstName}}
+                        {{ data.firstName}} {{ data.lastName}}
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
