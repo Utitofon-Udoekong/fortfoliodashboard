@@ -7,6 +7,7 @@
   },
   "devDependencies": {
     "@iconify/json": "^2.0.33",
+    "@pinia/nuxt": "^0.1.9",
     "autoprefixer": "^10.4.2",
     "nuxt3": "latest",
     "postcss": "^8.4.6",
@@ -20,6 +21,7 @@
     "alga-js": "^0.1.0-wood-3",
     "firebase": "^9.6.6",
     "firebase-admin": "^10.0.2",
+    "pinia": "^2.0.14",
     "swiper": "^6.8.4",
     "vee-validate": "^4.5.11",
     "vue-chart-3": "^3.1.2",

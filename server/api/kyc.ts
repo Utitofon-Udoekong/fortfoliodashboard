@@ -60,9 +60,7 @@ export default async (request:IncomingMessage, response:ServerResponse) => {
     let kycData: any | void[] = []
     usersSnap.docs.map(async doc => {
         kycData = await db.collection("authUsers").doc(doc.id).collection("kyc").get().then((querysnapshot) => {
-            console.log(doc.id)
-            querysnapshot.forEach((query) => {
-                console.log(query.id)
+            return querysnapshot.forEach((query) => {
                 return {
                     uuid: query.id,
                     ...query.data()
