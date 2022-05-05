@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-// import { users } from "~~/assets/users";
 import { TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
-const usersDataListOmo = await useUsers();
 const { data } = await useAsyncData("users", () => $fetch("/api/users"));
 // states
 const columns = [
@@ -56,7 +54,7 @@ const openTab = ref(1);
 // states------------------------------------------------------------------------------
 
 // methods
-const selectRow = (user) => {
+const selectRow = (user: any) => {
   editableUser.push(user);
   showUserData.value = true;
 };
@@ -84,7 +82,6 @@ const filterByColumn = () => {
   }
   paginateData(filterData);
 };
-const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
     searchUsers.value = array.search(usersData.value, searchInput.value);
@@ -106,7 +103,7 @@ const paginateUsers = () => {
     };
   }
 };
-const paginateData = (data) => {
+const paginateData = (data: any[]) => {
   filteredUsers.value = array.paginate(
     data,
     currentPage.value,
@@ -128,7 +125,7 @@ const getCurrentUsers = () => {
   return searchUsers.value.length <= 0 ? usersData.value : searchUsers.value;
 };
 
-const sortByColumn = (column) => {
+const sortByColumn = (column: string) => {
   col = {
     id: "",
     firstName: "",
@@ -158,7 +155,7 @@ const sortByColumn = (column) => {
 //   return Array.from(filteredUsers.value).filter(i => i.checked).map(i => i.id)
 // }
 // const print = () => file.printed(usersData.value);
-const exportFile = (format) => {
+const exportFile = (format: string) => {
   const genString = file.exported(usersData.value, format);
   file.download(genString, format);
 };
@@ -199,10 +196,12 @@ let classObject = computed(() => {
 // computed------------------------------------------------------------------------------
 
 const printdata = () =>
-  console.table([{ data: data.value }, { omolist: usersDataListOmo.value }]);
+  console.table([{ data: data.value }]);
 // lifecycle
 onMounted(() => {
-  // paginateData(usersData.value);
+  if(usersData.value.length > 0){
+    paginateData(usersData.value);
+  }
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>
@@ -402,7 +401,7 @@ onMounted(() => {
       </div> -->
     </div>
     <!-- SHOW TABLE -->
-    <div v-else class="table-form">
+    <div class="table-form">
       <div class="flex mb-3 justify-between items-start">
         <!-- <p>{{data}}</p> -->
         <div class="flex items-center">
@@ -585,7 +584,7 @@ onMounted(() => {
               <div
                 class="py-3 px-6 table-controls h-full w-full items-center justify-between border border-t-gray-200"
               >
-                <!-- <div class="table-control-cycle flex">
+                <div class="table-control-cycle flex">
                   <button
                     @click.prevent="(currentPage = 1), paginateUsers()"
                     :class="[
@@ -658,16 +657,16 @@ onMounted(() => {
                   >
                     Last
                   </button>
-                </div> -->
+                </div>
 
-                <!-- <div class="entries my-3">
+                <div class="entries my-3">
                   <p
                     class="text-gray-700 text-sm font-normal whitespace-nowrap"
                   >
                     Showing {{ showInfo.from }} to {{ showInfo.to }} of
                     {{ showInfo.of }}
                   </p>
-                </div> -->
+                </div>
               </div>
             </div>
           </div>
