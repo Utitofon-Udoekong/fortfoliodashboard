@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
+// import AdminFunctions from "../../helpers/customFunctions"
 const { data } = await useAsyncData("users", () => $fetch("/api/users"));
 // states
 const columns = [
@@ -8,7 +9,7 @@ const columns = [
   { name: "firstName", text: "User Name" },
   { name: "email", text: "Email Address" },
   { name: "phoneNumber", text: "Phone Number" },
-  { name: "verification", text: "Verification" },
+  { name: "createdat", text: "Created At" },
   { name: "isVerified", text: "Status" },
 ];
 let col = reactive({
@@ -154,7 +155,7 @@ const sortByColumn = (column: string) => {
 // const checks = () => {
 //   return Array.from(filteredUsers.value).filter(i => i.checked).map(i => i.id)
 // }
-// const print = () => file.printed(usersData.value);
+const print = () => file.printed(usersData.value);
 const exportFile = (format: string) => {
   const genString = file.exported(usersData.value, format);
   file.download(genString, format);
@@ -195,8 +196,6 @@ let classObject = computed(() => {
 
 // computed------------------------------------------------------------------------------
 
-const printdata = () =>
-  console.table([{ data: data.value }]);
 // lifecycle
 onMounted(() => {
   if(usersData.value.length > 0){
@@ -427,7 +426,7 @@ onMounted(() => {
           <div class="print-options flex justify-end mb-3">
             <div
               class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
-              @click="printdata"
+              @click="print"
             >
               <i-system-uicons-printer /> Print
             </div>
@@ -514,20 +513,18 @@ onMounted(() => {
                       {{ data.phoneNumber }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      <!-- {{ data.kyc }} -->
+                      {{new Date(data.createdat._seconds * 1000).toDateString() + ' at ' + new Date(data.createdat._seconds * 1000).toLocaleTimeString()}}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <!-- <span
+                      <span
                         :class="
-                          data.status === 'Active'
+                          data.isVerified
                             ? 'text-brand-green'
-                            : data.status === 'Deleted'
-                            ? 'text-brand-red'
-                            : 'text-yellow-400'
+                            : 'text-brand-red'
                         "
                         class="text-sm flex"
-                        >{{ data.status }}</span
-                      > -->
+                        >{{ data.isVerified ? "Verified" : "Pending" }}</span
+                      >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap relative">
                       <i-mdi-dots-horizontal
@@ -547,7 +544,8 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              (tableData[index].status = 'Active'),
+                            // (AdminFunctions.update)
+                              // (tableData[index].status = 'Active'),
                                 open(index, $event)
                             "
                           >
@@ -558,7 +556,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              (tableData[index].status = 'Disabaled'),
+                              AdminFunctions.disableUser(tableData[index].uuid),
                                 open(index, $event)
                             "
                           >
@@ -569,7 +567,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              (tableData[index].status = 'Deleted'),
+                              (AdminFunctions.deleteUser(tableData[index].uuid)),
                                 open(index, $event)
                             "
                           >
