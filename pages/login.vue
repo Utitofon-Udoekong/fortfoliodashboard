@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { object, string, ref as yupRef } from "yup";
 import { configure } from "vee-validate";
+import { useUserStore } from "~~/store/users";
 // import { onMounted, ref } from "vue";
 
-const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
+// const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
+const store = useUserStore()
+
 const mama = async () => {
-  // const users = await $db.collection("authUsers").get()
-  console.log(data.value)
+  await store.setkyc()
+}
+const papa = () => {
+  console.log(store.getKyc)
 }
 const debug = ref(false);
 onMounted(() => {
@@ -81,10 +86,16 @@ const initialValues = { email: "", password: "", confirmed: "" };
           @submit="handleSubmit"
         >
           <button
-            class="p-2 bg-gray-900 text-white"
+            class="p-2 bg-gray-900 text-white m-2"
             @click="mama"
           >
-            <!-- {{ debug ? "Remove Debug" : "Show Debug" }} -->
+            mama
+          </button>
+          <button
+            class="p-2 bg-gray-900 text-white"
+            @click="papa"
+          >
+            papa
           </button>
 
           <h2 class="title font-semibold text-md my-2">Login</h2>

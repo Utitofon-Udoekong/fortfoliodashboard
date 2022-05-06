@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { kycData } from "~~/assets/kyc";
 import { KYCTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 import { useUserStore } from "~~/store/users";
+import formatter from "~~/helpers/formatIsoDate";
 
-const store = useUserStore()
+const store = useUserStore();
 
 // states
 const columns = [
@@ -18,10 +18,12 @@ let col: KYCTableData = reactive({
   id: "",
   fullName: "",
   docType: "",
-  documents: [{
-    name: "",
-    downloadUrl: ""
-  }],
+  documents: [
+    {
+      name: "",
+      downloadUrl: "",
+    },
+  ],
   submitted: "",
   status: "",
 });
@@ -29,10 +31,12 @@ let sortCol: KYCTableData = reactive({
   id: "",
   fullName: "",
   docType: "",
-  documents: [{
-    name: "",
-    downloadUrl: ""
-  }],
+  documents: [
+    {
+      name: "",
+      downloadUrl: "",
+    },
+  ],
   submitted: "",
   status: "",
 });
@@ -97,23 +101,21 @@ const paginateUsers = () => {
     paginateData(kycDataList.value);
     col = {
       id: "",
-  fullName: "",
-  docType: "",
-  documents: [{
-    name: "",
-    downloadUrl: ""
-  }],
-  submitted: "",
-  status: "",
+      fullName: "",
+      docType: "",
+      documents: [
+        {
+          name: "",
+          downloadUrl: "",
+        },
+      ],
+      submitted: "",
+      status: "",
     };
   }
 };
 const paginateData = (data: any) => {
-  filteredKYC.value = array.paginate(
-    data,
-    currentPage.value,
-    currentKYC.value
-  );
+  filteredKYC.value = array.paginate(data, currentPage.value, currentKYC.value);
   totalPages.value = array.pages(data, currentKYC.value);
 };
 const paginateEvent = (page: number) => {
@@ -133,14 +135,16 @@ const getCurrentKYC = () => {
 const sortByColumn = (column) => {
   col = {
     id: "",
-  fullName: "",
-  docType: "",
-  documents: [{
-    name: "",
-    downloadUrl: ""
-  }],
-  submitted: "",
-  status: "",
+    fullName: "",
+    docType: "",
+    documents: [
+      {
+        name: "",
+        downloadUrl: "",
+      },
+    ],
+    submitted: "",
+    status: "",
   };
   let sortedUsers = getCurrentKYC();
   let sortedColumn = sortCol[column];
@@ -189,6 +193,15 @@ let classObject = computed(() => {
   };
 });
 
+const storeKyc = store.getKyc;
+
+watchEffect(() => {
+  if (storeKyc.length > 0) {
+    const data = store.getKyc;
+    kycDataList.value = data;
+  }
+});
+const unwatch = watchEffect(() => {});
 // computed------------------------------------------------------------------------------
 
 // lifecycle
@@ -196,15 +209,11 @@ onMounted(() => {
   paginateData(kycDataList.value);
 });
 // lifecycle---------------------
-
-
 </script>
 <template>
   <div class="h-auto">
     <!-- USER MODAL -->
-    <div
-      v-if="showModal"
-    >
+    <div v-if="showModal">
       <!-- class="w-full h-full" -->
       <!-- <div class="bg-white p-10 pt-14 w-full h-auto relative rounded-md">
         <div class="closemodal absolute right-6 top-6 cursor-pointer" @click="toggleModal">
@@ -224,8 +233,17 @@ onMounted(() => {
       <div class="flex mb-3 justify-between">
         <div class="flex items-center">
           <span class="mr-1">Show</span>
-          <select v-model="currentKYC" @change="paginateUsers" class="p-2 bg-blue-300 bg-opacity-25 rounded-md">
-            <option :value="users" v-for="(users, i) in showKYC" :key="i" class="text-white">
+          <select
+            v-model="currentKYC"
+            @change="paginateUsers"
+            class="p-2 bg-blue-300 bg-opacity-25 rounded-md"
+          >
+            <option
+              :value="users"
+              v-for="(users, i) in showKYC"
+              :key="i"
+              class="text-white"
+            >
               {{ users }}
             </option>
           </select>
@@ -233,8 +251,24 @@ onMounted(() => {
         </div>
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
-            <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3" @click="testPrint" > <i-system-uicons-printer/> Print </div>
-            <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md" @click="exportFile('csv')" > <i-ion-download /> Export </div>
+            <div
+              class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
+              @click="setKyc"
+            >
+              <i-mdi-reload /> Load Data
+            </div>
+            <div
+              class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
+              @click="testPrint"
+            >
+              <i-system-uicons-printer /> Print
+            </div>
+            <div
+              class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md"
+              @click="exportFile('csv')"
+            >
+              <i-ion-download /> Export
+            </div>
           </div>
           <div class="search-component w-80 mb-3">
             <div
@@ -259,14 +293,17 @@ onMounted(() => {
                 <thead class="bg-transparent">
                   <tr>
                     <th
-                    v-for="(headers, i) in tableHeader"
-                    :key="i"
+                      v-for="(headers, i) in tableHeader"
+                      :key="i"
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                    <div class="flex items-center">
+                      <div class="flex items-center">
                         <span>{{ headers.text }}</span>
-                        <span @click.prevent="sortByColumn(headers.name)" class="cursor-pointer pl-1">
+                        <span
+                          @click.prevent="sortByColumn(headers.name)"
+                          class="cursor-pointer pl-1"
+                        >
                           <i-mdi-filter-variant class="pointer-events-none" />
                         </span>
                       </div>
@@ -290,24 +327,39 @@ onMounted(() => {
                       <div class="flex items-center">
                         <span
                           class="text-md mr-2 text-blue-800 font-semibold bg-blue-700 bg-opacity-20 py-2 px-3 rounded-full"
-                          >{{kycData.fullName.slice(0,1)}}</span
+                          >{{ kycData.fullName.split(" ")[0][0].toUpperCase()
+                          }}{{
+                            kycData.fullName.split(" ")[1][0].toUpperCase()
+                          }}</span
                         >
                         <div class="text-sm font-normal block">
-                          <p>{{kycData.fullName}}</p>
+                          <p>{{ kycData.fullName }}</p>
                           <p>UID{{ kycData.id }}</p>
                         </div>
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">{{ kycData.documentType }}</div>
+                      <div class="text-sm">
+                        {{ kycData.documentType }}/ Utility Bill
+                      </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      <p v-for="(document, index) in kycData.documents">
-                        <a :href="document.downloadUrl">{{document.name}}</a>
+                      <p
+                        v-for="(document, index) in kycData.documents"
+                        class="hover:underline pb-1"
+                      >
+                        <a
+                          :href="document.downloadUrl"
+                          :download="document.name"
+                          >{{ document.name }}</a
+                        >
+                        <button type="button">
+                          <i-ic-outline-file-download />
+                        </button>
                       </p>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ kycData.submitted }}
+                    <td class="px-6 py-4 text-sm">
+                      {{ formatter(kycData.submitted) }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span
