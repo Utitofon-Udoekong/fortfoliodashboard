@@ -14,24 +14,30 @@ const columns = [
   { name: "submitted", text: "Submitted" },
   { name: "status", text: "Status" },
 ];
-let col = reactive({
-  id: null,
+let col: KYCTableData = reactive({
+  id: "",
   fullName: "",
   docType: "",
-  documents: "",
+  documents: [{
+    name: "",
+    downloadUrl: ""
+  }],
   submitted: "",
   status: "",
 });
-let sortCol = reactive({
-  id: null,
+let sortCol: KYCTableData = reactive({
+  id: "",
   fullName: "",
   docType: "",
-  documents: "",
+  documents: [{
+    name: "",
+    downloadUrl: ""
+  }],
   submitted: "",
   status: "",
 });
-const kycDataList = ref<any[]>(store.kyc);
-let filteredKYC = ref<any[]>([]);
+const kycDataList = ref<KYCTableData[]>(store.kyc);
+let filteredKYC = ref<KYCTableData[]>([]);
 const showKYC = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentKYC = ref<number>(10);
 const searchInput = ref<string>("");
@@ -43,7 +49,7 @@ let showKYCData = ref(false);
 
 const topPos = ref(0);
 const leftPos = ref(0);
-let editableUser: any[] = [];
+let editableUser: KYCTableData[] = [];
 const openTab = ref(1);
 let showModal = ref(false);
 // states------------------------------------------------------------------------------
@@ -53,7 +59,7 @@ const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop();
 };
-const selectRow = (user) => {
+const selectRow = (user: KYCTableData) => {
   editableUser.push(user);
   showKYCData.value = true;
 };
@@ -81,6 +87,7 @@ const filterByColumn = () => {
   }
   paginateData(filterData);
 };
+const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
     searchKYC.value = array.search(kycDataList.value, searchInput.value);
@@ -89,10 +96,13 @@ const paginateUsers = () => {
     searchKYC.value = [];
     paginateData(kycDataList.value);
     col = {
-      id: null,
+      id: "",
   fullName: "",
   docType: "",
-  documents: "",
+  documents: [{
+    name: "",
+    downloadUrl: ""
+  }],
   submitted: "",
   status: "",
     };
@@ -122,10 +132,13 @@ const getCurrentKYC = () => {
 
 const sortByColumn = (column) => {
   col = {
-    id: null,
+    id: "",
   fullName: "",
   docType: "",
-  documents: "",
+  documents: [{
+    name: "",
+    downloadUrl: ""
+  }],
   submitted: "",
   status: "",
   };
@@ -156,7 +169,7 @@ const showInfo = computed(() => {
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
 });
-const tableData = computed<any[]>(() => {
+const tableData = computed<KYCTableData[]>(() => {
   return filteredKYC.value || [];
 });
 
@@ -191,9 +204,9 @@ onMounted(() => {
     <!-- USER MODAL -->
     <div
       v-if="showModal"
-      class="w-full h-full"
     >
-      <div class="bg-white p-10 pt-14 w-full h-auto relative rounded-md">
+      <!-- class="w-full h-full" -->
+      <!-- <div class="bg-white p-10 pt-14 w-full h-auto relative rounded-md">
         <div class="closemodal absolute right-6 top-6 cursor-pointer" @click="toggleModal">
             <i-ion-close-round class="text-black text-xl" />
           </div>
@@ -205,9 +218,9 @@ onMounted(() => {
           <span class="flex justify-between"> <p class="text-sm font-semibold text-gray-400 pb-3"> Submitted at: </p> <span class="font-normal text-black text-base">{{ editableUser[0].submitted }}</span> </span>
           <span class="flex justify-between"> <p class="text-sm font-semibold text-gray-400">Status:</p> <span class="font-normal text-sm px-12 rounded py-1" :class=" editableUser[0].status === 'Approve' ? 'text-brand-green bg-brand-green bg-opacity-25' : editableUser[0].status === 'Rejected' ? 'text-brand-red bg-brand-red bg-opacity-25' : 'text-yellow-400 bg-yellow-400 bg-opacity-25' " >{{ editableUser[0].status }}</span > </span>
         </div>
-      </div>
+      </div> -->
     </div>
-    <div v-else class="table-form">
+    <div class="table-form">
       <div class="flex mb-3 justify-between">
         <div class="flex items-center">
           <span class="mr-1">Show</span>
@@ -279,17 +292,19 @@ onMounted(() => {
                           class="text-md mr-2 text-blue-800 font-semibold bg-blue-700 bg-opacity-20 py-2 px-3 rounded-full"
                           >{{kycData.fullName.slice(0,1)}}</span
                         >
-                        <div class="text-sm font-normal">
+                        <div class="text-sm font-normal block">
                           <p>{{kycData.fullName}}</p>
                           <p>UID{{ kycData.id }}</p>
                         </div>
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">{{ kycData.docType }}</div>
+                      <div class="text-sm">{{ kycData.documentType }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ kycData.documents }}
+                      <p v-for="(document, index) in kycData.documents">
+                        <a :href="document.downloadUrl">{{document.name}}</a>
+                      </p>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                       {{ kycData.submitted }}
@@ -297,7 +312,7 @@ onMounted(() => {
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span
                         :class="
-                          kycData.status === 'Approve'
+                          kycData.status === 'Approved'
                             ? 'text-brand-green'
                             : kycData.status === 'Rejected'
                             ? 'text-brand-red'
@@ -325,7 +340,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              (kycDataList[index].status = 'Approve'),
+                              (kycDataList[index].status = 'Approved'),
                                 open(index, $event)
                             "
                           >

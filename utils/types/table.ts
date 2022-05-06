@@ -59,14 +59,18 @@ export interface UsersTableData{
     createdat: object
     balance: number
     displayName: string,
-    kyc: object
+}
+
+interface Documentbody{
+    name: string,
+    downloadUrl: string
 }
 
 export interface KYCTableData{
-    id: number
+    id: string
     fullName: string
     docType: string
-    documents: string
+    documents: Documentbody[]
     submitted: string
     status: string
 }

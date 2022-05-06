@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { TableHeader } from "~~/utils/types/table";
+import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 import { useUserStore } from "~~/store/users";
 // import AdminFunctions from "../../helpers/customFunctions"
@@ -39,8 +39,8 @@ let sortCol = reactive({
   kyc: {},
 });
 
-const usersData = ref<any[]>(store.users);
-let filteredUsers = ref<any[]>([]);
+const usersData = ref<UsersTableData[]>(store.users);
+let filteredUsers = ref<UsersTableData[]>([]);
 const showUsers = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentUsers = ref<number>(10);
 const searchInput = ref<string>("");
@@ -52,12 +52,12 @@ let showUserData = ref(false);
 
 const topPos = ref(0);
 const leftPos = ref(0);
-let editableUser: any[] = [];
+let editableUser: UsersTableData[] = [];
 const openTab = ref(1);
 // states------------------------------------------------------------------------------
 
 // methods
-const selectRow = (user: any) => {
+const selectRow = (user: UsersTableData) => {
   editableUser.push(user);
   showUserData.value = true;
 };
@@ -176,7 +176,7 @@ const showInfo = computed(() => {
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
 });
-const tableData = computed<any[]>(() => {
+const tableData = computed<UsersTableData[]>(() => {
   return filteredUsers.value || [];
 });
 
