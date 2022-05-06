@@ -3,7 +3,7 @@ import { object, string, ref as yupRef } from "yup";
 import { configure } from "vee-validate";
 // import { onMounted, ref } from "vue";
 
-const { data } = await useAsyncData('users', () => $fetch('/api/users'))
+const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
 const mama = async () => {
   // const users = await $db.collection("authUsers").get()
   console.log(data.value)

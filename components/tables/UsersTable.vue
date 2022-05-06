@@ -552,7 +552,7 @@ onMounted(() => {
                                 open(index, $event)
                             "
                           >
-                            Verify User
+                            Enable User
                           </li>
                           <li
                             tabindex="0"

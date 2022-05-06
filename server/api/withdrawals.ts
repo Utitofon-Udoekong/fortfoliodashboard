@@ -1,3 +1,5 @@
+// const {$db} = useNuxtApp()
+
 import { IncomingMessage, ServerResponse } from "http";
 import { getFirestore } from 'firebase-admin/firestore'
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
@@ -12,16 +14,15 @@ if (!apps.length) {
 export default async (req:IncomingMessage, res: ServerResponse) => {
     const db = getFirestore()
     
-    const kyc = await db.collection("kyc").where("isVerified","==",false).get()
-    // const kyc = await db.collectionGroup("kyc").where("isVerified","==",false).get()
-    // if(kyc.empty) return console.log("no kyc")
+    const withdrawals = await db.collection("withdrawals").get()
+    if(withdrawals.empty) return console.log("no withdrawals")
    
-    const kycData = kyc.docs.map((doc) => {
+    const withdrawalsData = withdrawals.docs.map((doc) => {
         return {
             uuid: doc.id,
             ...doc.data()
         }
     })
     
-    return kycData
+    return withdrawalsData
 }

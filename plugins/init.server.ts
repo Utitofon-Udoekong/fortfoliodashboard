@@ -3,6 +3,7 @@ import { useUser } from '~~/store/users'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const users = useUser(nuxtApp.$pinia)
-  await users.setuser()
   console.log("initing user")
+  await users.setuser()
+  console.log("inited user")
 })

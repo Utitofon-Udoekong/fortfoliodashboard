@@ -2,7 +2,7 @@ import { getApp, getApps, initializeApp } from 'firebase-admin/app';
 import { getAuth } from "firebase-admin/auth";
 import {getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((nuxtApp) => {
     const config = useRuntimeConfig()
     const firebaseConfig = {
         apiKey: config.API_KEY,
