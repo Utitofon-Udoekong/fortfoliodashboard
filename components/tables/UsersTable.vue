@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
-import { useUser } from "~~/store/users";
+import { useUserStore } from "~~/store/users";
 // import AdminFunctions from "../../helpers/customFunctions"
 // const { data } = await useAsyncData("users", () => $fetch("/api/users"));
 // states
-const store = useUser()
+const store = useUserStore()
 const columns = [
   { name: "id", text: "User ID" },
   { name: "firstName", text: "User Name" },

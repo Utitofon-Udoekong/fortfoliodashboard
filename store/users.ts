@@ -1,7 +1,7 @@
 // import { getAuth } from "firebase-admin/auth";
 import { defineStore } from "pinia";
 // import AdminFunctions from "~~/helpers/customFunctions"
-export const useUser = defineStore('user', {
+export const useUserStore = defineStore('user', {
     state: () => ({
         users: [],
         kyc: [],
@@ -22,6 +22,8 @@ export const useUser = defineStore('user', {
             this.users = data.value
         },
         async setkyc() {
+            const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
+            this.kyc = data.value
         }
         // async disableUser(uid: string){
         //     const message = await getAuth()

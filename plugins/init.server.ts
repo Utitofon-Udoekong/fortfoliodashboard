@@ -1,8 +1,8 @@
 import { defineNuxtPlugin } from '#app'
-import { useUser } from '~~/store/users'
+import { useUserStore } from '~~/store/users'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-  const users = useUser(nuxtApp.$pinia)
+  const users = useUserStore(nuxtApp.$pinia)
   console.log("initing user")
   await users.setuser()
   console.log("inited user")

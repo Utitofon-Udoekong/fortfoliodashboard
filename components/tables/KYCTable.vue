@@ -2,8 +2,9 @@
 import { kycData } from "~~/assets/kyc";
 import { KYCTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
+import { useUserStore } from "~~/store/users";
 
-const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
+const store = useUserStore()
 
 // states
 const columns = [
@@ -13,7 +14,7 @@ const columns = [
   { name: "submitted", text: "Submitted" },
   { name: "status", text: "Status" },
 ];
-let col: KYCTableData = reactive({
+let col = reactive({
   id: null,
   fullName: "",
   docType: "",
@@ -21,7 +22,7 @@ let col: KYCTableData = reactive({
   submitted: "",
   status: "",
 });
-let sortCol: KYCTableData = reactive({
+let sortCol = reactive({
   id: null,
   fullName: "",
   docType: "",
@@ -29,8 +30,8 @@ let sortCol: KYCTableData = reactive({
   submitted: "",
   status: "",
 });
-const kycDataList = ref<KYCTableData[]>(kycData);
-let filteredKYC = ref<KYCTableData[]>([]);
+const kycDataList = ref<any[]>(store.kyc);
+let filteredKYC = ref<any[]>([]);
 const showKYC = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentKYC = ref<number>(10);
 const searchInput = ref<string>("");
@@ -42,7 +43,7 @@ let showKYCData = ref(false);
 
 const topPos = ref(0);
 const leftPos = ref(0);
-let editableUser: KYCTableData[] = [];
+let editableUser: any[] = [];
 const openTab = ref(1);
 let showModal = ref(false);
 // states------------------------------------------------------------------------------
@@ -52,7 +53,7 @@ const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop();
 };
-const selectRow = (user: KYCTableData) => {
+const selectRow = (user) => {
   editableUser.push(user);
   showKYCData.value = true;
 };
@@ -80,7 +81,6 @@ const filterByColumn = () => {
   }
   paginateData(filterData);
 };
-const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
     searchKYC.value = array.search(kycDataList.value, searchInput.value);
@@ -156,7 +156,7 @@ const showInfo = computed(() => {
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
 });
-const tableData = computed<KYCTableData[]>(() => {
+const tableData = computed<any[]>(() => {
   return filteredKYC.value || [];
 });
 
@@ -185,7 +185,6 @@ onMounted(() => {
 // lifecycle---------------------
 
 
-const testPrint = () => console.log(data.value)
 </script>
 <template>
   <div class="h-auto">
