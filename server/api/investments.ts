@@ -14,7 +14,7 @@ if (!apps.length) {
 export default async (req:IncomingMessage, res: ServerResponse) => {
     const db = getFirestore()
     
-    const investments = await db.collection("investments").get()
+    const investments = await db.collectionGroup("investments").get()
     if(investments.empty) return console.log("no investments")
    
     const investmentsData = investments.docs.map((doc) => {
