@@ -24,7 +24,6 @@ let col = reactive({
   createdat: {},
   balance: 0,
   displayName: "",
-  kyc: {},
 });
 let sortCol = reactive({
   id: "",
@@ -36,7 +35,6 @@ let sortCol = reactive({
   createdat: {},
   balance: 0,
   displayName: "",
-  kyc: {},
 });
 
 const usersData = ref<UsersTableData[]>(store.users);
@@ -102,7 +100,6 @@ const paginateUsers = () => {
       createdat: {},
       balance: 0,
       displayName: "",
-      kyc: {},
     };
   }
 };
@@ -139,7 +136,6 @@ const sortByColumn = (column: string) => {
     createdat: {},
     balance: 0,
     displayName: "",
-    kyc: {},
   };
   let sortedUsers = getCurrentUsers();
   let sortedColumn = sortCol[column];
