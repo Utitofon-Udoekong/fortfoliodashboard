@@ -13,8 +13,7 @@ export default async (req:IncomingMessage, res: ServerResponse) => {
     const db = getFirestore()
     
     const kyc = await db.collection("kyc").where("isVerified","==",false).get()
-    // const kyc = await db.collectionGroup("kyc").where("isVerified","==",false).get()
-    // if(kyc.empty) return console.log("no kyc")
+    if(kyc.empty) return console.log("no kyc")
    
     const kycData = kyc.docs.map((doc) => {
         return {
