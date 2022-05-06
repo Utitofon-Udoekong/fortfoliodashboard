@@ -40,6 +40,9 @@ let sortCol: KYCTableData = reactive({
   submitted: "",
   status: "",
 });
+// const kycDataList = computed<KYCTableData[]>(() => {
+//   return store.kyc;
+// });
 const kycDataList = ref<KYCTableData[]>(store.kyc);
 let filteredKYC = ref<KYCTableData[]>([]);
 const showKYC = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
@@ -132,7 +135,7 @@ const getCurrentKYC = () => {
   return searchKYC.value.length <= 0 ? kycDataList.value : searchKYC.value;
 };
 
-const sortByColumn = (column) => {
+const sortByColumn = (column: string) => {
   col = {
     id: "",
     fullName: "",
@@ -160,7 +163,7 @@ const sortByColumn = (column) => {
   paginateData(sortedUsers);
 };
 // const print = () => file.printed(kycDataList.value);
-const exportFile = (format) => {
+const exportFile = (format: string) => {
   const genString = file.exported(kycDataList.value, format);
   file.download(genString, format);
 };
@@ -193,15 +196,28 @@ let classObject = computed(() => {
   };
 });
 
-const storeKyc = store.getKyc;
+const setKyc = async () => {
+  await store.setkyc();
+  console.log("setting");
+};
+
+const downloadImage = (url: string | URL) => {
+  var xhr = new XMLHttpRequest();
+  xhr.responseType = "blob";
+  xhr.onload = (event) => {
+    var blob = xhr.response;
+  };
+  xhr.open("GET", url);
+  xhr.send();
+};
 
 watchEffect(() => {
-  if (storeKyc.length > 0) {
-    const data = store.getKyc;
-    kycDataList.value = data;
-  }
+  const data = store.getKyc;
+  kycDataList.value = data;
+  paginateData(kycDataList.value);
 });
-const unwatch = watchEffect(() => {});
+// const unwatch = watchEffect(() => {});
+
 // computed------------------------------------------------------------------------------
 
 // lifecycle
@@ -351,11 +367,12 @@ onMounted(() => {
                         <a
                           :href="document.downloadUrl"
                           :download="document.name"
+                          target="_blank"
                           >{{ document.name }}</a
                         >
-                        <button type="button">
+                        <!-- <button type="button" @click="downloadImage(document.downloadUrl)">
                           <i-ic-outline-file-download />
-                        </button>
+                        </button> -->
                       </p>
                     </td>
                     <td class="px-6 py-4 text-sm">
