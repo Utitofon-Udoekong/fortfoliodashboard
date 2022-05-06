@@ -1,23 +1,27 @@
 <script lang="ts" setup>
+import { useUserStore } from '~~/store/users';
+
+const store = useUserStore()
+const userCount = store.getUserCount
 const details = [
   {
     url: "users",
-    numbers: "1478 286",
+    numbers: `${userCount}`,
     title: "New users",
     percentage: "4.07%",
   },
-  {
-    url: "chart",
-    numbers: "$ 47,866.00",
-    title: "Total investment",
-    percentage: "0.24%",
-  },
-  {
-    url: "graph",
-    numbers: "$ 15,487.00",
-    title: "Total due investment",
-    percentage: "1.64%",
-  },
+  // {
+  //   url: "chart",
+  //   numbers: "$ 47,866.00",
+  //   title: "Total investment",
+  //   percentage: "0.24%",
+  // },
+  // {
+  //   url: "graph",
+  //   numbers: "$ 15,487.00",
+  //   title: "Total due investment",
+  //   percentage: "1.64%",
+  // },
 ];
 </script>
 <template>

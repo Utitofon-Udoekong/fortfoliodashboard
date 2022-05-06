@@ -14,6 +14,9 @@ export const useUserStore = defineStore('user', {
         },
         getKyc(state){
             return state.kyc
+        },
+        getUserCount(state){
+            return state.users.length
         }
     },
     actions: {

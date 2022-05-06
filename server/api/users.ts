@@ -13,6 +13,7 @@ if (!apps.length) {
 export default async (request:IncomingMessage, response:ServerResponse) => {
     const db = getFirestore()
     const usersSnap = await db.collection('authUsers').get();
+    if(usersSnap.empty) return "No user created"
     const users = usersSnap.docs.map((doc) => {
         return {
             uuid: doc.id,
