@@ -12,10 +12,8 @@ import { db } from "~~/helpers/fireadmin";
 // }
 export default async (req:IncomingMessage, res: ServerResponse) => {
     // const db = getFirestore()
-    let kyc: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>
-    db.collection("kyc").onSnapshot((querysnapshot) => {
-        kyc = querysnapshot
-    })
+    
+    const kyc = await db.collection("kyc").get()
     if(kyc.empty) return console.log("no kyc")
    
     const kycData = kyc.docs.map((doc) => {

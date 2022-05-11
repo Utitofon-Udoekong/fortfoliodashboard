@@ -14,9 +14,6 @@ const approveKYC = async (uid: string) => {
   batch.update(userVerifiedQuery,{
     "isVerified": true
   })
-  batch.update(kycQuery,{
-    "status": "Approved"
-  })
   batch.delete(kycQuery)
   await batch.commit()
 }

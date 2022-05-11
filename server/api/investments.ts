@@ -14,10 +14,8 @@ import { db } from "~~/helpers/fireadmin";
 // }
 export default async (req:IncomingMessage, res: ServerResponse) => {
     // const db = getFirestore()
-    let investments: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>
-    db.collectionGroup("investments").onSnapshot((querysnapshot) => {
-        investments = querysnapshot
-    })
+    
+    const investments = await db.collectionGroup("investments").get()
     if(investments.empty) return console.log("no investments")
    
     const investmentsData = investments.docs.map((doc) => {

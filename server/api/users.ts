@@ -12,17 +12,15 @@ import { db } from "~~/helpers/fireadmin";
 // }
 
 export default async (request:IncomingMessage, response:ServerResponse) => {
-    let usersSnap: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData> 
-    db.collection('authUsers').onSnapshot((querysnapshot) => {
-
-        if(querysnapshot.empty) return "No user created"
-        const users = usersSnap.docs.map((doc) => {
-            return {
-                uuid: doc.id,
-                ...doc.data(),
-            }
-        })
-        
-        return users
+    // const db = getFirestore()
+    const usersSnap = await db.collection('authUsers').get();
+    if(usersSnap.empty) return "No user created"
+    const users = usersSnap.docs.map((doc) => {
+        return {
+            uuid: doc.id,
+            ...doc.data(),
+        }
     })
+    
+    return users
 }
