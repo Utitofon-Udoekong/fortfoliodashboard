@@ -59,24 +59,7 @@ let invest12Months = []
 // states------------------------------------------------------------------------------
 
 // methods
-const get3MonthsInvestment = () => {
-  const _3months = store.investments.filter((investment) =>{
-    return investment.duration === 3
-  })
-  invest3Months = _3months
-}
-const get6MonthsInvestment = () => {
-  const _6months = store.investments.filter((investment) =>{
-    return investment.duration === 6
-  })
-  invest6Months = _6months
-}
-const get12MonthsInvestment = () => {
-  const _12months = store.investments.filter((investment) =>{
-    return investment.duration === 12
-  })
-  invest12Months = _12months
-}
+
 
 const setInvestments = async () => {
   await store.setInvestments();
@@ -202,7 +185,25 @@ const exportFile = (format) => {
   file.download(genString, format);
 };
 // methods------------------------------------------------------------------------------
-
+const get3MonthsInvestment = () => {
+  const _3months = store.investments.filter((investment) =>{
+    return investment.duration === 3
+  })
+  invest3Months = _3months
+}
+const get6MonthsInvestment = () => {
+  const _6months = store.investments.filter((investment) =>{
+    return investment.duration === 6
+  })
+  invest6Months = _6months
+}
+const get12MonthsInvestment = () => {
+  const _12months = store.investments.filter((investment) =>{
+    return investment.duration === 12
+  })
+  invest12Months = _12months
+}
+// to be computed
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
