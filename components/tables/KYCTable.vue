@@ -3,9 +3,32 @@ import { KYCTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 import { useUserStore } from "~~/store/users";
 import formatter from "~~/helpers/formatIsoDate";
-
+import { doc, updateDoc, writeBatch } from "@firebase/firestore";
+// const {$db} = useNuxtApp()
 const store = useUserStore();
+const {$db} = useNuxtApp()
+const batch = writeBatch($db)
+const approveKYC = async (uid: string) => {
+  const userVerifiedQuery = doc($db, "authUsers", uid)
+  const kycQuery = doc($db, "kyc", uid)
+  batch.update(userVerifiedQuery,{
+    "isVerified": true
+  })
+  batch.update(kycQuery,{
+    "status": "Approved"
+  })
+  batch.delete(kycQuery)
+  await batch.commit()
+}
 
+const rejectKYC = async (uid: string) => {
+  const ref = doc($db, "kyc", uid)
+  await updateDoc(ref,{
+    "isVerified": false,
+    "status": "Rejected"
+  })
+  console.log(`kyc for ${uid} rejected`)
+}
 // states
 const columns = [
   { name: "fullName", text: "User" },
@@ -409,7 +432,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              (kycDataList[index].status = 'Approved'),
+                              approveKYC(kycData.uuid),
                                 open(index, $event)
                             "
                           >
@@ -420,13 +443,13 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              (kycDataList[index].status = 'Rejected'),
+                              rejectKYC(kycData.uuid),
                                 open(index, $event)
                             "
                           >
                             Reject kyc
                           </li>
-                          <li
+                          <!-- <li
                             tabindex="0"
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
@@ -436,7 +459,7 @@ onMounted(() => {
                             "
                           >
                             Quick view
-                          </li>
+                          </li> -->
                         </ul>
                       </div>
                     </td>

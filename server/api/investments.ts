@@ -1,20 +1,23 @@
 // const {$db} = useNuxtApp()
 
 import { IncomingMessage, ServerResponse } from "http";
-import { getFirestore } from 'firebase-admin/firestore'
-import { initializeApp, getApps, cert } from 'firebase-admin/app'
+// import { getFirestore } from 'firebase-admin/firestore'
+// import { initializeApp, getApps, cert } from 'firebase-admin/app'
+import { db } from "~~/helpers/fireadmin";
 
-const apps = getApps()
+// const apps = getApps()
 
-if (!apps.length) {
-    initializeApp({
-        credential: cert('./serviceAccount.json') // 👈 Path to your JSON Firebase certificate
-    })
-}
+// if (!apps.length) {
+    // initializeApp({
+    //     credential: cert('./serviceAccount.json') // 👈 Path to your JSON Firebase certificate
+    // })
+// }
 export default async (req:IncomingMessage, res: ServerResponse) => {
-    const db = getFirestore()
-    
-    const investments = await db.collectionGroup("investments").get()
+    // const db = getFirestore()
+    let investments: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>
+    db.collectionGroup("investments").onSnapshot((querysnapshot) => {
+        investments = querysnapshot
+    })
     if(investments.empty) return console.log("no investments")
    
     const investmentsData = investments.docs.map((doc) => {

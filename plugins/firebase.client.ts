@@ -1,7 +1,7 @@
-import { getApp, getApps, initializeApp } from 'firebase-admin/app';
-import { getAuth } from "firebase-admin/auth";
-import {getFirestore } from 'firebase-admin/firestore';
-import { getStorage } from 'firebase-admin/storage';
+import { getApp, getApps, initializeApp } from 'firebase/app';
+import { getAuth } from "firebase/auth";
+import {getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 export default defineNuxtPlugin((nuxtApp) => {
     const config = useRuntimeConfig()
     const firebaseConfig = {
@@ -20,10 +20,11 @@ export default defineNuxtPlugin((nuxtApp) => {
         app = getApp(); // if already initialized, use that one
     }
 
-    const firebaseApp = app;
+    const firebaseApp = initializeApp(firebaseConfig);
     const auth = getAuth(firebaseApp);
     const db = getFirestore(firebaseApp);
-    const storage = getStorage(firebaseApp).bucket("KYC_DOCUMENTS")
+    const storage = getStorage(firebaseApp)
+    
     return {
         provide: {
             firebaseApp: firebaseApp,

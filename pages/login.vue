@@ -8,10 +8,10 @@ import { useUserStore } from "~~/store/users";
 const store = useUserStore()
 
 const mama = async () => {
-  await store.setkyc()
+  await store.setInvestments()
 }
 const papa = () => {
-  console.log(store.getKyc)
+  console.log(store.getInvestments)
 }
 const debug = ref(false);
 onMounted(() => {
