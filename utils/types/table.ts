@@ -66,4 +66,5 @@ export interface InvestmentTableData{
     dueDate: string
     status: string
     paymentMethod: string
+    duration: number
 }

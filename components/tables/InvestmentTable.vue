@@ -17,6 +17,7 @@ const columns = [
   { name: "paymentMethod", text: "Method" },
   { name: "paymentDate", text: "Payment Date" },
   { name: "dueDate", text: "Due Date" },
+  { name: "duration", text: "Duration" },
   { name: "status", text: "Status" },
 ];
 let col: InvestmentTableData = reactive({
@@ -26,7 +27,8 @@ let col: InvestmentTableData = reactive({
   paymentDate: "",
   dueDate: "",
   status: "",
-  paymentMethod: ""
+  paymentMethod: "",
+  duration: 0
 });
 let sortCol: InvestmentTableData = reactive({
   uid: "",
@@ -35,7 +37,8 @@ let sortCol: InvestmentTableData = reactive({
   paymentDate: "",
   dueDate: "",
   status: "",
-  paymentMethod: ""
+  paymentMethod: "",
+  duration: 0
 });
 const investmentsData = ref<InvestmentTableData[]>(store.investments);
 let filteredInvestment = ref<InvestmentTableData[]>([]);
@@ -122,7 +125,8 @@ const paginateUsers = () => {
       paymentDate: "",
       dueDate: "",
       status: "",
-      paymentMethod: ""
+      paymentMethod: "",
+      duration: 0
     };
   }
 };
@@ -158,7 +162,8 @@ const sortByColumn = (column) => {
     paymentDate: "",
     dueDate: "",
     status: "",
-    paymentMethod: ""
+    paymentMethod: "",
+    duration: 0
   };
   let sortedUsers = getCurrentUsers();
   let sortedColumn = sortCol[column];
@@ -185,25 +190,7 @@ const exportFile = (format) => {
   file.download(genString, format);
 };
 // methods------------------------------------------------------------------------------
-const get3MonthsInvestment = () => {
-  const _3months = store.investments.filter((investment) =>{
-    return investment.duration === 3
-  })
-  invest3Months = _3months
-}
-const get6MonthsInvestment = () => {
-  const _6months = store.investments.filter((investment) =>{
-    return investment.duration === 6
-  })
-  invest6Months = _6months
-}
-const get12MonthsInvestment = () => {
-  const _12months = store.investments.filter((investment) =>{
-    return investment.duration === 12
-  })
-  invest12Months = _12months
-}
-// to be computed
+
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
@@ -235,6 +222,21 @@ let classObject = computed(() => {
     left,
   };
 });
+const get3MonthsInvestment = computed((description: string) => {
+  const descrip = investmentsData.value.filter(investment => investment.description === description)
+  const _3months = descrip.filter(data => data.duration === 3)
+  return (_3months.length / investmentsData.value.length) * 100
+})
+const get6MonthsInvestment = computed((description: string) => {
+  const descrip = investmentsData.value.filter(investment => investment.description === description)
+  const _6months = descrip.filter(data => data.duration === 6)
+  return (_6months.length / investmentsData.value.length) * 100
+})
+const get12MonthsInvestment = computed((description: string) => {
+  const descrip = investmentsData.value.filter(investment => investment.description === description)
+  const _12months = descrip.filter(data => data.duration === 12)
+  return (_12months.length / investmentsData.value.length) * 100
+})
 
 watchEffect(() => {
   const data = store.getInvestments;
@@ -341,7 +343,7 @@ onMounted(() => {
                     @contextmenu.prevent="selectRow(investments)"
                     class="hover:bg-gray-300 cursor-pointer"
                   >
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-6 py-4">
                       <div class="flex items-center">
                         <div class="">
                           <p>#{{ investments.id }}</p>
@@ -360,11 +362,14 @@ onMounted(() => {
                       {{ investments.bankAccountType }}
                       {{ investments.paymentMethod }}
                     </td>
-                    <td class=" py-4  text-sm">
+                    <td class=" py-4 text-sm">
                       {{ new Date(investments.paymentDate).toLocaleDateString() }}
                     </td>
-                    <td class=" py-4  text-sm">
+                    <td class=" py-4 text-sm">
                       {{ new Date(investments.dueDate).toLocaleDateString() }}
+                    </td>
+                    <td class=" py-4 text-sm">
+                      {{ investments.duration }} months
                     </td>
                     <td class=" py-4 whitespace-nowrap">
                       <span
@@ -511,6 +516,12 @@ onMounted(() => {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="py-4">
+      <div class="flex gap-4">
+        <InvestmentOverview />
+        <TopInvestments />
       </div>
     </div>
     <!-- USER MODAL -->

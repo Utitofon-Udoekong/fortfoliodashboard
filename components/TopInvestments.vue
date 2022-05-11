@@ -1,7 +1,14 @@
 <script lang="ts" setup>
+import { ComputedRef } from 'vue';
+
 const openTab = ref(1);
 const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
-
+interface Props {
+  get3MonthsInvestment: ComputedRef<number>
+  get6MonthsInvestment: ComputedRef<number>
+  get12MonthsInvestment: ComputedRef<number>
+}
+const props = defineProps<Props>()
 </script>
 <template>
   <div class="p-5 bg-white rounded-md shadow w-full">
@@ -59,105 +66,108 @@ const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
         <div class="relative flex flex-col min-w-0 break-words w-full mb-6 body">
           <div class="px-4 py-5 flex-auto">
             <div class="tab-content tab-space">
+              <!-- 3 months -->
               <div
                 :class="{ hidden: openTab !== 1, block: openTab === 1 }"
               >
                 <div class="fortdollar mb-5">
                     <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
                   <p class="">Fortdollar</p>
-                  <p>50%</p>
+                  <p>{{props.get3MonthsInvestment("FortDollar Investment")}}%</p>
                 </div>
 
                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                <div class="bg-brand-light-blue h-1.5 rounded-full" style="width: 50%"></div>
+                <div class="bg-brand-light-blue h-1.5 rounded-full" style="width: {{props.get3MonthsInvestment('FortDollar Investment')}}%"></div>
                 </div>
                 </div>
 
                 <div class="fortcrypto mb-5">
                     <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
                   <p class="">FortCrypto</p>
-                  <p>20%</p>
+                  <p>{{props.get3MonthsInvestment("FortCrypto Investment")}}%</p>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                <div class="bg-brand-blue h-1.5 rounded-full" style="width: 20%"></div>
+                <div class="bg-brand-blue h-1.5 rounded-full" style="width: {{props.get3MonthsInvestment('FortCrypto Investment')}}%"></div>
                 </div>
                 </div>
                 
                 <div class="fortshield">
                     <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
                   <p class="">FortShield</p>
-                  <p>30%</p>
+                  <p>{{props.get3MonthsInvestment("FortShield Investment")}}%</p>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                <div class="bg-brand-green h-1.5 rounded-full" style="width: 30%"></div>
+                <div class="bg-brand-green h-1.5 rounded-full" style="width: {{props.get3MonthsInvestment('FortShield Investment')}}%"></div>
                 </div>
                 </div>
               </div>
+              <!-- 6 months -->
               <div
                 :class="{ hidden: openTab !== 2, block: openTab === 2 }"
               >
                 <div class="fortdollar mb-5">
                     <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
                   <p class="">Fortdollar</p>
-                  <p>23%</p>
+                  <p>{{props.get6MonthsInvestment("FortDollar Investment")}}%</p>
                 </div>
 
                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                <div class="bg-brand-light-blue h-1.5 rounded-full" style="width: 23%"></div>
+                <div class="bg-brand-light-blue h-1.5 rounded-full" style="width: {{props.get6MonthsInvestment('FortDollar Investment')}}%"></div>
                 </div>
                 </div>
 
                 <div class="fortcrypto mb-5">
                     <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
                   <p class="">FortCrypto</p>
-                  <p>62%</p>
+                  <p>{{props.get6MonthsInvestment("FortCrypto Investment")}}%</p>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                <div class="bg-brand-blue h-1.5 rounded-full" style="width: 62%"></div>
+                <div class="bg-brand-blue h-1.5 rounded-full" style="width: {{props.get6MonthsInvestment('FortCrypto Investment')}}%"></div>
                 </div>
                 </div>
                 
                 <div class="fortshield">
                     <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
                   <p class="">FortShield</p>
-                  <p>37%</p>
+                  <p>{{props.get6MonthsInvestment("FortShield Investment")}}%</p>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                <div class="bg-brand-green h-1.5 rounded-full" style="width: 37%"></div>
+                <div class="bg-brand-green h-1.5 rounded-full" style="width: {{props.get6MonthsInvestment('FortShield Investment')}}%"></div>
                 </div>
                 </div>
               </div>
+              <!-- 12 months -->
               <div
                 :class="{ hidden: openTab !== 3, block: openTab === 3 }"
               >
                 <div class="fortdollar mb-5">
                     <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
                   <p class="">Fortdollar</p>
-                  <p>20%</p>
+                  <p>{{props.get12MonthsInvestment("FortDollar Investment")}}%</p>
                 </div>
 
                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                <div class="bg-brand-light-blue h-1.5 rounded-full" style="width: 20%"></div>
+                <div class="bg-brand-light-blue h-1.5 rounded-full" style="width: {{props.get12MonthsInvestment('FortDollar Investment')}}%"></div>
                 </div>
                 </div>
 
                 <div class="fortcrypto mb-5">
                     <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
                   <p class="">FortCrypto</p>
-                  <p>47%</p>
+                  <p>{{props.get12MonthsInvestment("FortCrypto Investment")}}%</p>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                <div class="bg-brand-blue h-1.5 rounded-full" style="width: 47%"></div>
+                <div class="bg-brand-blue h-1.5 rounded-full" style="width: {{props.get12MonthsInvestment('FortCrypto Investment')}}%"></div>
                 </div>
                 </div>
                 
                 <div class="fortshield">
                     <div class="mb-2 text-sm text-gray-500 flex justify-between items-center">
                   <p class="">FortShield</p>
-                  <p>18%</p>
+                  <p>{{props.get12MonthsInvestment("FortShield Investment")}}%</p>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                <div class="bg-brand-green h-1.5 rounded-full" style="width: 18%"></div>
+                <div class="bg-brand-green h-1.5 rounded-full" style="width: {{props.get12MonthsInvestment('FortShield Investment')}}%"></div>
                 </div>
                 </div>
               </div>
