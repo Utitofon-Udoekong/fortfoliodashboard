@@ -8,24 +8,7 @@ import { doc, updateDoc, writeBatch } from "@firebase/firestore";
 const store = useUserStore();
 const {$db} = useNuxtApp()
 const batch = writeBatch($db)
-const approveKYC = async (uid: string) => {
-  const userVerifiedQuery = doc($db, "authUsers", uid)
-  const kycQuery = doc($db, "kyc", uid)
-  batch.update(userVerifiedQuery,{
-    "isVerified": true
-  })
-  batch.delete(kycQuery)
-  await batch.commit()
-}
 
-const rejectKYC = async (uid: string) => {
-  const ref = doc($db, "kyc", uid)
-  await updateDoc(ref,{
-    "isVerified": false,
-    "status": "Rejected"
-  })
-  console.log(`kyc for ${uid} rejected`)
-}
 // states
 const columns = [
   { name: "fullName", text: "User" },
@@ -82,6 +65,23 @@ let showModal = ref(false);
 // states------------------------------------------------------------------------------
 
 // methods
+const approveKYC = async (uid: string) => {
+  const userVerifiedQuery = doc($db, "authUsers", uid)
+  const kycQuery = doc($db, "kyc", uid)
+  batch.update(userVerifiedQuery,{
+    "isVerified": true
+  })
+  batch.delete(kycQuery)
+  await batch.commit()
+}
+
+const rejectKYC = async (uid: string) => {
+  const ref = doc($db, "kyc", uid)
+  await updateDoc(ref,{
+    "isVerified": false,
+    "status": "Rejected"
+  })
+}
 const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop();
@@ -218,18 +218,17 @@ let classObject = computed(() => {
 
 const setKyc = async () => {
   await store.setkyc();
-  console.log("setting");
 };
 
-const downloadImage = (url: string | URL) => {
-  var xhr = new XMLHttpRequest();
-  xhr.responseType = "blob";
-  xhr.onload = (event) => {
-    var blob = xhr.response;
-  };
-  xhr.open("GET", url);
-  xhr.send();
-};
+// const downloadImage = (url: string | URL) => {
+//   var xhr = new XMLHttpRequest();
+//   xhr.responseType = "blob";
+//   xhr.onload = (event) => {
+//     var blob = xhr.response;
+//   };
+//   xhr.open("GET", url);
+//   xhr.send();
+// };
 
 watchEffect(() => {
   const data = store.getKyc;

@@ -6,6 +6,7 @@ import { useUserStore } from "~~/store/users";
 
 // const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
 const store = useUserStore()
+const router = useRouter()
 
 const mama = async () => {
   await store.setInvestments()
@@ -34,6 +35,7 @@ const existingEmail = async (value: string) => {
 const handleSubmit = (values: Login, actions: { resetForm: () => void; }) => {
   console.log(values);
   actions.resetForm();
+  router.push("/dashboard")
 };
 
 configure({
@@ -147,7 +149,7 @@ const initialValues = { email: "", password: "", confirmed: "" };
               Submit
             </button>
             <NuxtLink
-              to="/signup"
+              to="/dashboard"
               class="hover:underline-current text-brand-light-blue text-sm"
               >Signup</NuxtLink
             >

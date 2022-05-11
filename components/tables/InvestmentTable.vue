@@ -1,34 +1,43 @@
 <script lang="ts" setup>
-import { investments } from "~~/assets/investments";
+// import { investments } from "~~/assets/investments";
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
+import { useUserStore } from "~~/store/users";
+import { collectionGroup, doc, query, updateDoc, where, writeBatch } from "@firebase/firestore";
+const store = useUserStore();
+const {$db} = useNuxtApp()
+const batch = writeBatch($db)
+
 
 // states
 const columns = [
-  { name: "id", text: "User ID" },
-  { name: "payment_for", text: "Payment For" },
-  { name: "amount_invested", text: "Amount Invested" },
-  { name: "payment_date", text: "Payment Date" },
-  { name: "due_date", text: "Due Date" },
+  { name: "uid", text: "User ID" },
+  { name: "description", text: "Payment For" },
+  { name: "amount", text: "Amount Invested" },
+  { name: "paymentMethod", text: "Method" },
+  { name: "paymentDate", text: "Payment Date" },
+  { name: "dueDate", text: "Due Date" },
   { name: "status", text: "Status" },
 ];
 let col: InvestmentTableData = reactive({
-  id: null,
-  payment_for: "",
-  amount_invested: null,
-  payment_date: "",
-  due_date: "",
+  uid: "",
+  description: "",
+  amount: 0,
+  paymentDate: "",
+  dueDate: "",
   status: "",
+  paymentMethod: ""
 });
 let sortCol: InvestmentTableData = reactive({
-  id: null,
-  payment_for: "",
-  amount_invested: null,
-  payment_date: "",
-  due_date: "",
+  uid: "",
+  description: "",
+  amount: 0,
+  paymentDate: "",
+  dueDate: "",
   status: "",
+  paymentMethod: ""
 });
-const investmentsData = ref<InvestmentTableData[]>(investments);
+const investmentsData = ref<InvestmentTableData[]>(store.investments);
 let filteredInvestment = ref<InvestmentTableData[]>([]);
 const showInvestment = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentInvestment = ref<number>(10);
@@ -43,10 +52,26 @@ const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: InvestmentTableData[] = [];
 const openTab = ref(1);
-let showModal = ref(false)
+let showModal = ref(false);
 // states------------------------------------------------------------------------------
 
 // methods
+
+const setInvestments = async () => {
+  await store.setInvestments();
+};
+
+const cancelInvestment = async (uid: string) => {
+  const ref = query(collectionGroup($db, "investments"), where('uid','==',uid))
+  // await updateDoc(ref,{
+    
+  // })
+}
+
+const approveInvestment = (uid: string) => {
+  const ref = doc($db, "investments", uid)
+}
+
 const selectRow = (user: InvestmentTableData) => {
   editableUser.push(user);
   showUserData.value = true;
@@ -78,18 +103,22 @@ const filterByColumn = () => {
 const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
-    searchInvestment.value = array.search(investmentsData.value,searchInput.value);
+    searchInvestment.value = array.search(
+      investmentsData.value,
+      searchInput.value
+    );
     paginateData(searchInvestment.value);
   } else {
     searchInvestment.value = [];
     paginateData(investmentsData.value);
     col = {
-      id: null,
-  payment_for: "",
-  amount_invested: null,
-  payment_date: "",
-  due_date: "",
-  status: "",
+      uid: "",
+      description: "",
+      amount: 0,
+      paymentDate: "",
+      dueDate: "",
+      status: "",
+      paymentMethod: ""
     };
   }
 };
@@ -112,17 +141,20 @@ const searchEvent = () => {
 };
 
 const getCurrentUsers = () => {
-  return searchInvestment.value.length <= 0 ? investmentsData.value : searchInvestment.value;
+  return searchInvestment.value.length <= 0
+    ? investmentsData.value
+    : searchInvestment.value;
 };
 
 const sortByColumn = (column) => {
   col = {
-    id: null,
-  payment_for: "",
-  amount_invested: null,
-  payment_date: "",
-  due_date: "",
-  status: "",
+    uid: "",
+    description: "",
+    amount: 0,
+    paymentDate: "",
+    dueDate: "",
+    status: "",
+    paymentMethod: ""
   };
   let sortedUsers = getCurrentUsers();
   let sortedColumn = sortCol[column];
@@ -140,7 +172,7 @@ const sortByColumn = (column) => {
 
 const toggleModal = () => {
   showModal.value = !showModal.value;
-  editableUser.pop()
+  editableUser.pop();
 };
 
 // const print = () => file.printed(investmentsData.value);
@@ -153,7 +185,11 @@ const exportFile = (format) => {
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
-  return array.pageInfo(getCurrentUsers(), currentPage.value, currentInvestment.value);
+  return array.pageInfo(
+    getCurrentUsers(),
+    currentPage.value,
+    currentInvestment.value
+  );
 });
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
@@ -178,17 +214,19 @@ let classObject = computed(() => {
   };
 });
 
+watchEffect(() => {
+  const data = store.getInvestments;
+  investmentsData.value = data;
+  paginateData(investmentsData.value);
+});
+
 // computed------------------------------------------------------------------------------
 
 // lifecycle
 onMounted(() => {
   paginateData(investmentsData.value);
-  
 });
 // lifecycle----------------------------------------------------------------------------------
-
-
-
 </script>
 <template>
   <div class="h-auto">
@@ -196,8 +234,17 @@ onMounted(() => {
       <div class="flex mb-3 justify-between">
         <div class="flex items-center">
           <span class="mr-1">Show</span>
-          <select v-model="currentInvestment" @change="paginateUsers" class="p-2 bg-blue-300 bg-opacity-25 rounded-md">
-            <option :value="users" v-for="(users, i) in showInvestment" :key="i" class="text-white">
+          <select
+            v-model="currentInvestment"
+            @change="paginateUsers"
+            class="p-2 bg-blue-300 bg-opacity-25 rounded-md"
+          >
+            <option
+              :value="users"
+              v-for="(users, i) in showInvestment"
+              :key="i"
+              class="text-white"
+            >
               {{ users }}
             </option>
           </select>
@@ -205,8 +252,19 @@ onMounted(() => {
         </div>
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
+            <div
+              class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
+              @click="setInvestments"
+            >
+              <i-mdi-reload /> Load Data
+            </div>
             <!-- <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3" @click="print" > <i-system-uicons-printer/> Print </div> -->
-            <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md" @click="exportFile('csv')" > <i-ion-download /> Export </div>
+            <div
+              class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md"
+              @click="exportFile('csv')"
+            >
+              <i-ion-download /> Export
+            </div>
           </div>
           <div class="search-component w-80 mb-3">
             <div
@@ -231,14 +289,17 @@ onMounted(() => {
                 <thead class="bg-transparent">
                   <tr>
                     <th
-                    v-for="(headers, i) in tableHeader"
-                    :key="i"
+                      v-for="(headers, i) in tableHeader"
+                      :key="i"
                       scope="col"
-                      class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
+                      class="mr-3 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
                       <div class="flex items-center">
                         <span>{{ headers.text }}</span>
-                        <span @click.prevent="sortByColumn(headers.name)" class="cursor-pointer pl-1">
+                        <span
+                          @click.prevent="sortByColumn(headers.name)"
+                          class="cursor-pointer pl-1"
+                        >
                           <i-mdi-filter-variant class="pointer-events-none" />
                         </span>
                       </div>
@@ -252,7 +313,12 @@ onMounted(() => {
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="(investments, index) in tableData" :key="index" @contextmenu.prevent="selectRow(investments)" class="hover:bg-gray-300 cursor-pointer">
+                  <tr
+                    v-for="(investments, index) in tableData"
+                    :key="index"
+                    @contextmenu.prevent="selectRow(investments)"
+                    class="hover:bg-gray-300 cursor-pointer"
+                  >
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
                         <div class="">
@@ -260,36 +326,73 @@ onMounted(() => {
                         </div>
                       </div>
                     </td>
-                    <td class="px-6 py-4 truncate whitespace-nowrap">
-                      <div class="text-sm truncate text-ellipsis">{{ investments.payment_for }} Investment</div>
+                    <td class=" py-4 truncate whitespace-nowrap">
+                      <div class="text-sm truncate text-ellipsis">
+                        {{ investments.description }}
+                      </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">{{ investments.amount_invested }}</div>
+                    <td class=" py-4 whitespace-nowrap">
+                      <div class="text-sm">{{investments.currency}} {{ investments.amount }}</div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ investments.payment_date }}
+                    <td class=" py-4 whitespace-nowrap text-sm">
+                      {{ investments.bankAccountType }}
+                      {{ investments.paymentMethod }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ investments.due_date }}
+                    <td class=" py-4  text-sm">
+                      {{ investments.paymentDate.toLocaleDateString() }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class=" py-4  text-sm">
+                      {{ investments.dueDate.toLocaleDateString() }}
+                    </td>
+                    <td class=" py-4 whitespace-nowrap">
                       <span
                         :class="
                           investments.status === 'Cancelled'
-                            ? 'text-brand-red' : investments.status === 'Pending' ? 'text-yellow-400'
+                            ? 'text-brand-red'
+                            : investments.status === 'Pending'
+                            ? 'text-yellow-400'
                             : 'text-brand-green'
                         "
                         class="text-sm flex"
-                        ><i-mdi-music-note-whole /> {{ investments.status }}</span
+                        ><i-mdi-music-note-whole />
+                        {{ investments.status }}</span
                       >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap relative">
-                      <i-mdi-dots-horizontal @click="open(index,$event)" class="cursor-pointer" role="button"
-                        aria-label="option" />
-                      <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
-                        <ul class="py-1" >
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="investmentsData[index].status = 'success',open(index,$event)">Approve payment</li>
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="investmentsData[index].status = 'pending',open(index,$event)">Cancel payment</li>
+                      <i-mdi-dots-horizontal
+                        @click="open(index, $event)"
+                        class="cursor-pointer"
+                        role="button"
+                        aria-label="option"
+                      />
+                      <div
+                        v-if="show === index"
+                        :style="classObject"
+                        class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl"
+                      >
+                        <ul class="py-1">
+                          <li
+                            tabindex="0"
+                            href="#"
+                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                            @click="
+                              (investmentsData[index].status = 'success'),
+                                open(index, $event)
+                            "
+                          >
+                            Approve payment
+                          </li>
+                          <li
+                            tabindex="0"
+                            href="#"
+                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                            @click="
+                              (investmentsData[index].status = 'pending'),
+                                open(index, $event)
+                            "
+                          >
+                            Cancel payment
+                          </li>
                         </ul>
                       </div>
                     </td>
@@ -389,20 +492,52 @@ onMounted(() => {
       </div>
     </div>
     <!-- USER MODAL -->
-    <div v-if="showModal" class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 w-full h-full">
-      <div class="closemodal p-4 fixed top-3 right-6 bg-white rounded-full cursor-pointer">
-        <i-ion-close-round class="text-black text-xl" @click="toggleModal"/>
+    <div
+      v-if="showModal"
+      class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 w-full h-full"
+    >
+      <div
+        class="closemodal p-4 fixed top-3 right-6 bg-white rounded-full cursor-pointer"
+      >
+        <i-ion-close-round class="text-black text-xl" @click="toggleModal" />
       </div>
       <div class="bg-white p-10 max-w-lg h-auto z-40 mx-auto mt-20">
         <p class="text-xl font-semibold pb-5">Investment INFO</p>
-        <p class="text-lg font-semibold pb-3">USERID: <span class="font-normal text-base">{{editableUser[0].id}}</span></p>
-        <p class="text-lg font-semibold pb-3">DESCRIPTION: <span class="font-normal text-base">{{editableUser[0].payment_for}}</span></p>
-        <p class="text-lg font-semibold pb-3">AMOUNT INVESTED: <span class="font-normal text-base">{{editableUser[0].amount_invested}}</span></p>
-        <p class="text-lg font-semibold pb-3">PAYMENT DATE: <span class="font-normal text-base">{{editableUser[0].payment_date}}</span></p>
-        <p class="text-lg font-semibold pb-3">DUE DATE: <span class="font-normal text-base">{{editableUser[0].due_date}}</span></p>
-        <p class="text-lg font-semibold">STATUS: <span class="font-normal text-base">{{editableUser[0].status}}</span></p>
+        <p class="text-lg font-semibold pb-3">
+          USERID:
+          <span class="font-normal text-base">{{ editableUser[0].id }}</span>
+        </p>
+        <p class="text-lg font-semibold pb-3">
+          DESCRIPTION:
+          <span class="font-normal text-base">{{
+            editableUser[0].description
+          }}</span>
+        </p>
+        <p class="text-lg font-semibold pb-3">
+          AMOUNT INVESTED:
+          <span class="font-normal text-base">{{
+            editableUser[0].amount
+          }}</span>
+        </p>
+        <p class="text-lg font-semibold pb-3">
+          PAYMENT DATE:
+          <span class="font-normal text-base">{{
+            editableUser[0].paymentDate
+          }}</span>
+        </p>
+        <p class="text-lg font-semibold pb-3">
+          DUE DATE:
+          <span class="font-normal text-base">{{
+            editableUser[0].dueDate
+          }}</span>
+        </p>
+        <p class="text-lg font-semibold">
+          STATUS:
+          <span class="font-normal text-base">{{
+            editableUser[0].status
+          }}</span>
+        </p>
       </div>
     </div>
   </div>
 </template>
-

@@ -31,23 +31,6 @@ export interface TransactionsTableData{
     status: string
 }
 
-// [
-//     {
-//       "uuid": "P7X6dGy88HTQyuQcQlZYdknZmEH2",
-//       "firstName": "Etini",
-//       "phoneNumber": "+123456",
-//       "id": "0a93749",
-//       "createdat": {
-//         "_seconds": 1651498533,
-//         "_nanoseconds": 697159000
-//       },
-//       "email": "meet@gmail.com",
-//       "balance": 0,
-//       "isVerified": false,
-//       "lastName": "Archibong",
-//       "displayName": "EA"
-//     },
-//   ]
 
 export interface UsersTableData{
     id: String
@@ -76,10 +59,11 @@ export interface KYCTableData{
 }
 
 export interface InvestmentTableData{
-    id: number
-    payment_for: string
-    amount_invested: number
-    payment_date: string
-    due_date: string
+    uid: string
+    description: string
+    amount: number
+    paymentDate: string
+    dueDate: string
     status: string
+    paymentMethod: string
 }
