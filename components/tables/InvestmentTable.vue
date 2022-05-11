@@ -53,9 +53,30 @@ const leftPos = ref(0);
 let editableUser: InvestmentTableData[] = [];
 const openTab = ref(1);
 let showModal = ref(false);
+let invest3Months = []
+let invest6Months = []
+let invest12Months = []
 // states------------------------------------------------------------------------------
 
 // methods
+const get3MonthsInvestment = () => {
+  const _3months = store.investments.filter((investment) =>{
+    return investment.duration === 3
+  })
+  invest3Months = _3months
+}
+const get6MonthsInvestment = () => {
+  const _6months = store.investments.filter((investment) =>{
+    return investment.duration === 6
+  })
+  invest6Months = _6months
+}
+const get12MonthsInvestment = () => {
+  const _12months = store.investments.filter((investment) =>{
+    return investment.duration === 12
+  })
+  invest12Months = _12months
+}
 
 const setInvestments = async () => {
   await store.setInvestments();
@@ -339,10 +360,10 @@ onMounted(() => {
                       {{ investments.paymentMethod }}
                     </td>
                     <td class=" py-4  text-sm">
-                      {{ investments.paymentDate.toLocaleDateString() }}
+                      {{ new Date(investments.paymentDate).toLocaleDateString() }}
                     </td>
                     <td class=" py-4  text-sm">
-                      {{ investments.dueDate.toLocaleDateString() }}
+                      {{ new Date(investments.dueDate).toLocaleDateString() }}
                     </td>
                     <td class=" py-4 whitespace-nowrap">
                       <span

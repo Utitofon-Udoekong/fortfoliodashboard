@@ -21,6 +21,12 @@ export const useUserStore = defineStore('user', {
         },
         getUserCount(state){
             return state.users.length
+        },
+        getKycCount(state){
+            return state.kyc.length
+        },
+        getInvestmentCount(state){
+            return state.investments.length
         }
     },
     actions: {
