@@ -1,33 +1,33 @@
 import { getAuth, UserRecord } from "firebase-admin/auth"
-const {$auth} = useNuxtApp()
+import {auth} from "./fireadmin"
 
 class AdminFunction {
     async register(email:string, password: string){
-        await $auth.createUser({
+        await auth.createUser({
             email: email,
             password: password
         }).then((record) => {
-            $auth.setCustomUserClaims(record.uid, {admin: true})
+            auth.setCustomUserClaims(record.uid, {admin: true})
         }).catch((error) => {
             return console.log("Error encountered registering user", error)
         })
     }
     async login(email:string, password: string){
-        await $auth.createUser({
+        await auth.createUser({
             email: email,
             password: password
         }).then((record) => {
-            $auth.setCustomUserClaims(record.uid, {admin: true})
+            auth.setCustomUserClaims(record.uid, {admin: true})
         }).catch((error) => {
             return console.log("Error encountered registering user", error)
         })
     }
-    async getUserAuthInfo(uid: string) {
+    async getUserByID(uid: string) {
         await getAuth()
             .getUser(uid)
             .then((userRecord: UserRecord) => {
                 // See the UserRecord reference doc for the contents of userRecord.
-                // return console.log(`Successfully fetched user data: ${userRecord.toJSON()}`);
+                // return console.log(`Successfully fetched user data: {userRecord.toJSON()}`);
                 return userRecord
             })
             .catch((error) => {

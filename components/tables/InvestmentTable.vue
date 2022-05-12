@@ -116,14 +116,14 @@ const open = async (index: number, e: MouseEvent) => {
     show.value === null ? (show.value = index) : (show.value = null);
   });
 };
-const filterByColumn = () => {
-  const filterCol = object.removeBy(col, "");
-  let filterData = getCurrentUsers();
-  if (Object.entries(filterCol).length >= 1) {
-    filterData = array.filter(getCurrentUsers(), filterCol);
-  }
-  paginateData(filterData);
-};
+// const filterByColumn = () => {
+//   const filterCol = object.removeBy(col, "");
+//   let filterData = getCurrentUsers();
+//   if (Object.entries(filterCol).length >= 1) {
+//     filterData = array.filter(getCurrentUsers(), filterCol);
+//   }
+//   paginateData(filterData);
+// };
 const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
@@ -429,13 +429,13 @@ onMounted(() => {
                     <td class="px-6 py-4">
                       <div class="flex items-center">
                         <div class="">
-                          <p>#{{ investments.id }}</p>
+                          <p>#{{ investments.uid }}</p>
                         </div>
                       </div>
                     </td>
                     <td class="py-4 truncate whitespace-nowrap">
                       <div class="text-sm truncate text-ellipsis">
-                        {{ investments.description }}
+                        {{ investments.description.replace('Investment','') }}
                       </div>
                     </td>
                     <td class="py-4 whitespace-nowrap">
@@ -449,11 +449,11 @@ onMounted(() => {
                     </td>
                     <td class="py-4 text-sm">
                       {{
-                        new Date(investments.paymentDate).toLocaleDateString()
+                        new Date(investments.paymentDate).toLocaleDateString('en-GB')
                       }}
                     </td>
                     <td class="py-4 text-sm">
-                      {{ new Date(investments.dueDate).toLocaleDateString() }}
+                      {{ new Date(investments.dueDate).toLocaleDateString('en-GB') }}
                     </td>
                     <td class="py-4 text-sm">
                       {{ investments.duration }} months
@@ -856,27 +856,24 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <div>
-            <LineChart />
-          </div>
         </div>
       </div>
     </div>
     <!-- USER MODAL -->
     <div
-      v-if="showModal"
+      v-if="showUserData"
       class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 w-full h-full"
     >
       <div
         class="closemodal p-4 fixed top-3 right-6 bg-white rounded-full cursor-pointer"
       >
-        <i-ion-close-round class="text-black text-xl" @click="toggleModal" />
+        <i-ion-close-round class="text-black text-xl" @click="toggleUserData" />
       </div>
       <div class="bg-white p-10 max-w-lg h-auto z-40 mx-auto mt-20">
         <p class="text-xl font-semibold pb-5">Investment INFO</p>
         <p class="text-lg font-semibold pb-3">
           USERID:
-          <span class="font-normal text-base">{{ editableUser[0].id }}</span>
+          <span class="font-normal text-base">{{ editableUser[0].uid }}</span>
         </p>
         <p class="text-lg font-semibold pb-3">
           DESCRIPTION:
@@ -900,6 +897,12 @@ onMounted(() => {
           DUE DATE:
           <span class="font-normal text-base">{{
             editableUser[0].dueDate
+          }}</span>
+        </p>
+        <p class="text-lg font-semibold pb-3">
+          DURATION:
+          <span class="font-normal text-base">{{
+            editableUser[0].duration
           }}</span>
         </p>
         <p class="text-lg font-semibold">
