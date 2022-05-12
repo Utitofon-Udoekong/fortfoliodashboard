@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // import { investments } from "~~/assets/investments";
-import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
+import { IncomingInvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 import { useUserStore } from "~~/store/users";
 import {
@@ -11,6 +11,7 @@ import {
   where,
   writeBatch,
 } from "@firebase/firestore";
+import { daysAhead } from "~~/helpers/daysAgo";
 const store = useUserStore();
 const { $db } = useNuxtApp();
 const batch = writeBatch($db);
@@ -26,28 +27,24 @@ const columns = [
   { name: "duration", text: "Duration" },
   { name: "status", text: "Status" },
 ];
-let col: InvestmentTableData = reactive({
+let col: IncomingInvestmentTableData = reactive({
   uid: "",
   description: "",
   amount: 0,
-  paymentDate: "",
   dueDate: "",
   status: "",
-  paymentMethod: "",
   duration: 0,
 });
-let sortCol: InvestmentTableData = reactive({
+let sortCol: IncomingInvestmentTableData = reactive({
   uid: "",
   description: "",
   amount: 0,
-  paymentDate: "",
   dueDate: "",
   status: "",
-  paymentMethod: "",
   duration: 0,
 });
-const investmentsData = ref<InvestmentTableData[]>(store.investments);
-let filteredInvestment = ref<InvestmentTableData[]>([]);
+const investmentsData = ref<IncomingInvestmentTableData[]>(store.investments);
+let filteredInvestment = ref<IncomingInvestmentTableData[]>([]);
 const showInvestment = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentInvestment = ref<number>(10);
 const searchInput = ref<string>("");
@@ -59,7 +56,7 @@ let showUserData = ref(false);
 
 const topPos = ref(0);
 const leftPos = ref(0);
-let editableUser: InvestmentTableData[] = [];
+let editableUser: IncomingInvestmentTableData[] = [];
 const openTab = ref(1);
 let showModal = ref(false);
 // states------------------------------------------------------------------------------
@@ -87,7 +84,7 @@ const approveInvestment = (uid: string) => {
   );
 };
 
-const selectRow = (user: InvestmentTableData) => {
+const selectRow = (user: IncomingInvestmentTableData) => {
   editableUser.push(user);
   showUserData.value = true;
 };
@@ -107,15 +104,25 @@ const open = async (index: number, e: MouseEvent) => {
     show.value === null ? (show.value = index) : (show.value = null);
   });
 };
-// const filterByColumn = () => {
-//   const filterCol = object.removeBy(col, "");
-//   let filterData = getCurrentUsers();
-//   if (Object.entries(filterCol).length >= 1) {
-//     filterData = array.filter(getCurrentUsers(), filterCol);
-//   }
-//   paginateData(filterData);
-// };
-const getAllEmployees = () => {};
+
+const filter3days = () => {
+  const in3days = investmentsData.value.filter(
+    (inv) => inv.dueDate === daysAhead(3, new Date())
+  );
+  paginateData(in3days);
+};
+const filter1Week = () => {
+  const in1Week = investmentsData.value.filter(
+    (inv) => inv.dueDate === daysAhead(7, new Date())
+  );
+  paginateData(in1Week);
+};
+const filter2Weeks = () => {
+  const in2Weeks = investmentsData.value.filter(
+    (inv) => inv.dueDate === daysAhead(14, new Date())
+  );
+  paginateData(in2Weeks);
+};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
     searchInvestment.value = array.search(
@@ -130,10 +137,8 @@ const paginateUsers = () => {
       uid: "",
       description: "",
       amount: 0,
-      paymentDate: "",
       dueDate: "",
       status: "",
-      paymentMethod: "",
       duration: 0,
     };
   }
@@ -167,10 +172,8 @@ const sortByColumn = (column) => {
     uid: "",
     description: "",
     amount: 0,
-    paymentDate: "",
     dueDate: "",
     status: "",
-    paymentMethod: "",
     duration: 0,
   };
   let sortedUsers = getCurrentUsers();
@@ -211,7 +214,7 @@ const showInfo = computed(() => {
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
 });
-const tableData = computed<InvestmentTableData[]>(() => {
+const tableData = computed<IncomingInvestmentTableData[]>(() => {
   return filteredInvestment.value || [];
 });
 
@@ -232,84 +235,88 @@ let classObject = computed(() => {
 });
 
 const get3MonthsFortDollarInvestment = computed(() => {
-    const descrip = investmentsData.value.filter(
-        (investment) => investment.description === "FortDollar Investment"
-    );
-    const _3months = descrip.filter((data) => data.duration === 3);
-    return (_3months.length / investmentsData.value.length) * 100 ?? 0;
+  const descrip = investmentsData.value.filter(
+    (investment) => investment.description === "FortDollar Investment"
+  );
+  const _3months = descrip.filter((data) => data.duration === 3);
+  return (_3months.length / investmentsData.value.length) * 100 ?? 0;
 });
 const get6MonthsFortDollarInvestment = computed(() => {
-    const descrip = investmentsData.value.filter(
-        (investment) => investment.description === "FortDollar Investment"
-    );
-    const _6months = descrip.filter((data) => data.duration === 6);
-    return (_6months.length / investmentsData.value.length) * 100 ?? 0;
+  const descrip = investmentsData.value.filter(
+    (investment) => investment.description === "FortDollar Investment"
+  );
+  const _6months = descrip.filter((data) => data.duration === 6);
+  return (_6months.length / investmentsData.value.length) * 100 ?? 0;
 });
 const get12MonthsFortDollarInvestment = computed(() => {
-    const descrip = investmentsData.value.filter(
-        (investment) => investment.description === "FortDollar Investment"
-    );
-    const _12months = descrip.filter((data) => data.duration === 12);
-    return (_12months.length / investmentsData.value.length) * 100 ?? 0;
+  const descrip = investmentsData.value.filter(
+    (investment) => investment.description === "FortDollar Investment"
+  );
+  const _12months = descrip.filter((data) => data.duration === 12);
+  return (_12months.length / investmentsData.value.length) * 100 ?? 0;
 });
 const get3MonthsFortCryptoInvestment = computed(() => {
-    const descrip = investmentsData.value.filter(
-        (investment) => investment.description === "FortCrypto Investment"
-    );
-    const _3months = descrip.filter((data) => data.duration === 3);
-    return (_3months.length / investmentsData.value.length) * 100 ?? 0;
+  const descrip = investmentsData.value.filter(
+    (investment) => investment.description === "FortCrypto Investment"
+  );
+  const _3months = descrip.filter((data) => data.duration === 3);
+  return (_3months.length / investmentsData.value.length) * 100 ?? 0;
 });
 const get6MonthsFortCryptoInvestment = computed(() => {
-    const descrip = investmentsData.value.filter(
-        (investment) => investment.description === "FortCrypto Investment"
-    );
-    const _6months = descrip.filter((data) => data.duration === 6);
-    return (_6months.length / investmentsData.value.length) * 100 ?? 0;
+  const descrip = investmentsData.value.filter(
+    (investment) => investment.description === "FortCrypto Investment"
+  );
+  const _6months = descrip.filter((data) => data.duration === 6);
+  return (_6months.length / investmentsData.value.length) * 100 ?? 0;
 });
 const get12MonthsFortCryptoInvestment = computed(() => {
-    const descrip = investmentsData.value.filter(
-        (investment) => investment.description === "FortCrypto Investment"
-    );
-    const _12months = descrip.filter((data) => data.duration === 12);
-    return (_12months.length / investmentsData.value.length) * 100 ?? 0;
+  const descrip = investmentsData.value.filter(
+    (investment) => investment.description === "FortCrypto Investment"
+  );
+  const _12months = descrip.filter((data) => data.duration === 12);
+  return (_12months.length / investmentsData.value.length) * 100 ?? 0;
 });
 const get3MonthsFortShieldInvestment = computed(() => {
-    const descrip = investmentsData.value.filter(
-        (investment) => investment.description === "FortShield Investment"
-    );
-    const _3months = descrip.filter((data) => data.duration === 3);
-    return (_3months.length / investmentsData.value.length) * 100 ?? 0;
+  const descrip = investmentsData.value.filter(
+    (investment) => investment.description === "FortShield Investment"
+  );
+  const _3months = descrip.filter((data) => data.duration === 3);
+  return (_3months.length / investmentsData.value.length) * 100 ?? 0;
 });
 const get6MonthsFortShieldInvestment = computed(() => {
-    const descrip = investmentsData.value.filter(
-        (investment) => investment.description === "FortShield Investment"
-    );
-    const _6months = descrip.filter((data) => data.duration === 6);
-    return (_6months.length / investmentsData.value.length) * 100 ?? 0;
+  const descrip = investmentsData.value.filter(
+    (investment) => investment.description === "FortShield Investment"
+  );
+  const _6months = descrip.filter((data) => data.duration === 6);
+  return (_6months.length / investmentsData.value.length) * 100 ?? 0;
 });
 const get12MonthsFortShieldInvestment = computed(() => {
-    const descrip = investmentsData.value.filter(
-        (investment) => investment.description === "FortShield Investment"
-    );
-    const _12months = descrip.filter((data) => data.duration === 12);
-    return (_12months.length / investmentsData.value.length) * 100 ?? 0;
+  const descrip = investmentsData.value.filter(
+    (investment) => investment.description === "FortShield Investment"
+  );
+  const _12months = descrip.filter((data) => data.duration === 12);
+  return (_12months.length / investmentsData.value.length) * 100 ?? 0;
 });
 
 const activeInvestmentAmount = computed(() => {
-  const activeInvestments = investmentsData.value.filter(inv => inv.status === "Successful")
-  return activeInvestments.length
-})
+  const activeInvestments = investmentsData.value.filter(
+    (inv) => inv.status === "Successful"
+  );
+  return activeInvestments.length;
+});
 
 const currentMonthsInvestmentAmount = computed(() => {
-  const date = new Date()
-  const currentMonth = date.getUTCMonth()
-  const currentMonthInvestment = investmentsData.value.filter(inv => new Date(inv.paymentDate).getMonth() === currentMonth)
+  const date = new Date();
+  const currentMonth = date.getUTCMonth();
+  const currentMonthInvestment = investmentsData.value.filter(
+    (inv) => new Date(inv.dueDate).getMonth() === currentMonth
+  );
   const totalSum = currentMonthInvestment.reduce((acc, inv) => {
-    return acc + inv.amount
-  }, 0)
+    return acc + inv.amount;
+  }, 0);
   // console.log(currentMonthInvestment)
-  return totalSum
-})
+  return totalSum;
+});
 
 watchEffect(() => {
   const data = store.getInvestments;
@@ -317,12 +324,14 @@ watchEffect(() => {
   paginateData(investmentsData.value);
 });
 
-
 // computed------------------------------------------------------------------------------
 
 // lifecycle
 onMounted(() => {
-  paginateData(investmentsData.value);
+    const in3days = investmentsData.value.filter(
+    (inv) => inv.dueDate === daysAhead(3, new Date())
+  );
+  paginateData(in3days);
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>
@@ -350,6 +359,11 @@ onMounted(() => {
         </div>
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
+            <select class="p-2 bg-blue-300 bg-opacity-25 rounded-md">
+              <option @click="filter3days" class="text-white">In 3 days</option>
+              <option @click="filter1Week" class="text-white">In 7 days</option>
+              <option @click="filter2Weeks" class="text-white"> In 14 days </option>
+            </select>
             <div
               class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
               @click="setInvestments"
@@ -426,12 +440,13 @@ onMounted(() => {
                     </td>
                     <td class="py-4 truncate whitespace-nowrap">
                       <div class="text-sm truncate text-ellipsis">
-                        {{ investments.description.replace('Investment','') }}
+                        {{ investments.description.replace("Investment", "") }}
                       </div>
                     </td>
                     <td class="py-4 whitespace-nowrap">
                       <div class="text-sm">
-                        {{ investments.currency }} {{ investments.amount.toLocaleString() }}
+                        {{ investments.currency }}
+                        {{ investments.amount.toLocaleString() }}
                       </div>
                     </td>
                     <td class="py-4 whitespace-nowrap text-sm">
@@ -440,11 +455,17 @@ onMounted(() => {
                     </td>
                     <td class="py-4 text-sm">
                       {{
-                        new Date(investments.paymentDate).toLocaleDateString('en-GB')
+                        new Date(investments.paymentDate).toLocaleDateString(
+                          "en-GB"
+                        )
                       }}
                     </td>
                     <td class="py-4 text-sm">
-                      {{ new Date(investments.dueDate).toLocaleDateString('en-GB') }}
+                      {{
+                        new Date(investments.dueDate).toLocaleDateString(
+                          "en-GB"
+                        )
+                      }}
                     </td>
                     <td class="py-4 text-sm">
                       {{ investments.duration }} months
@@ -596,260 +617,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div class="py-4">
-      <div class="flex gap-4">
-        <InvestmentOverview :activeInvestmentAmount="activeInvestmentAmount" :currentMonthsInvestmentAmount="currentMonthsInvestmentAmount" />
-        <div class="p-5 bg-white rounded-md shadow w-full">
-          <div class="flex flex-wrap">
-            <div class="w-full">
-              <div class="title mb-3">
-                <p class="font-semibold text-base">Top Investment Plans</p>
-              </div>
-              <div class="border-b border-gray-400 mb-4 headers">
-                <ul class="flex list-none flex-wrap flex-row -mb-px">
-                  <li class="mr-2 ml-5">
-                    <a
-                      href="#"
-                      :class="{
-                        'text-gray-500 hover:text-gray-600 border-transparent':
-                          openTab !== 1,
-                        'text-brand-light-blue border-brand-light-blue':
-                          openTab === 1,
-                      }"
-                      class="inline-block pb-2 px-4 text-sm font-medium text-center rounded-t-lg border-b-2"
-                      @click="toggleTabs(1)"
-                      >3 months</a
-                    >
-                  </li>
-                  <li class="mr-2">
-                    <a
-                      href="#"
-                      :class="{
-                        'text-gray-500 hover:text-gray-600 border-transparent':
-                          openTab !== 2,
-                        'text-brand-light-blue border-brand-light-blue':
-                          openTab === 2,
-                      }"
-                      class="inline-block pb-2 px-4 text-sm font-medium text-center rounded-t-lg border-b-2"
-                      @click="toggleTabs(2)"
-                      >6 months</a
-                    >
-                  </li>
-                  <li class="mr-2">
-                    <a
-                      href="#"
-                      :class="{
-                        'text-gray-500 hover:text-gray-600 border-transparent':
-                          openTab !== 3,
-                        'text-brand-light-blue border-brand-light-blue':
-                          openTab === 3,
-                      }"
-                      class="inline-block pb-2 px-4 text-sm font-medium text-center rounded-t-lg border-b-2"
-                      @click="toggleTabs(3)"
-                      >1 year</a
-                    >
-                  </li>
-                </ul>
-              </div>
-              <div
-                class="relative flex flex-col min-w-0 break-words w-full mb-6 body"
-              >
-                <div class="px-4 py-5 flex-auto">
-                  <div class="tab-content tab-space">
-                    <!-- 3 months -->
-                    <div
-                      :class="{ hidden: openTab !== 1, block: openTab === 1 }"
-                    >
-                      <div class="fortdollar mb-5">
-                        <div
-                          class="mb-2 text-sm text-gray-500 flex justify-between items-center"
-                        >
-                          <p class="">Fortdollar</p>
-                          <p>
-                            {{
-                              get3MonthsFortDollarInvestment.toFixed(2)
-                            }}%
-                          </p>
-                        </div>
 
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            class="bg-brand-light-blue h-1.5 rounded-full"
-                            :style="{width: get3MonthsFortDollarInvestment + '%'}"
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div class="fortcrypto mb-5">
-                        <div
-                          class="mb-2 text-sm text-gray-500 flex justify-between items-center"
-                        >
-                          <p class="">FortCrypto</p>
-                          <p>
-                            {{
-                              get3MonthsFortCryptoInvestment.toFixed(2)
-                            }}%
-                          </p>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            class="bg-brand-blue h-1.5 rounded-full"
-                            :style="{width: get3MonthsFortCryptoInvestment + '%'}"
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div class="fortshield">
-                        <div
-                          class="mb-2 text-sm text-gray-500 flex justify-between items-center"
-                        >
-                          <p class="">FortShield</p>
-                          <p>
-                            {{
-                              get3MonthsFortDollarInvestment.toFixed(2)
-                            }}%
-                          </p>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            class="bg-brand-green h-1.5 rounded-full"
-                            :style="{width: get3MonthsFortShieldInvestment + '%'}"
-                          ></div>
-                        </div>
-                      </div>
-                    </div> 
-                    <!-- 6 months -->
-                    <div
-                      :class="{ hidden: openTab !== 2, block: openTab === 2 }"
-                    >
-                      <div class="fortdollar mb-5">
-                        <div
-                          class="mb-2 text-sm text-gray-500 flex justify-between items-center"
-                        >
-                          <p class="">Fortdollar</p>
-                          <p>
-                            {{
-                              get6MonthsFortDollarInvestment.toFixed(2)
-                            }}%
-                          </p>
-                        </div>
-
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            class="bg-brand-light-blue h-1.5 rounded-full"
-                            :style="{width: get6MonthsFortDollarInvestment + '%'}"
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div class="fortcrypto mb-5">
-                        <div
-                          class="mb-2 text-sm text-gray-500 flex justify-between items-center"
-                        >
-                          <p class="">FortCrypto</p>
-                          <p>
-                            {{
-                              get6MonthsFortCryptoInvestment.toFixed(2)
-                            }}%
-                          </p>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            class="bg-brand-blue h-1.5 rounded-full"
-                            :style="{width: get6MonthsFortCryptoInvestment + '%'}"
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div class="fortshield">
-                        <div
-                          class="mb-2 text-sm text-gray-500 flex justify-between items-center"
-                        >
-                          <p class="">FortShield</p>
-                          <p>
-                            {{
-                              get6MonthsFortShieldInvestment.toFixed(2)
-                            }}%
-                          </p>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            class="bg-brand-green h-1.5 rounded-full"
-                            :style="{width: get6MonthsFortShieldInvestment + '%'}"
-                          ></div>
-                        </div>
-                      </div>
-                    </div> 
-                    <!-- 12 months -->
-                    <div
-                      :class="{ hidden: openTab !== 3, block: openTab === 3 }"
-                    >
-                      <div class="fortdollar mb-5">
-                        <div
-                          class="mb-2 text-sm text-gray-500 flex justify-between items-center"
-                        >
-                          <p class="">Fortdollar</p>
-                          <p>
-                            {{
-                              get12MonthsFortDollarInvestment.toFixed(2)
-                            }}%
-                          </p>
-                        </div>
-
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            class="bg-brand-light-blue h-1.5 rounded-full"
-                            :style="{width: get12MonthsFortDollarInvestment + '%'}"
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div class="fortcrypto mb-5">
-                        <div
-                          class="mb-2 text-sm text-gray-500 flex justify-between items-center"
-                        >
-                          <p class="">FortCrypto</p>
-                          <p>
-                            {{
-                              get12MonthsFortCryptoInvestment.toFixed(2)
-                            }}%
-                          </p>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            class="bg-brand-blue h-1.5 rounded-full"
-                            :style="{width: get12MonthsFortCryptoInvestment + '%'}"
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div class="fortshield">
-                        <div
-                          class="mb-2 text-sm text-gray-500 flex justify-between items-center"
-                        >
-                          <p class="">FortShield</p>
-                          <p>
-                            {{
-                              get12MonthsFortShieldInvestment.toFixed(2)
-                            }}%
-                          </p>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            class="bg-brand-green h-1.5 rounded-full"
-                            :style="{width: get12MonthsFortShieldInvestment + '%'}"
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- USER MODAL -->
     <div
       v-if="showUserData"

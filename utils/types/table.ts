@@ -68,3 +68,12 @@ export interface InvestmentTableData{
     paymentMethod: string
     duration: number
 }
+
+export interface IncomingInvestmentTableData{
+    uid: string
+    description: string
+    amount: number
+    duration: number
+    dueDate: string
+    status: string
+}
