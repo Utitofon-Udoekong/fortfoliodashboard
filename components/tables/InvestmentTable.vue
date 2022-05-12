@@ -62,15 +62,21 @@ const leftPos = ref(0);
 let editableUser: InvestmentTableData[] = [];
 const openTab = ref(1);
 let showModal = ref(false);
-let invest3Months = [];
-let invest6Months = [];
-let invest12Months = [];
 // states------------------------------------------------------------------------------
 
 // methods
 
 const setInvestments = async () => {
   await store.setInvestments();
+  console.log(get12MonthsFortCryptoInvestment.value,
+    get12MonthsFortDollarInvestment.value,
+    get12MonthsFortShieldInvestment.value,
+    get6MonthsFortCryptoInvestment.value,
+    get6MonthsFortDollarInvestment.value,
+    get6MonthsFortShieldInvestment.value,
+    get3MonthsFortCryptoInvestment.value,
+    get3MonthsFortDollarInvestment.value,
+    get3MonthsFortShieldInvestment.value)
 };
 
 const cancelInvestment = async (uid: string) => {
@@ -84,7 +90,10 @@ const cancelInvestment = async (uid: string) => {
 };
 
 const approveInvestment = (uid: string) => {
-  const ref = doc($db, "investments", uid);
+  const ref = query(
+    collectionGroup($db, "investments"),
+    where("uid", "==", uid)
+  );
 };
 
 const selectRow = (user: InvestmentTableData) => {
@@ -231,12 +240,91 @@ let classObject = computed(() => {
   };
 });
 
+const get3MonthsFortDollarInvestment = computed(() => {
+    const descrip = investmentsData.value.filter(
+        (investment) => investment.description === "FortDollar Investment"
+    );
+    const _3months = descrip.filter((data) => data.duration === 3);
+    return (_3months.length / investmentsData.value.length) * 100 ?? 0;
+});
+const get6MonthsFortDollarInvestment = computed(() => {
+    const descrip = investmentsData.value.filter(
+        (investment) => investment.description === "FortDollar Investment"
+    );
+    const _6months = descrip.filter((data) => data.duration === 6);
+    return (_6months.length / investmentsData.value.length) * 100 ?? 0;
+});
+const get12MonthsFortDollarInvestment = computed(() => {
+    const descrip = investmentsData.value.filter(
+        (investment) => investment.description === "FortDollar Investment"
+    );
+    const _12months = descrip.filter((data) => data.duration === 12);
+    return (_12months.length / investmentsData.value.length) * 100 ?? 0;
+});
+const get3MonthsFortCryptoInvestment = computed(() => {
+    const descrip = investmentsData.value.filter(
+        (investment) => investment.description === "FortCrypto Investment"
+    );
+    const _3months = descrip.filter((data) => data.duration === 3);
+    return (_3months.length / investmentsData.value.length) * 100 ?? 0;
+});
+const get6MonthsFortCryptoInvestment = computed(() => {
+    const descrip = investmentsData.value.filter(
+        (investment) => investment.description === "FortCrypto Investment"
+    );
+    const _6months = descrip.filter((data) => data.duration === 6);
+    return (_6months.length / investmentsData.value.length) * 100 ?? 0;
+});
+const get12MonthsFortCryptoInvestment = computed(() => {
+    const descrip = investmentsData.value.filter(
+        (investment) => investment.description === "FortCrypto Investment"
+    );
+    const _12months = descrip.filter((data) => data.duration === 12);
+    return (_12months.length / investmentsData.value.length) * 100 ?? 0;
+});
+const get3MonthsFortShieldInvestment = computed(() => {
+    const descrip = investmentsData.value.filter(
+        (investment) => investment.description === "FortShield Investment"
+    );
+    const _3months = descrip.filter((data) => data.duration === 3);
+    return (_3months.length / investmentsData.value.length) * 100 ?? 0;
+});
+const get6MonthsFortShieldInvestment = computed(() => {
+    const descrip = investmentsData.value.filter(
+        (investment) => investment.description === "FortShield Investment"
+    );
+    const _6months = descrip.filter((data) => data.duration === 6);
+    return (_6months.length / investmentsData.value.length) * 100 ?? 0;
+});
+const get12MonthsFortShieldInvestment = computed(() => {
+    const descrip = investmentsData.value.filter(
+        (investment) => investment.description === "FortShield Investment"
+    );
+    const _12months = descrip.filter((data) => data.duration === 12);
+    return (_12months.length / investmentsData.value.length) * 100 ?? 0;
+});
+
+const activeInvestmentAmount = computed(() => {
+  const activeInvestments = investmentsData.value.filter(inv => inv.status === "Successful")
+  return activeInvestments.length
+})
+
+const currentMonthsInvestmentAmount = computed(() => {
+  const date = new Date()
+  const currentMonth = date.getUTCMonth()
+  const currentMonthInvestment = investmentsData.value.filter(inv => {
+    const paymentMonth = new Date(inv.paymentDate).getMonth()
+    paymentMonth === currentMonth
+  })
+  return currentMonthInvestment.length
+})
 
 watchEffect(() => {
   const data = store.getInvestments;
   investmentsData.value = data;
   paginateData(investmentsData.value);
 });
+
 
 // computed------------------------------------------------------------------------------
 
@@ -518,7 +606,7 @@ onMounted(() => {
     </div>
     <div class="py-4">
       <div class="flex gap-4">
-        <InvestmentOverview />
+        <InvestmentOverview :activeInvestmentAmount="activeInvestmentAmount" :currentMonthsInvestmentAmount="currentMonthsInvestmentAmount" />
         <div class="p-5 bg-white rounded-md shadow w-full">
           <div class="flex flex-wrap">
             <div class="w-full">
@@ -587,9 +675,7 @@ onMounted(() => {
                           <p class="">Fortdollar</p>
                           <p>
                             {{
-                              get3MonthsInvestment(
-                                "FortDollar Investment"
-                              )
+                              get3MonthsFortDollarInvestment.toFixed(2)
                             }}%
                           </p>
                         </div>
@@ -597,7 +683,7 @@ onMounted(() => {
                         <div class="w-full bg-gray-200 rounded-full h-1.5">
                           <div
                             class="bg-brand-light-blue h-1.5 rounded-full"
-                            style="width: {{get3MonthsInvestment('FortDollar Investment')}}%"
+                            :style="{width: get3MonthsFortDollarInvestment + '%'}"
                           ></div>
                         </div>
                       </div>
@@ -609,16 +695,14 @@ onMounted(() => {
                           <p class="">FortCrypto</p>
                           <p>
                             {{
-                              get3MonthsInvestment(
-                                "FortCrypto Investment"
-                              )
+                              get3MonthsFortCryptoInvestment.toFixed(2)
                             }}%
                           </p>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-1.5">
                           <div
                             class="bg-brand-blue h-1.5 rounded-full"
-                            style="width: {{get3MonthsInvestment('FortCrypto Investment')}}%"
+                            :style="{width: get3MonthsFortCryptoInvestment + '%'}"
                           ></div>
                         </div>
                       </div>
@@ -630,20 +714,18 @@ onMounted(() => {
                           <p class="">FortShield</p>
                           <p>
                             {{
-                              get3MonthsInvestment(
-                                "FortShield Investment"
-                              )
+                              get3MonthsFortDollarInvestment.toFixed(2)
                             }}%
                           </p>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-1.5">
                           <div
                             class="bg-brand-green h-1.5 rounded-full"
-                            style="width: {{get3MonthsInvestment('FortShield Investment')}}%"
+                            :style="{width: get3MonthsFortShieldInvestment + '%'}"
                           ></div>
                         </div>
                       </div>
-                    </div>
+                    </div> 
                     <!-- 6 months -->
                     <div
                       :class="{ hidden: openTab !== 2, block: openTab === 2 }"
@@ -655,9 +737,7 @@ onMounted(() => {
                           <p class="">Fortdollar</p>
                           <p>
                             {{
-                              get6MonthsInvestment(
-                                "FortDollar Investment"
-                              )
+                              get6MonthsFortDollarInvestment.toFixed(2)
                             }}%
                           </p>
                         </div>
@@ -665,7 +745,7 @@ onMounted(() => {
                         <div class="w-full bg-gray-200 rounded-full h-1.5">
                           <div
                             class="bg-brand-light-blue h-1.5 rounded-full"
-                            style="width: {{get6MonthsInvestment('FortDollar Investment')}}%"
+                            :style="{width: get6MonthsFortDollarInvestment + '%'}"
                           ></div>
                         </div>
                       </div>
@@ -677,16 +757,14 @@ onMounted(() => {
                           <p class="">FortCrypto</p>
                           <p>
                             {{
-                              get6MonthsInvestment(
-                                "FortCrypto Investment"
-                              )
+                              get6MonthsFortCryptoInvestment.toFixed(2)
                             }}%
                           </p>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-1.5">
                           <div
                             class="bg-brand-blue h-1.5 rounded-full"
-                            style="width: {{get6MonthsInvestment('FortCrypto Investment')}}%"
+                            :style="{width: get6MonthsFortCryptoInvestment + '%'}"
                           ></div>
                         </div>
                       </div>
@@ -698,20 +776,18 @@ onMounted(() => {
                           <p class="">FortShield</p>
                           <p>
                             {{
-                              get6MonthsInvestment(
-                                "FortShield Investment"
-                              )
+                              get6MonthsFortShieldInvestment.toFixed(2)
                             }}%
                           </p>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-1.5">
                           <div
                             class="bg-brand-green h-1.5 rounded-full"
-                            style="width: {{get6MonthsInvestment('FortShield Investment')}}%"
+                            :style="{width: get6MonthsFortShieldInvestment + '%'}"
                           ></div>
                         </div>
                       </div>
-                    </div>
+                    </div> 
                     <!-- 12 months -->
                     <div
                       :class="{ hidden: openTab !== 3, block: openTab === 3 }"
@@ -723,9 +799,7 @@ onMounted(() => {
                           <p class="">Fortdollar</p>
                           <p>
                             {{
-                              get12MonthsInvestment(
-                                "FortDollar Investment"
-                              )
+                              get12MonthsFortDollarInvestment.toFixed(2)
                             }}%
                           </p>
                         </div>
@@ -733,7 +807,7 @@ onMounted(() => {
                         <div class="w-full bg-gray-200 rounded-full h-1.5">
                           <div
                             class="bg-brand-light-blue h-1.5 rounded-full"
-                            style="width: {{get12MonthsInvestment('FortDollar Investment')}}%"
+                            :style="{width: get12MonthsFortDollarInvestment + '%'}"
                           ></div>
                         </div>
                       </div>
@@ -745,16 +819,14 @@ onMounted(() => {
                           <p class="">FortCrypto</p>
                           <p>
                             {{
-                              get12MonthsInvestment(
-                                "FortCrypto Investment"
-                              )
+                              get12MonthsFortCryptoInvestment.toFixed(2)
                             }}%
                           </p>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-1.5">
                           <div
                             class="bg-brand-blue h-1.5 rounded-full"
-                            style="width: {{get12MonthsInvestment('FortCrypto Investment')}}%"
+                            :style="{width: get12MonthsFortCryptoInvestment + '%'}"
                           ></div>
                         </div>
                       </div>
@@ -766,16 +838,14 @@ onMounted(() => {
                           <p class="">FortShield</p>
                           <p>
                             {{
-                              get12MonthsInvestment(
-                                "FortShield Investment"
-                              )
+                              get12MonthsFortShieldInvestment.toFixed(2)
                             }}%
                           </p>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-1.5">
                           <div
                             class="bg-brand-green h-1.5 rounded-full"
-                            style="width: {{get12MonthsInvestment('FortShield Investment')}}%"
+                            :style="{width: get12MonthsFortShieldInvestment + '%'}"
                           ></div>
                         </div>
                       </div>
