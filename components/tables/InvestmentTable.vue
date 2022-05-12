@@ -312,11 +312,12 @@ const activeInvestmentAmount = computed(() => {
 const currentMonthsInvestmentAmount = computed(() => {
   const date = new Date()
   const currentMonth = date.getUTCMonth()
-  const currentMonthInvestment = investmentsData.value.filter(inv => {
-    const paymentMonth = new Date(inv.paymentDate).getMonth()
-    paymentMonth === currentMonth
-  })
-  return currentMonthInvestment.length
+  const currentMonthInvestment = investmentsData.value.filter(inv => new Date(inv.paymentDate).getMonth() === currentMonth)
+  const totalSum = currentMonthInvestment.reduce((acc, inv) => {
+    return acc + inv.amount
+  }, 0)
+  // console.log(currentMonthInvestment)
+  return totalSum
 })
 
 watchEffect(() => {

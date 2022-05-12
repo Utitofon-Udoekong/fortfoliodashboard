@@ -70,7 +70,7 @@ const props = defineProps<Props>()
               <p class="text-sm text-gray-400 pb-3">PAID PROFIT</p>
               <hr>
               <p class="text-sm text-gray-400 pt-2 pb-5">Investment made this month</p>
-              <p class="text-lg font-medium">{{props.currentMonthsInvestmentAmount}} USD</p>
+              <p class="text-lg font-medium">{{props.currentMonthsInvestmentAmount.toLocaleString()}} USD</p>
               <p class="text-sm text-gray-400">AMOUNT</p>
             </div>
             <div v-bind:class="{ hidden: openTab !== 2, block: openTab === 2 }">
