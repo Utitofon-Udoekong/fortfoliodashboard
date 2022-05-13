@@ -1,14 +1,13 @@
 <template>
+  <NuxtLayout name="dashboard">
     <div class="py-4">
       <TablesIncomingInvestmentTable />
     </div>
-  <!-- <NuxtLayout name="dashboard">
-    
-  </NuxtLayout> -->
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-// definePageMeta({
-//   layout: false,
-// });
+definePageMeta({
+  layout: false,
+});
 </script>

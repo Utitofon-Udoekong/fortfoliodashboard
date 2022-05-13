@@ -40,6 +40,14 @@ const { clamp, changeClamp } = inject("clamp");
         </NuxtLink>
         <NuxtLink
           :exact-active-class="'bg-brand-clear_white text-gray-50'"
+          class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+          to="/dashboard/investment/upcoming"
+        >
+          <span class="pr-3"><i-bx-bx-chart /></span>
+          <li :class="clamp ? 'hidden' : 'block'">Upcoming Investments</li>
+        </NuxtLink>
+        <NuxtLink
+          :exact-active-class="'bg-brand-clear_white text-gray-50'"
           to="/dashboard/users"
           class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
         >
