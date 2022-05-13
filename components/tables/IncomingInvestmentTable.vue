@@ -21,8 +21,6 @@ const columns = [
   { name: "uid", text: "User ID" },
   { name: "description", text: "Payment For" },
   { name: "amount", text: "Amount Invested" },
-  { name: "paymentMethod", text: "Method" },
-  { name: "paymentDate", text: "Payment Date" },
   { name: "dueDate", text: "Due Date" },
   { name: "duration", text: "Duration" },
   { name: "status", text: "Status" },
