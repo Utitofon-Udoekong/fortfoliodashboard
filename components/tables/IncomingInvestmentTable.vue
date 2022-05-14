@@ -327,7 +327,7 @@ watchEffect(() => {
 // lifecycle
 onMounted(() => {
     const in3days = investmentsData.value.filter(
-    (inv) => inv. + 'Z'  === daysAhead(3, new Date())
+    (inv) => inv.dueDate + 'Z'  === daysAhead(3, new Date())
   );
   paginateData(in3days);
 });
