@@ -56,7 +56,9 @@ const searchKYC = ref<string[]>([]);
 const currentPage = ref<number>(1);
 const totalPages = ref<number>(1);
 let show = ref<number | null>(null);
-
+let showModal = ref(false)
+const openTab = ref(1);
+let editableUser: KYCTableData[] = [];
 
 const topPos = ref(0);
 const leftPos = ref(0);
@@ -82,11 +84,21 @@ const rejectKYC = async (uid: string) => {
     "status": "Rejected"
   })
 }
-const toggleImageModal = () => {showImageModal.value = !showImageModal.value
-console.log("changed")}
+const toggleImageModal = () => {showImageModal.value = !showImageModal.value}
 const setImageSource = (src: string) => {
   imageSource.value = src
 }
+
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+  editableUser.pop();
+};
+
+const selectRow = (user: KYCTableData) => {
+  editableUser.push(user);
+  showModal.value = true;
+};
+// const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
 
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
@@ -219,9 +231,29 @@ onMounted(() => {
 // lifecycle---------------------
 </script>
 <template>
-  <div class="h-auto">
+  <div class="h-auto mb-5">
     <ImageModal :imageSource="imageSource" :toggleShow="toggleImageModal" :show="showImageModal"/>
-    <div class="table-form">
+    <!-- USER MODAL -->
+    <div v-if="showModal">
+      <div class="bg-white p-10 pt-14 w-full h-auto relative ring ring-4 ring-brand-light-blue rounded-md">
+        <div class="closemodal absolute right-6 top-6 cursor-pointer" @click="toggleModal">
+            <i-ion-close-round class="text-black text-xl" />
+          </div>
+        <div class="w-full ">
+          <span class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3">Full Name: </p> <span class="font-semibold text-black text-2xl">{{ editableUser[0].fullName }}</span> </span>
+          <span class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3"> KYC ID: </p> <span class="font-semibold text-black text-2xl">{{ editableUser[0].id }}</span> </span>
+          <span class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3"> Document Type: </p> <span class="font-semibold text-black text-2xl">{{ editableUser[0].documentType }}</span> </span>
+          <span class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3"> Submitted at: </p> <span class="font-semibold text-black text-2xl">{{ formatter(editableUser[0].submitted) }}</span> </span>
+          <span class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500">Status:</p> <span class="font-semibold text-lg px-12 text-center rounded py-1 w-1/4" :class=" editableUser[0].status === 'Approve' ? 'text-brand-green bg-brand-green bg-opacity-25' : editableUser[0].status === 'Rejected' ? 'text-brand-red bg-brand-red bg-opacity-25' : 'text-yellow-400 bg-yellow-400 bg-opacity-25' " >{{ editableUser[0].status }}</span > </span>
+          <div class="grid grid-cols-3 gap-x-4">
+            <div class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3">Frontside:</p>  <img class="w-full" :src="editableUser[0].documents[0].downloadUrl" alt=""> </div>
+          <div class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3">Back side:</p>  <img class="w-full" :src="editableUser[0].documents[1].downloadUrl" alt=""> </div>
+          <div class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3"> Utility Bill: </p> <img class="w-full" :src="editableUser[0].documents[2].downloadUrl" alt=""> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else class="table-form">
       <div class="flex mb-3 justify-between">
         <div class="flex items-center">
           <span class="mr-1">Show</span>
@@ -258,7 +290,7 @@ onMounted(() => {
           </div>
           <div class="search-component w-80 mb-3">
             <div
-              class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2"
+              class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2 focus-within:border-brand-light-blue"
             >
               <input
                 type="search"
@@ -371,6 +403,14 @@ onMounted(() => {
                             tabindex="0"
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                            @click="selectRow(kycData)"
+                          >
+                            Quick view
+                          </li>
+                          <li
+                            tabindex="0"
+                            href="#"
+                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
                               approveKYC(kycData.uuid),
                                 open(index, $event)
@@ -389,17 +429,6 @@ onMounted(() => {
                           >
                             Reject kyc
                           </li>
-                          <!-- <li
-                            tabindex="0"
-                            href="#"
-                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
-                            @click="
-                              (kycDataList[index].status = 'pending'),
-                                open(index, $event)
-                            "
-                          >
-                            Quick view
-                          </li> -->
                         </ul>
                       </div>
                     </td>
