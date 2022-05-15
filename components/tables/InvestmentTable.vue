@@ -396,7 +396,6 @@ onMounted(() => {
                   <tr
                     v-for="(investments, index) in tableData"
                     :key="index"
-                    @contextmenu.prevent="selectRow(investments)"
                     class="hover:bg-gray-300 cursor-pointer"
                   >
                     <td class="px-6 py-4">
@@ -479,6 +478,17 @@ onMounted(() => {
                             "
                           >
                             Cancel payment
+                          </li>
+                          <li
+                            tabindex="0"
+                            href="#"
+                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                            @click="
+                              selectRow(investments),
+                                open(index, $event)
+                            "
+                          >
+                            Quick view
                           </li>
                         </ul>
                       </div>
@@ -835,15 +845,12 @@ onMounted(() => {
     <!-- USER MODAL -->
     <div
       v-if="showUserData"
-      class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 w-full h-full"
+      class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 h-screen w-screen flex justify-center items-center"
     >
-      <div
-        class="closemodal p-4 fixed top-3 right-6 bg-white rounded-full cursor-pointer"
-      >
-        <i-ion-close-round class="text-black text-xl" @click="toggleUserData" />
-      </div>
-      <div class="bg-white p-10 max-w-lg h-auto z-40 mx-auto mt-20">
-        <p class="text-xl font-semibold pb-5">Investment INFO</p>
+      <div class="bg-white p-10 max-w-lg h-2/3 z-40 relative">
+        <i-ion-close-round class="text-black text-2xl absolute right-2 top-4" @click="toggleUserData" />
+        <div class="con w-full h-full">
+          <p class="text-xl font-semibold pb-5">Investment INFO</p>
         <p class="text-lg font-semibold pb-3">
           USERID:
           <span class="font-normal text-base">{{ editableUser[0].uid }}</span>
@@ -876,7 +883,7 @@ onMounted(() => {
           DURATION:
           <span class="font-normal text-base">{{
             editableUser[0].duration
-          }}</span>
+          }} months</span>
         </p>
         <p class="text-lg font-semibold">
           STATUS:
@@ -884,6 +891,7 @@ onMounted(() => {
             editableUser[0].status
           }}</span>
         </p>
+        </div>
       </div>
     </div>
   </div>

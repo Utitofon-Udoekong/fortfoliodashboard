@@ -56,14 +56,10 @@ const searchKYC = ref<string[]>([]);
 const currentPage = ref<number>(1);
 const totalPages = ref<number>(1);
 let show = ref<number | null>(null);
-let showKYCData = ref(false);
 
 
 const topPos = ref(0);
 const leftPos = ref(0);
-let editableUser: KYCTableData[] = [];
-const openTab = ref(1);
-let showModal = ref(false);
 let showImageModal = ref(false);
 let imageSource = ref("")
 // states------------------------------------------------------------------------------
@@ -86,44 +82,22 @@ const rejectKYC = async (uid: string) => {
     "status": "Rejected"
   })
 }
-const toggleModal = () => {
-  showModal.value = !showModal.value;
-  editableUser.pop();
-};
 const toggleImageModal = () => {showImageModal.value = !showImageModal.value
 console.log("changed")}
 const setImageSource = (src: string) => {
   imageSource.value = src
 }
-const selectRow = (user: KYCTableData) => {
-  editableUser.push(user);
-  showKYCData.value = true;
-};
-const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
 
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
   leftPos.value = e.pageX - 120;
   // console.log(top.value, left.value)
 };
-const toggleUserData = () => {
-  showKYCData.value = !showKYCData.value;
-  editableUser.pop();
-};
 const open = async (index: number, e: MouseEvent) => {
   await getHeight(e).then(() => {
     show.value === null ? (show.value = index) : (show.value = null);
   });
 };
-const filterByColumn = () => {
-  const filterCol = object.removeBy(col, "");
-  let filterData = getCurrentKYC();
-  if (Object.entries(filterCol).length >= 1) {
-    filterData = array.filter(getCurrentKYC(), filterCol);
-  }
-  paginateData(filterData);
-};
-const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
     searchKYC.value = array.search(kycDataList.value, searchInput.value);
@@ -246,23 +220,6 @@ onMounted(() => {
 </script>
 <template>
   <div class="h-auto">
-    <!-- USER MODAL -->
-    <!-- <div v-if="showModal"> -->
-      <!-- class="w-full h-full" -->
-      <!-- <div class="bg-white p-10 pt-14 w-full h-auto relative rounded-md">
-        <div class="closemodal absolute right-6 top-6 cursor-pointer" @click="toggleModal">
-            <i-ion-close-round class="text-black text-xl" />
-          </div>
-        <div class="grid grid-cols-2 w-full gap-x-36 gap-y-4">
-          <span class="flex justify-between"> <p class="text-sm font-semibold text-gray-400 pb-3"> Document Type: </p> <span class="font-normal text-black text-base">{{ editableUser[0].id }}</span> </span>
-          <span class="flex justify-between"> <p class="text-sm font-semibold text-gray-400 pb-3">Frontside:</p> <span class="font-normal text-black text-base">{{ editableUser[0].fullName }}</span> </span>
-          <span class="flex justify-between"> <p class="text-sm font-semibold text-gray-400 pb-3">Back side:</p> <span class="font-normal text-black text-base">{{ editableUser[0].docType }}</span> </span>
-          <span class="flex justify-between"> <p class="text-sm font-semibold text-gray-400 pb-3"> Utility Bill: </p> <span class="font-normal text-black text-base">{{ editableUser[0].documents }}</span> </span>
-          <span class="flex justify-between"> <p class="text-sm font-semibold text-gray-400 pb-3"> Submitted at: </p> <span class="font-normal text-black text-base">{{ editableUser[0].submitted }}</span> </span>
-          <span class="flex justify-between"> <p class="text-sm font-semibold text-gray-400">Status:</p> <span class="font-normal text-sm px-12 rounded py-1" :class=" editableUser[0].status === 'Approve' ? 'text-brand-green bg-brand-green bg-opacity-25' : editableUser[0].status === 'Rejected' ? 'text-brand-red bg-brand-red bg-opacity-25' : 'text-yellow-400 bg-yellow-400 bg-opacity-25' " >{{ editableUser[0].status }}</span > </span>
-        </div>
-      </div> -->
-    <!-- </div> -->
     <ImageModal :imageSource="imageSource" :toggleShow="toggleImageModal" :show="showImageModal"/>
     <div class="table-form">
       <div class="flex mb-3 justify-between">
@@ -378,15 +335,6 @@ onMounted(() => {
                         class="hover:underline pb-1"
                         @click="setImageSource(document.downloadUrl),toggleImageModal()"
                       >
-                        <!-- <a
-                          :href="document.downloadUrl"
-                          :download="document.name"
-                          target="_blank"
-                          >{{ document.name }}</a
-                        > -->
-                        <!-- <button type="button" @click="downloadImage(document.downloadUrl)">
-                          <i-ic-outline-file-download />
-                        </button> -->
                         {{ document.name }}
                       </p>
                     </td>
