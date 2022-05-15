@@ -41,7 +41,10 @@ let sortCol: IncomingInvestmentTableData = reactive({
   status: "",
   duration: 0,
 });
-const investmentsData = ref<IncomingInvestmentTableData[]>(store.investments);
+const in3days = store.investments.filter(
+    (inv) => inv.dueDate + 'Z'  === daysAhead(3, new Date())
+  );
+const investmentsData = ref<IncomingInvestmentTableData[]>(in3days);
 let filteredInvestment = ref<IncomingInvestmentTableData[]>([]);
 const showInvestment = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentInvestment = ref<number>(10);
@@ -235,10 +238,7 @@ let classObject = computed(() => {
 
 // lifecycle
 onMounted(() => {
-    const in3days = investmentsData.value.filter(
-    (inv) => inv.dueDate + 'Z'  === daysAhead(3, new Date())
-  );
-  paginateData(in3days);
+  paginateData(investmentsData.value);
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>
@@ -298,7 +298,7 @@ onMounted(() => {
         <div class="overflow-x-scroll lg:overflow-x-hidden">
           <div class="py-2 align-middle inline-block min-w-full">
             <div class="overflow-hidden border-b border-gray-200 sm:rounded-lg">
-              <table class="min-w-full divide-y divide-gray-200">
+              <table class="min-w-full divide-y divide-gray-200" v-if="investmentsData.length > 0">
                 <thead class="bg-transparent">
                   <tr>
                     <th
@@ -325,7 +325,7 @@ onMounted(() => {
                     </th>
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="bg-white divide-y divide-gray-200"  >
                   <tr
                     v-for="(investments, index) in tableData"
                     :key="index"
@@ -426,6 +426,9 @@ onMounted(() => {
                   </tr>
                 </tbody>
               </table>
+                <div class="bg-white p-5 w-full" v-else>
+                  <p class="text-2xl text-center">NO UPCOMING INVESTMENTS</p>
+                </div>
               <div
                 class="py-3 px-6 table-controls h-full w-full items-center justify-between border border-t-gray-200"
               >

@@ -1,6 +1,7 @@
 <template>
   <NuxtLayout name="dashboard">
     <Activitycards />
+    <TablesIncomingInvestmentTable/>
   </NuxtLayout>
 </template>
 

@@ -189,7 +189,7 @@ const toggleModal = () => {
 };
 
 // const print = () => file.printed(investmentsData.value);
-const exportFile = (format) => {
+const exportFile = (format: string) => {
   const genString = file.exported(investmentsData.value, format);
   file.download(genString, format);
 };
