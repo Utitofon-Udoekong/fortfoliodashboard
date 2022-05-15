@@ -90,12 +90,11 @@ const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop();
 };
+const toggleImageModal = () => {showImageModal.value = !showImageModal.value
+console.log("changed")}
 const setImageSource = (src: string) => {
   imageSource.value = src
 }
-const toggleImageModal = () => {
-  showImageModal.value = !showImageModal.value;
-};
 const selectRow = (user: KYCTableData) => {
   editableUser.push(user);
   showKYCData.value = true;
@@ -377,7 +376,7 @@ onMounted(() => {
                       <p
                         v-for="(document, index) in kycData.documents"
                         class="hover:underline pb-1"
-                        @click="setImageSource(document.downloadUrl), toggleImageModal"
+                        @click="setImageSource(document.downloadUrl),toggleImageModal()"
                       >
                         <!-- <a
                           :href="document.downloadUrl"
@@ -388,6 +387,7 @@ onMounted(() => {
                         <!-- <button type="button" @click="downloadImage(document.downloadUrl)">
                           <i-ic-outline-file-download />
                         </button> -->
+                        {{ document.name }}
                       </p>
                     </td>
                     <td class="px-6 py-4 text-sm">
