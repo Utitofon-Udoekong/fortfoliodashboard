@@ -61,10 +61,6 @@ let showModal = ref(false);
 
 // methods
 
-const setInvestments = async () => {
-  await store.setInvestments();
-};
-
 const cancelInvestment = async (uid: string) => {
   const ref = query(
     collectionGroup($db, "investments"),
@@ -235,12 +231,6 @@ let classObject = computed(() => {
   };
 });
 
-watchEffect(() => {
-  const data = store.getInvestments;
-  investmentsData.value = data;
-  paginateData(investmentsData.value);
-});
-
 // computed------------------------------------------------------------------------------
 
 // lifecycle
@@ -248,7 +238,6 @@ onMounted(() => {
     const in3days = investmentsData.value.filter(
     (inv) => inv.dueDate + 'Z'  === daysAhead(3, new Date())
   );
-  console.log(in3days)
   paginateData(in3days);
 });
 // lifecycle----------------------------------------------------------------------------------
@@ -282,12 +271,6 @@ onMounted(() => {
               <option @click="filter1Week" class="text-white">In 7 days</option>
               <option @click="filter2Weeks" class="text-white"> In 14 days </option>
             </select>
-            <div
-              class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
-              @click="setInvestments"
-            >
-              <i-mdi-reload /> Load Data
-            </div>
             <!-- <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3" @click="print" > <i-system-uicons-printer/> Print </div> -->
             <div
               class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md"

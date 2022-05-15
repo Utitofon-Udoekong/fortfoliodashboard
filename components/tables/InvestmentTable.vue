@@ -66,10 +66,6 @@ let showModal = ref(false);
 
 // methods
 
-const setInvestments = async () => {
-  await store.setInvestments();
-};
-
 const cancelInvestment = async (uid: string) => {
   const ref = query(
     collectionGroup($db, "investments"),
@@ -311,17 +307,7 @@ const currentMonthsInvestmentAmount = computed(() => {
   return totalSum
 })
 
-watchEffect(() => {
-  const data = store.getInvestments;
-  investmentsData.value = data;
-  paginateData(investmentsData.value);
-});
-
-
 // computed------------------------------------------------------------------------------
-definePageMeta({
-  middleware: ["investment"]
-});
 // lifecycle
 onMounted(() => {
   paginateData(investmentsData.value);
@@ -352,12 +338,6 @@ onMounted(() => {
         </div>
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
-            <div
-              class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
-              @click="setInvestments"
-            >
-              <i-mdi-reload /> Load Data
-            </div>
             <!-- <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3" @click="print" > <i-system-uicons-printer/> Print </div> -->
             <div
               class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md"

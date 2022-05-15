@@ -216,10 +216,6 @@ let classObject = computed(() => {
   };
 });
 
-const setKyc = async () => {
-  await store.setkyc();
-};
-
 // const downloadImage = (url: string | URL) => {
 //   var xhr = new XMLHttpRequest();
 //   xhr.responseType = "blob";
@@ -229,18 +225,10 @@ const setKyc = async () => {
 //   xhr.open("GET", url);
 //   xhr.send();
 // };
-
-watchEffect(() => {
-  const data = store.getKyc;
-  kycDataList.value = data;
-  paginateData(kycDataList.value);
-});
 // const unwatch = watchEffect(() => {});
 
 // computed------------------------------------------------------------------------------
-definePageMeta({
-  middleware: ["kyc"]
-});
+
 // lifecycle
 onMounted(() => {
   paginateData(kycDataList.value);
@@ -288,12 +276,6 @@ onMounted(() => {
         </div>
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
-            <div
-              class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
-              @click="setKyc"
-            >
-              <i-mdi-reload /> Load Data
-            </div>
             <div
               class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
               @click="testPrint"
