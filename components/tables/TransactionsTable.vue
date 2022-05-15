@@ -219,7 +219,7 @@ onMounted(() => {
           </div>
           <div class="search-component w-80 mb-3">
             <div
-              class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2"
+              class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2 focus-within:border-brand-light-blue"
             >
               <input
                 type="search"
