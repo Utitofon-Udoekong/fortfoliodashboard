@@ -11,6 +11,7 @@ import {
   where,
   writeBatch,
 } from "@firebase/firestore";
+import formatter from "~~/helpers/formatIsoDate";
 const store = useUserStore();
 const { $db } = useNuxtApp();
 const batch = writeBatch($db);
@@ -847,12 +848,12 @@ onMounted(() => {
       v-if="showUserData"
       class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 h-screen w-screen flex justify-center items-center"
     >
-      <div class="bg-white p-10 max-w-lg h-2/3 z-40 relative">
-        <i-ion-close-round class="text-black text-2xl absolute right-2 top-4" @click="toggleUserData" />
+      <div class="bg-white p-10 max-w-lg h-2/3 z-40 relative rounded-md ring ring-4 ring-blue-400">
+        <i-ion-close-round class="text-black text-2xl absolute right-2 top-4 cursor-pointer" @click="toggleUserData" />
         <div class="con w-full h-full">
           <p class="text-xl font-semibold pb-5">Investment INFO</p>
         <p class="text-lg font-semibold pb-3">
-          USERID:
+          INVESTMENT ID:
           <span class="font-normal text-base">{{ editableUser[0].uid }}</span>
         </p>
         <p class="text-lg font-semibold pb-3">
@@ -863,20 +864,20 @@ onMounted(() => {
         </p>
         <p class="text-lg font-semibold pb-3">
           AMOUNT INVESTED:
-          <span class="font-normal text-base">{{
+          <span class="font-normal text-base">{{investmentsData[editableUser[0]]}} {{
             editableUser[0].amount
           }}</span>
         </p>
         <p class="text-lg font-semibold pb-3">
           PAYMENT DATE:
           <span class="font-normal text-base">{{
-            editableUser[0].paymentDate
+            formatter(editableUser[0].paymentDate)
           }}</span>
         </p>
         <p class="text-lg font-semibold pb-3">
           DUE DATE:
           <span class="font-normal text-base">{{
-            editableUser[0].dueDate
+            formatter(editableUser[0].dueDate)
           }}</span>
         </p>
         <p class="text-lg font-semibold pb-3">
