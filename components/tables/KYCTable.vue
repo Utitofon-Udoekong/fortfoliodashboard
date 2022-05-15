@@ -4,6 +4,7 @@ import { array, file, object } from "alga-js";
 import { useUserStore } from "~~/store/users";
 import formatter from "~~/helpers/formatIsoDate";
 import { doc, updateDoc, writeBatch } from "@firebase/firestore";
+// import ImageModal from "../ImageModal.vue";
 // const {$db} = useNuxtApp()
 const store = useUserStore();
 const {$db} = useNuxtApp()
@@ -57,11 +58,14 @@ const totalPages = ref<number>(1);
 let show = ref<number | null>(null);
 let showKYCData = ref(false);
 
+
 const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: KYCTableData[] = [];
 const openTab = ref(1);
 let showModal = ref(false);
+let showImageModal = ref(false);
+let imageSource = ref("")
 // states------------------------------------------------------------------------------
 
 // methods
@@ -85,6 +89,12 @@ const rejectKYC = async (uid: string) => {
 const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop();
+};
+const setImageSource = (src: string) => {
+  imageSource.value = src
+}
+const toggleImageModal = () => {
+  showImageModal.value = !showImageModal.value;
 };
 const selectRow = (user: KYCTableData) => {
   editableUser.push(user);
@@ -238,7 +248,7 @@ onMounted(() => {
 <template>
   <div class="h-auto">
     <!-- USER MODAL -->
-    <div v-if="showModal">
+    <!-- <div v-if="showModal"> -->
       <!-- class="w-full h-full" -->
       <!-- <div class="bg-white p-10 pt-14 w-full h-auto relative rounded-md">
         <div class="closemodal absolute right-6 top-6 cursor-pointer" @click="toggleModal">
@@ -253,7 +263,8 @@ onMounted(() => {
           <span class="flex justify-between"> <p class="text-sm font-semibold text-gray-400">Status:</p> <span class="font-normal text-sm px-12 rounded py-1" :class=" editableUser[0].status === 'Approve' ? 'text-brand-green bg-brand-green bg-opacity-25' : editableUser[0].status === 'Rejected' ? 'text-brand-red bg-brand-red bg-opacity-25' : 'text-yellow-400 bg-yellow-400 bg-opacity-25' " >{{ editableUser[0].status }}</span > </span>
         </div>
       </div> -->
-    </div>
+    <!-- </div> -->
+    <ImageModal :imageSource="imageSource" :toggleShow="toggleImageModal" :show="showImageModal"/>
     <div class="table-form">
       <div class="flex mb-3 justify-between">
         <div class="flex items-center">
@@ -366,13 +377,14 @@ onMounted(() => {
                       <p
                         v-for="(document, index) in kycData.documents"
                         class="hover:underline pb-1"
+                        @click="setImageSource(document.downloadUrl), toggleImageModal"
                       >
-                        <a
+                        <!-- <a
                           :href="document.downloadUrl"
                           :download="document.name"
                           target="_blank"
                           >{{ document.name }}</a
-                        >
+                        > -->
                         <!-- <button type="button" @click="downloadImage(document.downloadUrl)">
                           <i-ic-outline-file-download />
                         </button> -->

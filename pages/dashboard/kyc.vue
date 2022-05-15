@@ -9,8 +9,5 @@
 definePageMeta({
   layout: false,
 });
-const route = useRoute()
-onMounted(() => {
-  console.log(route.path)
-})
+
 </script>
