@@ -251,13 +251,13 @@ onMounted(() => {
           <select
             v-model="currentInvestment"
             @change="paginateUsers"
-            class="p-2 bg-blue-300 bg-opacity-25 rounded-md"
+            class="p-2  border border-brand-light-blue text-brand-light-blue rounded-md bg-transparent"
           >
             <option
               :value="users"
               v-for="(users, i) in showInvestment"
               :key="i"
-              class="text-white"
+              class="text-black"
             >
               {{ users }}
             </option>
@@ -266,11 +266,13 @@ onMounted(() => {
         </div>
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
-            <select class="p-2 bg-blue-300 bg-opacity-25 rounded-md">
-              <option @click="filter3days" class="text-white">In 3 days</option>
-              <option @click="filter1Week" class="text-white">In 7 days</option>
-              <option @click="filter2Weeks" class="text-white"> In 14 days </option>
+            <div class="mr-3">
+              <select class="p-3 border border-brand-light-blue text-brand-light-blue rounded-md bg-transparent">
+              <option @click="filter3days" class="text-black">In 3 days</option>
+              <option @click="filter1Week" class="text-black">In 7 days</option>
+              <option @click="filter2Weeks" class="text-black"> In 14 days </option>
             </select>
+            </div>
             <!-- <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3" @click="print" > <i-system-uicons-printer/> Print </div> -->
             <div
               class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md"
@@ -281,7 +283,7 @@ onMounted(() => {
           </div>
           <div class="search-component w-80 mb-3">
             <div
-              class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2"
+              class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2 focus-within:border-brand-light-blue"
             >
               <input
                 type="search"
@@ -329,7 +331,6 @@ onMounted(() => {
                   <tr
                     v-for="(investments, index) in tableData"
                     :key="index"
-                    @contextmenu.prevent="selectRow(investments)"
                     class="hover:bg-gray-300 cursor-pointer"
                   >
                     <td class="px-6 py-4">
@@ -398,6 +399,16 @@ onMounted(() => {
                         class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl"
                       >
                         <ul class="py-1">
+                          <li
+                            tabindex="0"
+                            href="#"
+                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                            @click="
+                              selectRow(investments)
+                            "
+                          >
+                            Quick view
+                          </li>
                           <li
                             tabindex="0"
                             href="#"
