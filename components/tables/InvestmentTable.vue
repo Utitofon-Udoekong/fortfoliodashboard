@@ -319,7 +319,9 @@ watchEffect(() => {
 
 
 // computed------------------------------------------------------------------------------
-
+definePageMeta({
+  middleware: ["investment"]
+});
 // lifecycle
 onMounted(() => {
   paginateData(investmentsData.value);

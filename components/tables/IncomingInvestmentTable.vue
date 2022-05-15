@@ -107,18 +107,21 @@ const filter3days = () => {
   const in3days = investmentsData.value.filter(
     (inv) => inv.dueDate === daysAhead(3, new Date())
   );
+  console.log(in3days)
   paginateData(in3days);
 };
 const filter1Week = () => {
   const in1Week = investmentsData.value.filter(
     (inv) => inv.dueDate === daysAhead(7, new Date())
   );
+  console.log(in1Week)
   paginateData(in1Week);
 };
 const filter2Weeks = () => {
   const in2Weeks = investmentsData.value.filter(
     (inv) => inv.dueDate === daysAhead(14, new Date())
   );
+  console.log(in2Weeks)
   paginateData(in2Weeks);
 };
 const paginateUsers = () => {
@@ -232,90 +235,6 @@ let classObject = computed(() => {
   };
 });
 
-const get3MonthsFortDollarInvestment = computed(() => {
-  const descrip = investmentsData.value.filter(
-    (investment) => investment.description === "FortDollar Investment"
-  );
-  const _3months = descrip.filter((data) => data.duration === 3);
-  return (_3months.length / investmentsData.value.length) * 100 ?? 0;
-});
-const get6MonthsFortDollarInvestment = computed(() => {
-  const descrip = investmentsData.value.filter(
-    (investment) => investment.description === "FortDollar Investment"
-  );
-  const _6months = descrip.filter((data) => data.duration === 6);
-  return (_6months.length / investmentsData.value.length) * 100 ?? 0;
-});
-const get12MonthsFortDollarInvestment = computed(() => {
-  const descrip = investmentsData.value.filter(
-    (investment) => investment.description === "FortDollar Investment"
-  );
-  const _12months = descrip.filter((data) => data.duration === 12);
-  return (_12months.length / investmentsData.value.length) * 100 ?? 0;
-});
-const get3MonthsFortCryptoInvestment = computed(() => {
-  const descrip = investmentsData.value.filter(
-    (investment) => investment.description === "FortCrypto Investment"
-  );
-  const _3months = descrip.filter((data) => data.duration === 3);
-  return (_3months.length / investmentsData.value.length) * 100 ?? 0;
-});
-const get6MonthsFortCryptoInvestment = computed(() => {
-  const descrip = investmentsData.value.filter(
-    (investment) => investment.description === "FortCrypto Investment"
-  );
-  const _6months = descrip.filter((data) => data.duration === 6);
-  return (_6months.length / investmentsData.value.length) * 100 ?? 0;
-});
-const get12MonthsFortCryptoInvestment = computed(() => {
-  const descrip = investmentsData.value.filter(
-    (investment) => investment.description === "FortCrypto Investment"
-  );
-  const _12months = descrip.filter((data) => data.duration === 12);
-  return (_12months.length / investmentsData.value.length) * 100 ?? 0;
-});
-const get3MonthsFortShieldInvestment = computed(() => {
-  const descrip = investmentsData.value.filter(
-    (investment) => investment.description === "FortShield Investment"
-  );
-  const _3months = descrip.filter((data) => data.duration === 3);
-  return (_3months.length / investmentsData.value.length) * 100 ?? 0;
-});
-const get6MonthsFortShieldInvestment = computed(() => {
-  const descrip = investmentsData.value.filter(
-    (investment) => investment.description === "FortShield Investment"
-  );
-  const _6months = descrip.filter((data) => data.duration === 6);
-  return (_6months.length / investmentsData.value.length) * 100 ?? 0;
-});
-const get12MonthsFortShieldInvestment = computed(() => {
-  const descrip = investmentsData.value.filter(
-    (investment) => investment.description === "FortShield Investment"
-  );
-  const _12months = descrip.filter((data) => data.duration === 12);
-  return (_12months.length / investmentsData.value.length) * 100 ?? 0;
-});
-
-const activeInvestmentAmount = computed(() => {
-  const activeInvestments = investmentsData.value.filter(
-    (inv) => inv.status === "Successful"
-  );
-  return activeInvestments.length;
-});
-
-const currentMonthsInvestmentAmount = computed(() => {
-  const date = new Date();
-  const currentMonth = date.getUTCMonth();
-  const currentMonthInvestment = investmentsData.value.filter(
-    (inv) => new Date(inv.dueDate).getMonth() === currentMonth
-  );
-  const totalSum = currentMonthInvestment.reduce((acc, inv) => {
-    return acc + inv.amount;
-  }, 0);
-  // console.log(currentMonthInvestment)
-  return totalSum;
-});
-
 watchEffect(() => {
   const data = store.getInvestments;
   investmentsData.value = data;
@@ -329,6 +248,7 @@ onMounted(() => {
     const in3days = investmentsData.value.filter(
     (inv) => inv.dueDate + 'Z'  === daysAhead(3, new Date())
   );
+  console.log(in3days)
   paginateData(in3days);
 });
 // lifecycle----------------------------------------------------------------------------------

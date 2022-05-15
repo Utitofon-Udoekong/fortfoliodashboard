@@ -238,7 +238,9 @@ watchEffect(() => {
 // const unwatch = watchEffect(() => {});
 
 // computed------------------------------------------------------------------------------
-
+definePageMeta({
+  middleware: ["kyc"]
+});
 // lifecycle
 onMounted(() => {
   paginateData(kycDataList.value);
