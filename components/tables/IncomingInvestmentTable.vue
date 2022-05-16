@@ -42,7 +42,7 @@ let sortCol: IncomingInvestmentTableData = reactive({
   duration: 0,
 });
 const in3days = store.investments.filter(
-    (inv) => inv.dueDate + 'Z'  === daysAhead(3, new Date())
+    (inv) => inv.dueDate.slice(0,10)  === daysAhead(3, new Date()).slice(0,10)
   );
 const investmentsData = ref<IncomingInvestmentTableData[]>(in3days);
 let filteredInvestment = ref<IncomingInvestmentTableData[]>([]);
