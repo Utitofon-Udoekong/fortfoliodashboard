@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-// import { investments } from "~~/assets/investments";
 import { IncomingInvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/users";
