@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { withdrawals } from "~~/assets/withdrawals";
 import { WithdrawalsTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 import { computed, onMounted, reactive, ref } from "vue";
