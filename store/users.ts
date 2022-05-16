@@ -6,6 +6,7 @@ export const useUserStore = defineStore('user', {
         users: [],
         kyc: [],
         investments: [],
+        withdrawals: [],
         snackbarMessage: "",
         showSnackBar: false
     }),
@@ -19,14 +20,17 @@ export const useUserStore = defineStore('user', {
         getInvestments(state){
             return state.investments
         },
+        getWithdrawals(state){
+            return state.withdrawals
+        },
         getUserCount(state){
             return state.users.length
         },
         getKycCount(state){
             return state.kyc.length
         },
-        getInvestmentCount(state){
-            return state.investments.length
+        getWithdrawalCount(state){
+            return state.withdrawals.length
         }
     },
     actions: {
@@ -39,8 +43,12 @@ export const useUserStore = defineStore('user', {
             this.kyc = data.value
         },
         async setInvestments() {
-            const { data } = await useAsyncData('investments', () => $fetch('/api/investments'))
+            const { data } = await useAsyncData('investments', () => $fetch('/api/investments')).then(await this.setWithdrawals())
             this.investments = data.value
+        },
+        async setWithdrawals() {
+            const { data } = await useAsyncData('withdrawals', () => $fetch('/api/withdrawals'))
+            this.withdrawals = data.value
         }
         // async disableUser(uid: string){
         //     const message = await getAuth()

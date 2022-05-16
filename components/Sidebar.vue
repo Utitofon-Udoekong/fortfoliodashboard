@@ -64,11 +64,11 @@ const { clamp, changeClamp } = inject("clamp");
         </NuxtLink>
         <NuxtLink
           :exact-active-class="'bg-brand-clear_white text-gray-50'"
-          to="/dashboard/transaction"
+          to="/dashboard/withdrawal"
           class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
         >
           <span class="pr-3"><i-ph-file-arrow-up /></span>
-          <li :class="clamp ? 'hidden' : 'block'">Transactions</li>
+          <li :class="clamp ? 'hidden' : 'block'">Withdrawals</li>
         </NuxtLink>
       </ul>
     </div>

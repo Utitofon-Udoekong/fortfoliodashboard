@@ -1,45 +1,57 @@
 <script lang="ts" setup>
-import { transactions } from "~~/assets/transactions";
-import { TransactionsTableData, TableHeader } from "~~/utils/types/table";
+import { withdrawals } from "~~/assets/withdrawals";
+import { WithdrawalsTableData, TableHeader } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 import { computed, onMounted, reactive, ref } from "vue";
-const { data } = await useAsyncData('transactions', () => $fetch('/api/transactions'))
+import { useUserStore } from "~~/store/users";
+const store = useUserStore()
 // states
 const columns = [
   { name: "id", text: "User ID" },
   { name: "description", text: "Plan" },
   { name: "amountInvested", text: "Amount" },
-  { name: "processed", text: "Processed" },
+  { name: "processed", text: "Createdat" },
   { name: "status", text: "Status" },
 ];
-let col: TransactionsTableData = reactive({
-  id: null,
+let col: WithdrawalsTableData = reactive({
   description: "",
-  amountInvested: null,
-  processed: "",
   status: "",
+  amount: 0,
+  createdat: "",
+  currency: "",
+  duration: 0,
+  roi: 0,
+  paymentMethod: "",
+  planName: "",
+  traxId: ""
 });
-let sortCol: TransactionsTableData = reactive({
-  id: null,
+
+let sortCol: WithdrawalsTableData = reactive({
   description: "",
-  amountInvested: null,
-  processed: "",
   status: "",
+  amount: 0,
+  createdat: "",
+  currency: "",
+  duration: 0,
+  roi: 0,
+  paymentMethod: "",
+  planName: "",
+  traxId: ""
 });
-const transactionsData = ref<TransactionsTableData[]>(transactions);
-let filteredTransactions = ref<TransactionsTableData[]>([]);
-const showTransactions = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
-const currentTransactions = ref<number>(10);
+const withdrawalsData = ref<WithdrawalsTableData[]>(store.withdrawals);
+let filteredWithdrawals = ref<WithdrawalsTableData[]>([]);
+const showWithdrawals = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
+const currentWithdrawals = ref<number>(10);
 const searchInput = ref<string>("");
-const searchTransactions = ref<string[]>([]);
+const searchWithdrawals = ref<string[]>([]);
 const currentPage = ref<number>(1);
 const totalPages = ref<number>(1);
 let show = ref<number | null>(null);
-let showTransactionsData = ref(false);
+let showWithdrawalsData = ref(false);
 
 const topPos = ref(0);
 const leftPos = ref(0);
-let editableUser: TransactionsTableData[] = [];
+let editableUser: WithdrawalsTableData[] = [];
 const openTab = ref(1);
 let showModal = ref(false);
 // states------------------------------------------------------------------------------
@@ -49,11 +61,10 @@ const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop();
 };
-const selectRow = (user: TransactionsTableData) => {
+const selectRow = (user: WithdrawalsTableData) => {
   editableUser.push(user);
-  showTransactionsData.value = true;
+  showWithdrawalsData.value = true;
 };
-const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
 
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
@@ -61,9 +72,16 @@ const getHeight = async (e: MouseEvent) => {
   // console.log(top.value, left.value)
 };
 const toggleUserData = () => {
-  showTransactionsData.value = !showTransactionsData.value;
+  showWithdrawalsData.value = !showWithdrawalsData.value;
   editableUser.pop();
 };
+
+const approveWithdrawal = () => {
+  
+}
+const cancelWithdrawal = () => {
+
+}
 const open = async (index: number, e: MouseEvent) => {
   await getHeight(e).then(() => {
     show.value === null ? (show.value = index) : (show.value = null);
@@ -71,39 +89,44 @@ const open = async (index: number, e: MouseEvent) => {
 };
 const filterByColumn = () => {
   const filterCol = object.removeBy(col, "");
-  let filterData = getCurrentTransactions();
+  let filterData = getCurrentWithdrawals();
   if (Object.entries(filterCol).length >= 1) {
-    filterData = array.filter(getCurrentTransactions(), filterCol);
+    filterData = array.filter(getCurrentWithdrawals(), filterCol);
   }
   paginateData(filterData);
 };
 const getAllEmployees = () => {};
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
-    searchTransactions.value = array.search(
-      transactionsData.value,
+    searchWithdrawals.value = array.search(
+      withdrawalsData.value,
       searchInput.value
     );
-    paginateData(searchTransactions.value);
+    paginateData(searchWithdrawals.value);
   } else {
-    searchTransactions.value = [];
-    paginateData(transactionsData.value);
+    searchWithdrawals.value = [];
+    paginateData(withdrawalsData.value);
     col = {
-      id: null,
       description: "",
-      amountInvested: null,
-      processed: "",
-      status: "",
+  status: "",
+  amount: 0,
+  createdat: "",
+  currency: "",
+  duration: 0,
+  roi: 0,
+  paymentMethod: "",
+  planName: "",
+  traxId: ""
     };
   }
 };
 const paginateData = (data: any) => {
-  filteredTransactions.value = array.paginate(
+  filteredWithdrawals.value = array.paginate(
     data,
     currentPage.value,
-    currentTransactions.value
+    currentWithdrawals.value
   );
-  totalPages.value = array.pages(data, currentTransactions.value);
+  totalPages.value = array.pages(data, currentWithdrawals.value);
 };
 const paginateEvent = (page: number) => {
   currentPage.value = page;
@@ -115,36 +138,41 @@ const searchEvent = () => {
   paginateUsers();
 };
 
-const getCurrentTransactions = () => {
-  return searchTransactions.value.length <= 0
-    ? transactionsData.value
-    : searchTransactions.value;
+const getCurrentWithdrawals = () => {
+  return searchWithdrawals.value.length <= 0
+    ? withdrawalsData.value
+    : searchWithdrawals.value;
 };
 
 const sortByColumn = (column) => {
   col = {
-    id: null,
     description: "",
-    amountInvested: null,
-    processed: "",
-    status: "",
+  status: "",
+  amount: 0,
+  createdat: "",
+  currency: "",
+  duration: 0,
+  roi: 0,
+  paymentMethod: "",
+  planName: "",
+  traxId: ""
   };
-  let sortedUsers = getCurrentTransactions();
+  let sortedUsers = getCurrentWithdrawals();
   let sortedColumn = sortCol[column];
   if (sortedColumn === "" || sortedColumn === null) {
     sortCol[column] = "asc";
-    sortedUsers = array.sortBy(getCurrentTransactions(), column, "asc");
+    sortedUsers = array.sortBy(getCurrentWithdrawals(), column, "asc");
   } else if (sortedColumn === "asc") {
     sortCol[column] = "desc";
-    sortedUsers = array.sortBy(getCurrentTransactions(), column, "desc");
+    sortedUsers = array.sortBy(getCurrentWithdrawals(), column, "desc");
   } else if (sortedColumn === "desc") {
     sortCol[column] = "";
   }
   paginateData(sortedUsers);
 };
-// const print = () => file.printed(transactionsData.value);
+// const print = () => file.printed(withdrawalsData.value);
 const exportFile = (format: string) => {
-  const genString = file.exported(transactionsData.value, format);
+  const genString = file.exported(withdrawalsData.value, format);
   file.download(genString, format);
 };
 // methods------------------------------------------------------------------------------
@@ -153,16 +181,16 @@ const exportFile = (format: string) => {
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
   return array.pageInfo(
-    getCurrentTransactions(),
+    getCurrentWithdrawals(),
     currentPage.value,
-    currentTransactions.value
+    currentWithdrawals.value
   );
 });
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
 });
-const tableData = computed<TransactionsTableData[]>(() => {
-  return filteredTransactions.value || [];
+const tableData = computed<WithdrawalsTableData[]>(() => {
+  return filteredWithdrawals.value || [];
 });
 
 const showPagination = computed(() => {
@@ -185,7 +213,7 @@ let classObject = computed(() => {
 
 // lifecycle
 onMounted(() => {
-  paginateData(transactionsData.value);
+  paginateData(withdrawalsData.value);
 });
 // lifecycle---------------------
 </script>
@@ -196,13 +224,13 @@ onMounted(() => {
         <div class="flex items-center">
           <span class="mr-1">Show</span>
           <select
-            v-model="currentTransactions"
+            v-model="currentWithdrawals"
             @change="paginateUsers"
             class="p-2 bg-blue-300 bg-opacity-25 rounded-md"
           >
             <option
               :value="users"
-              v-for="(users, i) in showTransactions"
+              v-for="(users, i) in showWithdrawals"
               :key="i"
               class="text-white"
             >
@@ -210,7 +238,7 @@ onMounted(() => {
             </option>
             <option :value="showInfo.of" class="text-white">All</option>
           </select>
-          <span class="ml-1">transactions</span>
+          <span class="ml-1">withdrawals</span>
         </div>
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
@@ -238,7 +266,7 @@ onMounted(() => {
             <div class="overflow-hidden border-b border-gray-200 sm:rounded-lg">
               <table class="min-w-full divide-y divide-gray-200">
                 <caption class="text-lg font-semibold">
-                  Recent Transactions
+                  Recent Withdrawals
                 </caption>
                 <thead class="bg-white">
                   <tr>
@@ -274,7 +302,7 @@ onMounted(() => {
                     class="hover:bg-gray-300 cursor-pointer"
                   >
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div>#{{ data.id }}</div>
+                      <div>#{{ data.uid }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
@@ -284,10 +312,10 @@ onMounted(() => {
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">${{ data.amountInvested }}</div>
+                      <div class="text-sm">${{ data.amount }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ data.processed }}
+                      {{ data.createdat }}
                     </td>
 
                     <td class="px-6 py-4 whitespace-nowrap">
@@ -309,13 +337,12 @@ onMounted(() => {
                         role="button"
                         aria-label="option"
                       />
-                      <!-- <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
+                      <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
                         <ul class="py-1" >
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'success',open(index,$event)">Approve payment</li>
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="activities[index].status = 'pending',open(index,$event)">Cancel payment</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="approveWithdrawal(),open(index,$event)">Approve withdrawal</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="cancelWithdrawal(),open(index,$event)">Cancel withdrawal</li>
                         </ul>
-                        @click="open(index,$event)" 
-                      </div> -->
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -423,7 +450,7 @@ onMounted(() => {
         <i-ion-close-round class="text-black text-xl" @click="toggleModal" />
       </div>
       <div class="bg-white p-10 max-w-lg h-auto z-40 mx-auto mt-20">
-        <p class="text-xl font-semibold pb-5">Transactions INFO</p>
+        <p class="text-xl font-semibold pb-5">Withdrawals INFO</p>
         <p class="text-lg font-semibold pb-3">
           USERID:
           <span class="font-normal text-base">{{ editableUser[0].id }}</span>

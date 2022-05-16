@@ -1,4 +1,4 @@
-export const transactions = [{
+export const withdrawals = [{
     "id": 1,
     "description": "Anticholinesterase agents",
     "amountInvested": 2780,

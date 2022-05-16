@@ -3,34 +3,18 @@ export interface TableHeader{
     name: string
 }
 
-export interface TestTableData {
-    id: string
-    name: string
-    position: string
-    office: string
-    extension: string
-    startDate: string
-    salary: string
-}
-
-
-export interface MainTableData{
-    id: string
+export interface WithdrawalsTableData{
     description: string
-    amountInvested: string
-    paymentDate: string
-    dueDate: string
+    amount: number
+    planName: string
+    duration: number
+    roi: number
+    paymentMethod: string
+    currency: string
+    traxId: string
+    createdat: string
     status: string
 }
-
-export interface TransactionsTableData{
-    description: string
-    id: number
-    amountInvested: number
-    processed: string
-    status: string
-}
-
 
 export interface UsersTableData{
     id: String
