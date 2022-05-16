@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { WithdrawalsTableData, TableHeader } from "~~/utils/types/table";
-import { array, file, object } from "alga-js";
+import { array, file } from "alga-js";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useUserStore } from "~~/store/users";
 const store = useUserStore()

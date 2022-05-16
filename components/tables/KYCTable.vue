@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { KYCTableData, TableHeader } from "~~/utils/types/table";
-import { array, file, object } from "alga-js";
+import { array, file} from "alga-js";
 import { useUserStore } from "~~/store/users";
 import formatter from "~~/helpers/formatIsoDate";
 import { doc, updateDoc, writeBatch } from "@firebase/firestore";
