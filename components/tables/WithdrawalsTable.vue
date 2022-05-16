@@ -7,11 +7,13 @@ import { useUserStore } from "~~/store/users";
 const store = useUserStore()
 // states
 const columns = [
-  { name: "uid", text: "User ID" },
+  { name: "traxId", text: "Trax ID" },
   { name: "description", text: "Plan" },
   { name: "amount", text: "Amount" },
   { name: "createdat", text: "Createdat" },
-  { name: "status", text: "Status" },
+  { name: "paymentMethod", text: "Method" },
+  { name: "duration", text: "Duration" },
+  { name: "roi", text: "ROI" },
 ];
 let col: WithdrawalsTableData = reactive({
   description: "",
@@ -52,7 +54,6 @@ let showWithdrawalsData = ref(false);
 const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: WithdrawalsTableData[] = [];
-const openTab = ref(1);
 let showModal = ref(false);
 // states------------------------------------------------------------------------------
 
@@ -69,7 +70,6 @@ const selectRow = (user: WithdrawalsTableData) => {
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
   leftPos.value = e.pageX - 120;
-  // console.log(top.value, left.value)
 };
 const toggleUserData = () => {
   showWithdrawalsData.value = !showWithdrawalsData.value;
@@ -87,15 +87,7 @@ const open = async (index: number, e: MouseEvent) => {
     show.value === null ? (show.value = index) : (show.value = null);
   });
 };
-const filterByColumn = () => {
-  const filterCol = object.removeBy(col, "");
-  let filterData = getCurrentWithdrawals();
-  if (Object.entries(filterCol).length >= 1) {
-    filterData = array.filter(getCurrentWithdrawals(), filterCol);
-  }
-  paginateData(filterData);
-};
-const getAllEmployees = () => {};
+
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
     searchWithdrawals.value = array.search(
@@ -302,7 +294,7 @@ onMounted(() => {
                     class="hover:bg-gray-300 cursor-pointer"
                   >
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div>#{{ data.uid }}</div>
+                      <div>#{{ data.traxId }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
@@ -312,10 +304,19 @@ onMounted(() => {
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">${{ data.amount }}</div>
+                      <div class="text-sm">{{data.currency}}{{ data.amount.toLocaleString() }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ data.createdat }}
+                      {{ data.createdat.toLocaleDateString("en-GB") }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                      {{ data.paymentMethod }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                      {{ data.duration }} months
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                      {{ data.roi }}%
                     </td>
 
                     <td class="px-6 py-4 whitespace-nowrap">
