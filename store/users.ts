@@ -71,7 +71,7 @@ export const useUserStore = defineStore('user', {
         //     })
         //     .then((_) => {
         //         // See the UserRecord reference doc for the contents of userRecord.
-        //         return 'Successfully deleted user'
+        //         return 'Successfully deleted user';
         //     })
         //     .catch((error) => {
         //         return "Error deleting user " + error
