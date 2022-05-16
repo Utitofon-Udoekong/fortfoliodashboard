@@ -13,6 +13,7 @@ const columns = [
   { name: "paymentMethod", text: "Method" },
   { name: "duration", text: "Duration" },
   { name: "roi", text: "ROI" },
+  { name: "status", text: "Status" },
 ];
 let col: WithdrawalsTableData = reactive({
   description: "",
