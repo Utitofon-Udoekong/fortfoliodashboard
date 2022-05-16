@@ -7,10 +7,10 @@ import { useUserStore } from "~~/store/users";
 const store = useUserStore()
 // states
 const columns = [
-  { name: "id", text: "User ID" },
+  { name: "uid", text: "User ID" },
   { name: "description", text: "Plan" },
-  { name: "amountInvested", text: "Amount" },
-  { name: "processed", text: "Createdat" },
+  { name: "amount", text: "Amount" },
+  { name: "createdat", text: "Createdat" },
   { name: "status", text: "Status" },
 ];
 let col: WithdrawalsTableData = reactive({
