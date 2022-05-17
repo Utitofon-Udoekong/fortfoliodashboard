@@ -6,6 +6,7 @@ import { useUserStore } from "~~/store/users";
 import {
   collectionGroup,
   doc,
+  getDocs,
   query,
   updateDoc,
   where,
@@ -76,11 +77,19 @@ const cancelInvestment = async (uid: string) => {
   // })
 };
 
-const approveInvestment = (uid: string) => {
+const approveInvestment = async (uid: string) => {
   const ref = query(
     collectionGroup($db, "investments"),
     where("uid", "==", uid)
   );
+  const querySnapshot = await getDocs(ref);
+  querySnapshot.forEach((doc) => {
+    batch.update(doc.ref, { 
+      "staus": "Successful"
+    })
+    
+  });
+
 };
 
 const selectRow = (user: InvestmentTableData) => {

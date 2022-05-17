@@ -235,7 +235,7 @@ onMounted(() => {
     <ImageModal :imageSource="imageSource" :toggleShow="toggleImageModal" :show="showImageModal"/>
     <!-- USER MODAL -->
     <div v-if="showModal">
-      <div class="bg-white p-10 pt-14 w-full h-auto relative ring ring-4 ring-brand-light-blue rounded-md">
+      <div class="bg-white p-10 pt-14 w-full h-auto relative ring-4 ring-brand-light-blue rounded-md">
         <div class="closemodal absolute right-6 top-6 cursor-pointer" @click="toggleModal">
             <i-ion-close-round class="text-black text-xl" />
           </div>
