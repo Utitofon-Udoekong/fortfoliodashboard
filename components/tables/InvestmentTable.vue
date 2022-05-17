@@ -844,7 +844,7 @@ onMounted(() => {
       class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 h-screen w-screen flex justify-center items-center"
     >
       <div
-        class="bg-white p-10 max-w-xl h-3/4 z-40 relative rounded-md ring ring-4 ring-blue-400"
+        class="bg-white p-10 max-w-xl h-3/4 z-40 relative rounded-md ring-4 ring-blue-400"
       >
         <i-ion-close-round
           class="text-black text-2xl absolute right-2 top-4 cursor-pointer"
