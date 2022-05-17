@@ -72,9 +72,13 @@ const cancelInvestment = async (uid: string) => {
     collectionGroup($db, "investments"),
     where("uid", "==", uid)
   );
-  // await updateDoc(ref,{
-
-  // })
+  const querySnapshot = await getDocs(ref);
+  querySnapshot.forEach((doc) => {
+    batch.update(doc.ref, { 
+      "status": "Cancelled"
+    })
+  });
+  await batch.commit()
 };
 
 const approveInvestment = async (uid: string) => {
@@ -85,11 +89,10 @@ const approveInvestment = async (uid: string) => {
   const querySnapshot = await getDocs(ref);
   querySnapshot.forEach((doc) => {
     batch.update(doc.ref, { 
-      "staus": "Successful"
+      "status": "Successful"
     })
-    
   });
-
+  await batch.commit()
 };
 
 const selectRow = (user: InvestmentTableData) => {
@@ -467,8 +470,15 @@ onMounted(() => {
                             tabindex="0"
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
-                            @click="
-                              (investmentsData[index].status = 'success'),
+                            @click="selectRow(investments), open(index, $event)"
+                          >
+                            Quick view
+                          </li>
+                          <li
+                            tabindex="0"
+                            href="#"
+                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                            @click="approveInvestment(investments.uuid),
                                 open(index, $event)
                             "
                           >
@@ -479,19 +489,11 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              (investmentsData[index].status = 'pending'),
+                              cancelInvestment(investments.uuid),
                                 open(index, $event)
                             "
                           >
                             Cancel payment
-                          </li>
-                          <li
-                            tabindex="0"
-                            href="#"
-                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
-                            @click="selectRow(investments), open(index, $event)"
-                          >
-                            Quick view
                           </li>
                         </ul>
                       </div>

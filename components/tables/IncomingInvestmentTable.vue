@@ -5,6 +5,7 @@ import { useUserStore } from "~~/store/users";
 import {
   collectionGroup,
   doc,
+  getDocs,
   query,
   updateDoc,
   where,
@@ -68,16 +69,27 @@ const cancelInvestment = async (uid: string) => {
     collectionGroup($db, "investments"),
     where("uid", "==", uid)
   );
-  // await updateDoc(ref,{
-
-  // })
+  const querySnapshot = await getDocs(ref);
+  querySnapshot.forEach((doc) => {
+    batch.update(doc.ref, { 
+      "status": "Cancelled"
+    })
+  });
+  await batch.commit()
 };
 
-const approveInvestment = (uid: string) => {
+const approveInvestment = async (uid: string) => {
   const ref = query(
     collectionGroup($db, "investments"),
     where("uid", "==", uid)
   );
+  const querySnapshot = await getDocs(ref);
+  querySnapshot.forEach((doc) => {
+    batch.update(doc.ref, { 
+      "status": "Successful"
+    })
+  });
+  await batch.commit()
 };
 
 const selectRow = (user: IncomingInvestmentTableData) => {
@@ -413,7 +425,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              (investmentsData[index].status = 'success'),
+                              approveInvestment(investments.uuid),
                                 open(index, $event)
                             "
                           >
@@ -424,7 +436,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              (investmentsData[index].status = 'pending'),
+                              cancelInvestment(investments.uuid),
                                 open(index, $event)
                             "
                           >
