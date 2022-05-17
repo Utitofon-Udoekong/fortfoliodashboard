@@ -35,11 +35,11 @@ export const useUserStore = defineStore('user', {
     },
     actions: {
         async setuser() {
-            const { data } = await useAsyncData('users', () => $fetch('/api/users')).then(await this.setkyc())
+            const { data } = await useAsyncData('users', () => $fetch('/api/users'))
             this.users = data.value
         },
         async setkyc() {
-            const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc')).then(await this.setInvestments())
+            const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
             this.kyc = data.value
         },
         async setInvestments() {
