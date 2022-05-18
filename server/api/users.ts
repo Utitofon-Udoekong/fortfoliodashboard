@@ -18,24 +18,28 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
     // })
     const doc = db.collection('authUsers')
     let users = []
-    return new Promise((resolve) => {
-        var resolveOnce = (doc: unknown) => {
-            resolveOnce = () => void
-                resolve(doc)
-        };
-        doc.onSnapshot(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                users.push({
-                    uuid: doc.id,
-                    ...doc.data()
+    const unsub = () => {
+        return new Promise((resolve) => {
+            var resolveOnce = (doc: unknown) => {
+                resolveOnce = () => void
+                    resolve(doc)
+            };
+            doc.onSnapshot(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    users.push({
+                        uuid: doc.id,
+                        ...doc.data()
+                    })
                 })
-            })
-            resolve(users)
-            // const newUsers = querySnapshot.docs.map(q => ({ id: q.id, ...q.data()}))
-        }, err => {
-            console.log(`Encountered error: ${err}`);
-        });
-    })
+                resolve(users)
+                // const newUsers = querySnapshot.docs.map(q => ({ id: q.id, ...q.data()}))
+            }, err => {
+                console.log(`Encountered error: ${err}`);
+            });
+        })
+    }
+    console.log(unsub())
+    return unsub()
     // // console.log(users)
     // // return db.collection('authUsers').onSnapshot
     // return plaugh

@@ -35,7 +35,7 @@ export const useUserStore = defineStore('user', {
     },
     actions: {
         async setuser() {
-            const { data } = useAsyncData('users', () => $fetch('/api/users'))
+            const { data } = await useAsyncData('users', () => $fetch('/api/users'))
             const snap = data.value
             console.log(snap)
             // this.users = data.value
