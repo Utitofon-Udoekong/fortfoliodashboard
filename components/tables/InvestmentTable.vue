@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-// import { investments } from "~~/assets/investments";
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/users";
@@ -8,7 +7,6 @@ import {
   doc,
   getDocs,
   query,
-  updateDoc,
   where,
   writeBatch,
 } from "@firebase/firestore";
@@ -63,6 +61,9 @@ const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: InvestmentTableData[] = [];
 const openTab = ref(1);
+const showError = ref(false);
+const showSuccess = ref(false);
+const notificationMessage = ref("");
 // states------------------------------------------------------------------------------
 
 // methods
@@ -73,12 +74,26 @@ const cancelInvestment = async (uid: string) => {
     where("uid", "==", uid)
   );
   const querySnapshot = await getDocs(ref);
-  querySnapshot.forEach((doc) => {
-    batch.update(doc.ref, { 
-      "status": "Cancelled"
-    })
-  });
-  await batch.commit()
+  try {
+    querySnapshot.forEach((doc) => {
+      batch.update(doc.ref, {
+        status: "Cancelled",
+      });
+    });
+    await batch.commit().then(
+      () => {
+        notificationMessage.value = `Investment for ${uid} cancelled`;
+        showSuccess.value = true;
+      },
+      (d) => {
+        notificationMessage.value = `An error occured: ${d}`;
+        showError.value = true;
+      }
+    );
+  } catch (error) {
+    notificationMessage.value = `An error occured: ${error}`;
+    showError.value = true;
+  }
 };
 
 const approveInvestment = async (uid: string) => {
@@ -87,12 +102,26 @@ const approveInvestment = async (uid: string) => {
     where("uid", "==", uid)
   );
   const querySnapshot = await getDocs(ref);
-  querySnapshot.forEach((doc) => {
-    batch.update(doc.ref, { 
-      "status": "Successful"
-    })
-  });
-  await batch.commit()
+  try {
+    querySnapshot.forEach((doc) => {
+      batch.update(doc.ref, {
+        status: "Successful",
+      });
+    });
+    await batch.commit().then(
+      () => {
+        notificationMessage.value = `Investment for ${uid} Approved`;
+        showSuccess.value = true;
+      },
+      (d) => {
+        notificationMessage.value = `An error occured: ${d}`;
+        showError.value = true;
+      }
+    );
+  } catch (error) {
+    notificationMessage.value = `An error occured: ${error}`;
+    showError.value = true;
+  }
 };
 
 const selectRow = (user: InvestmentTableData) => {
@@ -309,6 +338,22 @@ const currentMonthsInvestmentAmount = computed(() => {
   return totalSum;
 });
 
+watch(showError, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showError.value = false;
+    }, 1500);
+  }
+});
+
+watch(showSuccess, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 1500);
+  }
+});
+
 // computed------------------------------------------------------------------------------
 // lifecycle
 onMounted(() => {
@@ -317,6 +362,7 @@ onMounted(() => {
 // lifecycle----------------------------------------------------------------------------------
 </script>
 <template>
+  <Notifications :showError="showError" :showSuccess="showSuccess" />
   <div class="h-auto">
     <div class="table-form">
       <div class="flex mb-3 justify-between">
@@ -478,7 +524,8 @@ onMounted(() => {
                             tabindex="0"
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
-                            @click="approveInvestment(investments.uuid),
+                            @click="
+                              approveInvestment(investments.uuid),
                                 open(index, $event)
                             "
                           >

@@ -58,6 +58,9 @@ const leftPos = ref(0);
 let editableUser: IncomingInvestmentTableData[] = [];
 const openTab = ref(1);
 let showModal = ref(false);
+const showError = ref(false);
+const showSuccess = ref(false);
+const notificationMessage = ref("");
 // states------------------------------------------------------------------------------
 
 // methods
@@ -68,12 +71,26 @@ const cancelInvestment = async (uid: string) => {
     where("uid", "==", uid)
   );
   const querySnapshot = await getDocs(ref);
-  querySnapshot.forEach((doc) => {
-    batch.update(doc.ref, { 
-      "status": "Cancelled"
-    })
-  });
-  await batch.commit()
+  try {
+    querySnapshot.forEach((doc) => {
+      batch.update(doc.ref, {
+        status: "Cancelled",
+      });
+    });
+    await batch.commit().then(
+      () => {
+        notificationMessage.value = `Investment for ${uid} cancelled`;
+        showSuccess.value = true;
+      },
+      (d) => {
+        notificationMessage.value = `An error occured: ${d}`;
+        showError.value = true;
+      }
+    );
+  } catch (error) {
+    notificationMessage.value = `An error occured: ${error}`;
+    showError.value = true;
+  }
 };
 
 const approveInvestment = async (uid: string) => {
@@ -82,12 +99,26 @@ const approveInvestment = async (uid: string) => {
     where("uid", "==", uid)
   );
   const querySnapshot = await getDocs(ref);
-  querySnapshot.forEach((doc) => {
-    batch.update(doc.ref, { 
-      "status": "Successful"
-    })
-  });
-  await batch.commit()
+  try {
+    querySnapshot.forEach((doc) => {
+      batch.update(doc.ref, {
+        status: "Successful",
+      });
+    });
+    await batch.commit().then(
+      () => {
+        notificationMessage.value = `Investment for ${uid} Approved`;
+        showSuccess.value = true;
+      },
+      (d) => {
+        notificationMessage.value = `An error occured: ${d}`;
+        showError.value = true;
+      }
+    );
+  } catch (error) {
+    notificationMessage.value = `An error occured: ${error}`;
+    showError.value = true;
+  }
 };
 
 const selectRow = (user: IncomingInvestmentTableData) => {
@@ -243,6 +274,21 @@ let classObject = computed(() => {
   };
 });
 
+watch(showError, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showError.value = false;
+    }, 1500);
+  }
+});
+
+watch(showSuccess, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 1500);
+  }
+});
 // computed------------------------------------------------------------------------------
 
 // lifecycle
@@ -252,6 +298,7 @@ onMounted(() => {
 // lifecycle----------------------------------------------------------------------------------
 </script>
 <template>
+<Notifications :showError="showError" :showSuccess="showSuccess" />
   <div class="h-auto">
     <div class="table-form">
       <div class="flex mb-3 justify-between">
