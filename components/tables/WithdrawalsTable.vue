@@ -52,11 +52,10 @@ const searchWithdrawals = ref<string[]>([]);
 const currentPage = ref<number>(1);
 const totalPages = ref<number>(1);
 let show = ref<number | null>(null);
-let showWithdrawalsData = ref(false);
 
 const topPos = ref(0);
 const leftPos = ref(0);
-let editableUser: WithdrawalsTableData[] = [];
+let editableUser: any[];
 let showModal = ref(false);
 const showError = ref(false);
 const showSuccess = ref(false);
@@ -68,18 +67,15 @@ const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop();
 };
-const selectRow = (user: WithdrawalsTableData) => {
-  editableUser.push(user);
-  showWithdrawalsData.value = true;
+const selectRow = (traxId: string) => {
+  const withdrawalData = store.withdrawals.filter(data => data.traxId === traxId)
+  editableUser.push(withdrawalData);
+  showModal.value = true;
 };
 
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
   leftPos.value = e.pageX - 120;
-};
-const toggleUserData = () => {
-  showWithdrawalsData.value = !showWithdrawalsData.value;
-  editableUser.pop();
 };
 
 const approveWithdrawal = async (traxId: string) => {

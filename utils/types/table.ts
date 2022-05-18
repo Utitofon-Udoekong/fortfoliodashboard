@@ -15,9 +15,6 @@ export interface WithdrawalsTableData{
     createdat: string
     status: string,
 }
-interface WithdrawalDetails{
-    
-}
 
 export interface UsersTableData{
     id: String
