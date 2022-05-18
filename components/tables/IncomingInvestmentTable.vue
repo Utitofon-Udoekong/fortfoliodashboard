@@ -4,10 +4,8 @@ import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/users";
 import {
   collectionGroup,
-  doc,
   getDocs,
   query,
-  updateDoc,
   where,
   writeBatch,
 } from "@firebase/firestore";

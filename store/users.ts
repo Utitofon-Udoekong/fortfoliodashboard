@@ -1,6 +1,4 @@
-// import { getAuth } from "firebase-admin/auth";
 import { defineStore } from "pinia";
-// import AdminFunctions from "~~/helpers/customFunctions"
 export const useUserStore = defineStore('user', {
     state: () => ({
         users: [],
@@ -36,9 +34,7 @@ export const useUserStore = defineStore('user', {
     actions: {
         async setuser() {
             const { data } = await useAsyncData('users', () => $fetch('/api/users'))
-            const snap = data.value
-            console.log(snap)
-            // this.users = data.value
+            this.users = data.value
         },
         async setkyc() {
             const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
