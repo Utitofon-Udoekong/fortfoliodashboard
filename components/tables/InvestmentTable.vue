@@ -952,12 +952,20 @@ onMounted(() => {
               >{{ editableUser[0].duration }} months</span
             >
           </p>
-          <p class="text-lg font-semibold">
-            STATUS:
-            <span class="font-normal text-base">{{
-              editableUser[0].status
-            }}</span>
-          </p>
+          <span class="flex flex-col font-semibold mb-4">
+            <p class="text-lg font-semibold pb-3">STATUS:</p>
+            <span
+              class="font-semibold text-lg px-12 text-center rounded py-1 w-1/4 bg-opacity-25"
+              :class="
+                editableUser[0].status === 'Successful'
+                  ? 'text-brand-green bg-brand-green'
+                  : editableUser[0].status === 'Cancelled'
+                  ? 'text-brand-red bg-brand-red'
+                  : 'text-yellow-400 bg-yellow-400'
+              "
+              >{{ editableUser[0].status }}</span
+            >
+          </span>
         </div>
       </div>
     </div>

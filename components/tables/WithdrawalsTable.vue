@@ -494,43 +494,103 @@ onMounted(() => {
     <!-- USER MODAL -->
     <div
       v-if="showModal"
-      class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 w-full h-full"
+      class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 h-screen w-screen flex justify-center items-center"
     >
       <div
-        class="closemodal p-4 fixed top-3 right-6 bg-white rounded-full cursor-pointer"
+        class="bg-white p-10 max-w-xl h-3/4 z-40 relative rounded-md ring-4 ring-blue-400"
       >
-        <i-ion-close-round class="text-black text-xl" @click="toggleModal" />
-      </div>
-      <div class="bg-white p-10 max-w-lg h-auto z-40 mx-auto mt-20">
-        <p class="text-xl font-semibold pb-5">Withdrawals INFO</p>
-        <p class="text-lg font-semibold pb-3">
-          USERID:
-          <span class="font-normal text-base">{{ editableUser[0].id }}</span>
-        </p>
-        <p class="text-lg font-semibold pb-3">
-          DESCRIPTION:
-          <span class="font-normal text-base">{{
-            editableUser[0].description
-          }}</span>
-        </p>
-        <p class="text-lg font-semibold pb-3">
-          AMOUNT INVESTED:
-          <span class="font-normal text-base">{{
-            editableUser[0].amountInvested
-          }}</span>
-        </p>
-        <p class="text-lg font-semibold pb-3">
-          PROCESSED:
-          <span class="font-normal text-base">{{
-            editableUser[0].processed
-          }}</span>
-        </p>
-        <p class="text-lg font-semibold">
-          STATUS:
-          <span class="font-normal text-base">{{
-            editableUser[0].status
-          }}</span>
-        </p>
+        <i-ion-close-round
+          class="text-black text-2xl absolute right-2 top-4 cursor-pointer"
+          @click="toggleModal"
+        />
+        <div class="con w-full h-full">
+          <p class="text-xl font-semibold pb-5">Withdrawal INFO</p>
+          <p class="text-lg font-semibold pb-3">
+            WITHDRAWAL ID:
+            <span class="font-normal text-base">{{ editableUser[0].traxId }}</span>
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            DESCRIPTION:
+            <span class="font-normal text-base">{{
+              editableUser[0].description
+            }}</span>
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            AMOUNT INVESTED:
+            <span class="font-normal text-base">
+              {{ editableUser[0].currency }}
+              {{ editableUser[0].amount.toLocaleString() }}
+            </span>
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            CREATED AT:
+            <span class="font-normal text-base">{{
+              formatter(editableUser[0].createdat)
+            }}</span>
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            PAYMENT METHOD:
+            <span class="font-normal text-base">
+              {{ editableUser[0].paymentMethod }}
+            </span>
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            BANK NAME:
+            <span class="font-normal text-base">
+              {{ editableUser[0].withdrawalDetails.bankName }}
+            </span>
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            ACCOUNT NUMBER:
+            <span class="font-normal text-base">
+              {{ editableUser[0].withdrawalDetails.accountNumber }}
+            </span>
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            USERNAME:
+            <span class="font-normal text-base">
+              {{ editableUser[0].withdrawalDetails.userName }}
+            </span>
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            ACCOUNT ID:
+            <span class="font-normal text-base">
+              {{ editableUser[0].withdrawalDetails.id }}
+            </span>
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            ACCOUNT TYPE:
+            <span class="font-normal text-base">
+              {{ editableUser[0].withdrawalDetails.type }}
+            </span>
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            DURATION:
+            <span class="font-normal text-base"
+              >{{ editableUser[0].duration }} months</span
+            >
+          </p>
+          <p class="text-lg font-semibold pb-3">
+            ROI:
+            <span class="font-normal text-base"
+              >{{ editableUser[0].roi }}%</span
+            >
+          </p>
+          <span class="font-semibold mb-4 flex flex-col">
+            <p class="text-lg font-semibold pb-3">STATUS:</p>
+            <span
+              class="font-semibold text-lg px-12 text-center rounded py-1 w-1/4 bg-opacity-25"
+              :class="
+                editableUser[0].status === 'Successful'
+                  ? 'text-brand-green bg-brand-green'
+                  : editableUser[0].status === 'Cancelled'
+                  ? 'text-brand-red bg-brand-red'
+                  : 'text-yellow-400 bg-yellow-400'
+              "
+              >{{ editableUser[0].status }}</span
+            >
+          </span>
+        </div>
       </div>
     </div>
   </div>
