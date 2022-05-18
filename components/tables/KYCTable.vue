@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { KYCTableData, TableHeader } from "~~/utils/types/table";
-import { array, file} from "alga-js";
+import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/users";
 import formatter from "~~/helpers/formatIsoDate";
 import { doc, updateDoc, writeBatch } from "@firebase/firestore";
 // import ImageModal from "../ImageModal.vue";
 // const {$db} = useNuxtApp()
 const store = useUserStore();
-const {$db} = useNuxtApp()
-const batch = writeBatch($db)
+const { $db } = useNuxtApp();
+const batch = writeBatch($db);
 
 // states
 const columns = [
@@ -56,38 +56,70 @@ const searchKYC = ref<string[]>([]);
 const currentPage = ref<number>(1);
 const totalPages = ref<number>(1);
 let show = ref<number | null>(null);
-let showModal = ref(false)
-const openTab = ref(1);
+let showModal = ref(false);
 let editableUser: KYCTableData[] = [];
 
 const topPos = ref(0);
 const leftPos = ref(0);
 let showImageModal = ref(false);
-let imageSource = ref("")
+let imageSource = ref("");
+const showError = ref(false);
+const showSuccess = ref(false);
+const notificationMessage = ref("");
 // states------------------------------------------------------------------------------
 
 // methods
 const approveKYC = async (uid: string) => {
-  const userVerifiedQuery = doc($db, "authUsers", uid)
-  const kycQuery = doc($db, "kyc", uid)
-  batch.update(userVerifiedQuery,{
-    "isVerified": true
-  })
-  batch.delete(kycQuery)
-  await batch.commit()
-}
+  const userVerifiedQuery = doc($db, "authUsers", uid);
+  const kycQuery = doc($db, "kyc", uid);
+  try {
+    batch.update(userVerifiedQuery, {
+      isVerified: true,
+    });
+    batch.delete(kycQuery);
+    await batch.commit().then(
+      () => {
+        notificationMessage.value = `KYC for ${uid} Approved`;
+        showSuccess.value = true;
+      },
+      (d) => {
+        notificationMessage.value = `An error occured: ${d}`;
+        showError.value = true;
+      }
+    );
+  } catch (error) {
+    notificationMessage.value = `An error occured: ${error}`;
+    showError.value = true;
+  }
+};
 
 const rejectKYC = async (uid: string) => {
-  const ref = doc($db, "kyc", uid)
-  await updateDoc(ref,{
-    "isVerified": false,
-    "status": "Rejected"
-  })
-}
-const toggleImageModal = () => {showImageModal.value = !showImageModal.value}
+  const ref = doc($db, "kyc", uid);
+  try {
+    await updateDoc(ref, {
+      isVerified: false,
+      status: "Rejected",
+    }).then(
+      () => {
+        notificationMessage.value = `KYC for ${uid} Approved`;
+        showSuccess.value = true;
+      },
+      (d) => {
+        notificationMessage.value = `An error occured: ${d}`;
+        showError.value = true;
+      }
+    );
+  } catch (error) {
+    notificationMessage.value = `An error occured: ${error}`;
+    showError.value = true;
+  }
+};
+const toggleImageModal = () => {
+  showImageModal.value = !showImageModal.value;
+};
 const setImageSource = (src: string) => {
-  imageSource.value = src
-}
+  imageSource.value = src;
+};
 
 const toggleModal = () => {
   showModal.value = !showModal.value;
@@ -211,6 +243,22 @@ let classObject = computed(() => {
   };
 });
 
+watch(showError, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showError.value = false;
+    }, 1500);
+  }
+});
+
+watch(showSuccess, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 1500);
+  }
+});
+
 // const downloadImage = (url: string | URL) => {
 //   var xhr = new XMLHttpRequest();
 //   xhr.responseType = "blob";
@@ -231,24 +279,94 @@ onMounted(() => {
 // lifecycle---------------------
 </script>
 <template>
+  <Notifications :showError="showError" :showSuccess="showSuccess" />
   <div class="h-auto mb-5">
-    <ImageModal :imageSource="imageSource" :toggleShow="toggleImageModal" :show="showImageModal"/>
+    <ImageModal
+      :imageSource="imageSource"
+      :toggleShow="toggleImageModal"
+      :show="showImageModal"
+    />
     <!-- USER MODAL -->
     <div v-if="showModal">
-      <div class="bg-white p-10 pt-14 w-full h-auto relative ring-4 ring-brand-light-blue rounded-md">
-        <div class="closemodal absolute right-6 top-6 cursor-pointer" @click="toggleModal">
-            <i-ion-close-round class="text-black text-xl" />
-          </div>
-        <div class="w-full ">
-          <span class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3">Full Name: </p> <span class="font-semibold text-black text-2xl">{{ editableUser[0].fullName }}</span> </span>
-          <span class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3"> KYC ID: </p> <span class="font-semibold text-black text-2xl">{{ editableUser[0].id }}</span> </span>
-          <span class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3"> Document Type: </p> <span class="font-semibold text-black text-2xl">{{ editableUser[0].documentType }}</span> </span>
-          <span class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3"> Submitted at: </p> <span class="font-semibold text-black text-2xl">{{ formatter(editableUser[0].submitted) }}</span> </span>
-          <span class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500">Status:</p> <span class="font-semibold text-lg px-12 text-center rounded py-1 w-1/4" :class=" editableUser[0].status === 'Approve' ? 'text-brand-green bg-brand-green bg-opacity-25' : editableUser[0].status === 'Rejected' ? 'text-brand-red bg-brand-red bg-opacity-25' : 'text-yellow-400 bg-yellow-400 bg-opacity-25' " >{{ editableUser[0].status }}</span > </span>
+      <div
+        class="bg-white p-10 pt-14 w-full h-auto relative ring-4 ring-brand-light-blue rounded-md"
+      >
+        <div
+          class="closemodal absolute right-6 top-6 cursor-pointer"
+          @click="toggleModal"
+        >
+          <i-ion-close-round class="text-black text-xl" />
+        </div>
+        <div class="w-full">
+          <span class="flex font-semibold flex-col mb-4">
+            <p class="text-lg font-semibold text-gray-500 pb-3">Full Name:</p>
+            <span class="font-semibold text-black text-2xl">{{
+              editableUser[0].fullName
+            }}</span>
+          </span>
+          <span class="flex font-semibold flex-col mb-4">
+            <p class="text-lg font-semibold text-gray-500 pb-3">KYC ID:</p>
+            <span class="font-semibold text-black text-2xl">{{
+              editableUser[0].id
+            }}</span>
+          </span>
+          <span class="flex font-semibold flex-col mb-4">
+            <p class="text-lg font-semibold text-gray-500 pb-3">
+              Document Type:
+            </p>
+            <span class="font-semibold text-black text-2xl">{{
+              editableUser[0].documentType
+            }}</span>
+          </span>
+          <span class="flex font-semibold flex-col mb-4">
+            <p class="text-lg font-semibold text-gray-500 pb-3">
+              Submitted at:
+            </p>
+            <span class="font-semibold text-black text-2xl">{{
+              formatter(editableUser[0].submitted)
+            }}</span>
+          </span>
+          <span class="flex font-semibold flex-col mb-4">
+            <p class="text-lg font-semibold text-gray-500">Status:</p>
+            <span
+              class="font-semibold text-lg px-12 text-center rounded py-1 w-1/4"
+              :class="
+                editableUser[0].status === 'Approve'
+                  ? 'text-brand-green bg-brand-green bg-opacity-25'
+                  : editableUser[0].status === 'Rejected'
+                  ? 'text-brand-red bg-brand-red bg-opacity-25'
+                  : 'text-yellow-400 bg-yellow-400 bg-opacity-25'
+              "
+              >{{ editableUser[0].status }}</span
+            >
+          </span>
           <div class="grid grid-cols-3 gap-x-4">
-            <div class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3">Frontside:</p>  <img class="w-full" :src="editableUser[0].documents[0].downloadUrl" alt=""> </div>
-          <div class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3">Back side:</p>  <img class="w-full" :src="editableUser[0].documents[1].downloadUrl" alt=""> </div>
-          <div class="flex font-semibold flex-col mb-4"> <p class="text-lg font-semibold text-gray-500 pb-3"> Utility Bill: </p> <img class="w-full" :src="editableUser[0].documents[2].downloadUrl" alt=""> </div>
+            <div class="flex font-semibold flex-col mb-4">
+              <p class="text-lg font-semibold text-gray-500 pb-3">Frontside:</p>
+              <img
+                class="w-full"
+                :src="editableUser[0].documents[0].downloadUrl"
+                alt=""
+              />
+            </div>
+            <div class="flex font-semibold flex-col mb-4">
+              <p class="text-lg font-semibold text-gray-500 pb-3">Back side:</p>
+              <img
+                class="w-full"
+                :src="editableUser[0].documents[1].downloadUrl"
+                alt=""
+              />
+            </div>
+            <div class="flex font-semibold flex-col mb-4">
+              <p class="text-lg font-semibold text-gray-500 pb-3">
+                Utility Bill:
+              </p>
+              <img
+                class="w-full"
+                :src="editableUser[0].documents[2].downloadUrl"
+                alt=""
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -365,7 +483,10 @@ onMounted(() => {
                       <p
                         v-for="(document, index) in kycData.documents"
                         class="hover:underline pb-1"
-                        @click="setImageSource(document.downloadUrl),toggleImageModal()"
+                        @click="
+                          setImageSource(document.downloadUrl),
+                            toggleImageModal()
+                        "
                       >
                         {{ document.name }}
                       </p>
@@ -412,8 +533,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              approveKYC(kycData.uuid),
-                                open(index, $event)
+                              approveKYC(kycData.uuid), open(index, $event)
                             "
                           >
                             Approve kyc
@@ -423,8 +543,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              rejectKYC(kycData.uuid),
-                                open(index, $event)
+                              rejectKYC(kycData.uuid), open(index, $event)
                             "
                           >
                             Reject kyc

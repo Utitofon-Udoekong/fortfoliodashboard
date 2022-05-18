@@ -17,7 +17,7 @@ const batch = writeBatch($db);
 
 // states
 const columns = [
-  { name: "uid", text: "User ID" },
+  { name: "traxId", text: "User ID" },
   { name: "description", text: "Payment For" },
   { name: "amount", text: "Amount Invested" },
   { name: "paymentMethod", text: "Method" },
@@ -27,7 +27,7 @@ const columns = [
   { name: "status", text: "Status" },
 ];
 let col: InvestmentTableData = reactive({
-  uid: "",
+  traxId: "",
   description: "",
   amount: 0,
   paymentDate: "",
@@ -37,7 +37,7 @@ let col: InvestmentTableData = reactive({
   duration: 0,
 });
 let sortCol: InvestmentTableData = reactive({
-  uid: "",
+  traxId: "",
   description: "",
   amount: 0,
   paymentDate: "",
@@ -68,10 +68,10 @@ const notificationMessage = ref("");
 
 // methods
 
-const cancelInvestment = async (uid: string) => {
+const cancelInvestment = async (uuid: string) => {
   const ref = query(
     collectionGroup($db, "investments"),
-    where("uid", "==", uid)
+    where("uuid", "==", uuid)
   );
   const querySnapshot = await getDocs(ref);
   try {
@@ -82,7 +82,7 @@ const cancelInvestment = async (uid: string) => {
     });
     await batch.commit().then(
       () => {
-        notificationMessage.value = `Investment for ${uid} cancelled`;
+        notificationMessage.value = `Investment for ${uuid} cancelled`;
         showSuccess.value = true;
       },
       (d) => {
@@ -96,10 +96,10 @@ const cancelInvestment = async (uid: string) => {
   }
 };
 
-const approveInvestment = async (uid: string) => {
+const approveInvestment = async (uuid: string) => {
   const ref = query(
     collectionGroup($db, "investments"),
-    where("uid", "==", uid)
+    where("uuid", "==", uuid)
   );
   const querySnapshot = await getDocs(ref);
   try {
@@ -110,7 +110,7 @@ const approveInvestment = async (uid: string) => {
     });
     await batch.commit().then(
       () => {
-        notificationMessage.value = `Investment for ${uid} Approved`;
+        notificationMessage.value = `Investment for ${uuid} Approved`;
         showSuccess.value = true;
       },
       (d) => {
@@ -155,7 +155,7 @@ const paginateUsers = () => {
     searchInvestment.value = [];
     paginateData(investmentsData.value);
     col = {
-      uid: "",
+      traxId: "",
       description: "",
       amount: 0,
       paymentDate: "",
@@ -192,7 +192,7 @@ const getCurrentUsers = () => {
 
 const sortByColumn = (column) => {
   col = {
-    uid: "",
+    traxId: "",
     description: "",
     amount: 0,
     paymentDate: "",
@@ -449,7 +449,7 @@ onMounted(() => {
                     <td class="px-6 py-4">
                       <div class="flex items-center">
                         <div class="">
-                          <p>#{{ investments.uid }}</p>
+                          <p>#{{ investments.traxId }}</p>
                         </div>
                       </div>
                     </td>
@@ -912,7 +912,7 @@ onMounted(() => {
           <p class="text-xl font-semibold pb-5">Investment INFO</p>
           <p class="text-lg font-semibold pb-3">
             INVESTMENT ID:
-            <span class="font-normal text-base">{{ editableUser[0].uid }}</span>
+            <span class="font-normal text-base">{{ editableUser[0].traxId }}</span>
           </p>
           <p class="text-lg font-semibold pb-3">
             DESCRIPTION:

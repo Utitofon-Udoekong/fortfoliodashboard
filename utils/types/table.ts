@@ -13,7 +13,10 @@ export interface WithdrawalsTableData{
     currency: string
     traxId: string
     createdat: string
-    status: string
+    status: string,
+}
+interface WithdrawalDetails{
+    
 }
 
 export interface UsersTableData{
@@ -43,7 +46,7 @@ export interface KYCTableData{
 }
 
 export interface InvestmentTableData{
-    uid: string
+    traxId: string
     description: string
     amount: number
     paymentDate: string
@@ -54,7 +57,7 @@ export interface InvestmentTableData{
 }
 
 export interface IncomingInvestmentTableData{
-    uid: string
+    traxId: string
     description: string
     amount: number
     duration: number

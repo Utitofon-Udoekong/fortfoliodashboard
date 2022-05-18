@@ -9,10 +9,10 @@ const store = useUserStore()
 const router = useRouter()
 
 const mama = async () => {
-  await store.setuser()
+  await store.setWithdrawals()
 }
 const papa = () => {
-  console.log(store.getUsers)
+  console.log(store.getWithdrawals)
 }
 const debug = ref(false);
 onMounted(() => {

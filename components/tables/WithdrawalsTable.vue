@@ -3,7 +3,10 @@ import { WithdrawalsTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useUserStore } from "~~/store/users";
+import { collectionGroup, getDocs, query, where, writeBatch } from "@firebase/firestore";
 const store = useUserStore()
+const {$db} = useNuxtApp()
+const batch = writeBatch($db)
 // states
 const columns = [
   { name: "traxId", text: "Trax ID" },
@@ -55,6 +58,9 @@ const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: WithdrawalsTableData[] = [];
 let showModal = ref(false);
+const showError = ref(false);
+const showSuccess = ref(false);
+const notificationMessage = ref("");
 // states------------------------------------------------------------------------------
 
 // methods
@@ -76,11 +82,59 @@ const toggleUserData = () => {
   editableUser.pop();
 };
 
-const approveWithdrawal = () => {
-  
+const approveWithdrawal = async (traxId: string) => {
+  const ref = query(
+    collectionGroup($db, "withdrawals"),
+    where("traxId", "==", traxId)
+  );
+  const querySnapshot = await getDocs(ref);
+  try {
+    querySnapshot.forEach((doc) => {
+      batch.update(doc.ref, {
+        status: "Successful",
+      });
+    });
+    await batch.commit().then(
+      () => {
+        notificationMessage.value = `Withdrawal for ${traxId} approved`;
+        showSuccess.value = true;
+      },
+      (d) => {
+        notificationMessage.value = `An error occured: ${d}`;
+        showError.value = true;
+      }
+    );
+  } catch (error) {
+    notificationMessage.value = `An error occured: ${error}`;
+    showError.value = true;
+  }
 }
-const cancelWithdrawal = () => {
-
+const cancelWithdrawal = async (traxId: string) => {
+  const ref = query(
+    collectionGroup($db, "withdrawals"),
+    where("traxId", "==", traxId)
+  );
+  const querySnapshot = await getDocs(ref);
+  try {
+    querySnapshot.forEach((doc) => {
+      batch.update(doc.ref, {
+        status: "Cancelled",
+      });
+    });
+    await batch.commit().then(
+      () => {
+        notificationMessage.value = `Withdrawal for ${traxId} cancelled`;
+        showSuccess.value = true;
+      },
+      (d) => {
+        notificationMessage.value = `An error occured: ${d}`;
+        showError.value = true;
+      }
+    );
+  } catch (error) {
+    notificationMessage.value = `An error occured: ${error}`;
+    showError.value = true;
+  }
 }
 const open = async (index: number, e: MouseEvent) => {
   await getHeight(e).then(() => {
@@ -340,8 +394,9 @@ onMounted(() => {
                       />
                       <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
                         <ul class="py-1" >
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="approveWithdrawal(),open(index,$event)">Approve withdrawal</li>
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="cancelWithdrawal(),open(index,$event)">Cancel withdrawal</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="selectRow(data.traxId)">Quick View</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="approveWithdrawal(data.traxId),open(index,$event)">Approve withdrawal</li>
+                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="cancelWithdrawal(data.traxId),open(index,$event)">Cancel withdrawal</li>
                         </ul>
                       </div>
                     </td>
