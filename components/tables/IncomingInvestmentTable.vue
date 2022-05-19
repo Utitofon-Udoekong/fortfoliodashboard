@@ -16,7 +16,7 @@ const batch = writeBatch($db);
 
 // states
 const columns = [
-  { name: "uid", text: "User ID" },
+  { name: "traxId", text: "User ID" },
   { name: "description", text: "Payment For" },
   { name: "amount", text: "Amount Invested" },
   { name: "dueDate", text: "Due Date" },
@@ -24,7 +24,7 @@ const columns = [
   { name: "status", text: "Status" },
 ];
 let col: IncomingInvestmentTableData = reactive({
-  uid: "",
+  traxId: "",
   description: "",
   amount: 0,
   dueDate: "",
@@ -32,7 +32,7 @@ let col: IncomingInvestmentTableData = reactive({
   duration: 0,
 });
 let sortCol: IncomingInvestmentTableData = reactive({
-  uid: "",
+  traxId: "",
   description: "",
   amount: 0,
   dueDate: "",
@@ -58,68 +58,9 @@ const leftPos = ref(0);
 let editableUser: IncomingInvestmentTableData[] = [];
 const openTab = ref(1);
 let showModal = ref(false);
-const showError = ref(false);
-const showSuccess = ref(false);
-const notificationMessage = ref("");
 // states------------------------------------------------------------------------------
 
 // methods
-
-const cancelInvestment = async (uid: string) => {
-  const ref = query(
-    collectionGroup($db, "investments"),
-    where("uid", "==", uid)
-  );
-  const querySnapshot = await getDocs(ref);
-  try {
-    querySnapshot.forEach((doc) => {
-      batch.update(doc.ref, {
-        status: "Cancelled",
-      });
-    });
-    await batch.commit().then(
-      () => {
-        notificationMessage.value = `Investment for ${uid} cancelled`;
-        showSuccess.value = true;
-      },
-      (d) => {
-        notificationMessage.value = `An error occured: ${d}`;
-        showError.value = true;
-      }
-    );
-  } catch (error) {
-    notificationMessage.value = `An error occured: ${error}`;
-    showError.value = true;
-  }
-};
-
-const approveInvestment = async (uid: string) => {
-  const ref = query(
-    collectionGroup($db, "investments"),
-    where("uid", "==", uid)
-  );
-  const querySnapshot = await getDocs(ref);
-  try {
-    querySnapshot.forEach((doc) => {
-      batch.update(doc.ref, {
-        status: "Successful",
-      });
-    });
-    await batch.commit().then(
-      () => {
-        notificationMessage.value = `Investment for ${uid} Approved`;
-        showSuccess.value = true;
-      },
-      (d) => {
-        notificationMessage.value = `An error occured: ${d}`;
-        showError.value = true;
-      }
-    );
-  } catch (error) {
-    notificationMessage.value = `An error occured: ${error}`;
-    showError.value = true;
-  }
-};
 
 const selectRow = (user: IncomingInvestmentTableData) => {
   editableUser.push(user);
@@ -174,7 +115,7 @@ const paginateUsers = () => {
     searchInvestment.value = [];
     paginateData(investmentsData.value);
     col = {
-      uid: "",
+      traxId: "",
       description: "",
       amount: 0,
       dueDate: "",
@@ -209,7 +150,7 @@ const getCurrentUsers = () => {
 
 const sortByColumn = (column) => {
   col = {
-    uid: "",
+    traxId: "",
     description: "",
     amount: 0,
     dueDate: "",
@@ -274,21 +215,6 @@ let classObject = computed(() => {
   };
 });
 
-watch(showError, (newVal) => {
-  if (newVal === true) {
-    setTimeout(() => {
-      showError.value = false;
-    }, 1500);
-  }
-});
-
-watch(showSuccess, (newVal) => {
-  if (newVal === true) {
-    setTimeout(() => {
-      showSuccess.value = false;
-    }, 1500);
-  }
-});
 // computed------------------------------------------------------------------------------
 
 // lifecycle
@@ -298,7 +224,6 @@ onMounted(() => {
 // lifecycle----------------------------------------------------------------------------------
 </script>
 <template>
-<Notifications :showError="showError" :showSuccess="showSuccess" />
   <div class="h-auto">
     <div class="table-form">
       <div class="flex mb-3 justify-between">
@@ -392,7 +317,7 @@ onMounted(() => {
                     <td class="px-6 py-4">
                       <div class="flex items-center">
                         <div class="">
-                          <p>#{{ investments.uid }}</p>
+                          <p>#{{ investments.traxId }}</p>
                         </div>
                       </div>
                     </td>
@@ -464,28 +389,6 @@ onMounted(() => {
                             "
                           >
                             Quick view
-                          </li>
-                          <li
-                            tabindex="0"
-                            href="#"
-                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
-                            @click="
-                              approveInvestment(investments.uuid),
-                                open(index, $event)
-                            "
-                          >
-                            Approve payment
-                          </li>
-                          <li
-                            tabindex="0"
-                            href="#"
-                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
-                            @click="
-                              cancelInvestment(investments.uuid),
-                                open(index, $event)
-                            "
-                          >
-                            Cancel payment
                           </li>
                         </ul>
                       </div>
@@ -603,7 +506,7 @@ onMounted(() => {
         <p class="text-xl font-semibold pb-5">Investment INFO</p>
         <p class="text-lg font-semibold pb-3">
           USERID:
-          <span class="font-normal text-base">{{ editableUser[0].uid }}</span>
+          <span class="font-normal text-base">{{ editableUser[0].traxId }}</span>
         </p>
         <p class="text-lg font-semibold pb-3">
           DESCRIPTION:
