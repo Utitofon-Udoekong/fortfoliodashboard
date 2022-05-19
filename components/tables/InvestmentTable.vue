@@ -353,9 +353,8 @@ const currentMonthsInvestmentAmount = computed(() => {
     (inv) => new Date(inv.paymentDate).getMonth() === currentMonth
   );
   const totalSum = currentMonthInvestment.reduce((acc, inv) => {
-    return acc + (inv.currency === "N" ? inv.amount / 590 : inv.amount);
+    return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount);
   }, 0);
-  // console.log(currentMonthInvestment)
   return totalSum;
 });
 
