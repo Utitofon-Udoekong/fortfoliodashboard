@@ -4,15 +4,14 @@ import { configure } from "vee-validate";
 import { useUserStore } from "~~/store/users";
 // import { onMounted, ref } from "vue";
 
-// const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
 const store = useUserStore()
 const router = useRouter()
 
 const mama = async () => {
-  await store.setWithdrawals()
+  await store.setUsers()
 }
 const papa = () => {
-  console.log(store.getWithdrawals)
+  console.log(store.getUsers)
 }
 const debug = ref(false);
 onMounted(() => {

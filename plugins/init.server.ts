@@ -4,7 +4,6 @@ import { useUserStore } from '~~/store/users'
 export default defineNuxtPlugin(async (nuxtApp) => {
   const users = useUserStore(nuxtApp.$pinia)
   console.log("initing user and kyc")
-  // await users.setuser()
-  // await users.setkyc()
+  await users.setUsers()
   console.log("inited user and kyc")
 })
