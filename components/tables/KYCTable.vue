@@ -69,6 +69,7 @@ const notificationMessage = ref("");
 // states------------------------------------------------------------------------------
 
 // methods
+const refresh = () => {store.setKyc()}
 const approveKYC = async (uid: string) => {
   const userVerifiedQuery = doc($db, "authUsers", uid);
   const kycQuery = doc($db, "kyc", uid);
@@ -81,6 +82,7 @@ const approveKYC = async (uid: string) => {
       () => {
         notificationMessage.value = `KYC for ${uid} Approved`;
         showSuccess.value = true;
+        refresh()
       },
       (d) => {
         notificationMessage.value = `An error occured: ${d}`;
@@ -279,7 +281,7 @@ onMounted(() => {
 // lifecycle---------------------
 </script>
 <template>
-  <Notifications :showError="showError" :showSuccess="showSuccess" />
+  <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
   <div class="h-auto mb-5">
     <ImageModal
       :imageSource="imageSource"

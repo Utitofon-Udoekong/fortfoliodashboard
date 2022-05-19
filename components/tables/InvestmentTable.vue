@@ -19,7 +19,7 @@ const batch = writeBatch($db);
 const columns = [
   { name: "traxId", text: "User ID" },
   { name: "description", text: "Payment For" },
-  { name: "amount", text: "Amount Invested" },
+  { name: "amount", text: "Amount" },
   { name: "paymentMethod", text: "Method" },
   { name: "paymentDate", text: "Payment Date" },
   { name: "dueDate", text: "Due Date" },
@@ -67,7 +67,7 @@ const notificationMessage = ref("");
 // states------------------------------------------------------------------------------
 
 // methods
-
+const refresh = () => {store.setInvestments()}
 const cancelInvestment = async (traxId: string) => {
   const ref = query(
     collectionGroup($db, "investments"),
@@ -94,6 +94,7 @@ const cancelInvestment = async (traxId: string) => {
       () => {
         notificationMessage.value = `Investment for ${traxId} cancelled`;
         showSuccess.value = true;
+        refresh()
       },
       (d) => {
         notificationMessage.value = `An error occured: ${d}`;
@@ -352,13 +353,13 @@ const currentMonthsInvestmentAmount = computed(() => {
     (inv) => new Date(inv.paymentDate).getMonth() === currentMonth
   );
   const totalSum = currentMonthInvestment.reduce((acc, inv) => {
-    return acc + inv.amount;
+    return acc + (inv.currency === "N" ? inv.amount / 590 : inv.amount);
   }, 0);
   // console.log(currentMonthInvestment)
   return totalSum;
 });
 
-watch(showError, (newVal) => {
+watch(showError, (newVal: boolean) => {
   if (newVal === true) {
     setTimeout(() => {
       showError.value = false;
@@ -366,7 +367,7 @@ watch(showError, (newVal) => {
   }
 });
 
-watch(showSuccess, (newVal) => {
+watch(showSuccess, (newVal: boolean) => {
   if (newVal === true) {
     setTimeout(() => {
       showSuccess.value = false;
@@ -382,7 +383,7 @@ onMounted(() => {
 // lifecycle----------------------------------------------------------------------------------
 </script>
 <template>
-  <Notifications :showError="showError" :showSuccess="showSuccess" />
+  <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
   <div class="h-auto">
     <div class="table-form">
       <div class="flex mb-3 justify-between">
@@ -922,7 +923,7 @@ onMounted(() => {
       class="fixed bg-gray-700 inset-0 z-30 bg-opacity-30 h-screen w-screen flex justify-center items-center"
     >
       <div
-        class="bg-white p-10 max-w-xl h-3/4 z-40 relative rounded-md ring-4 ring-blue-400"
+        class="bg-white p-10 max-w-xl h-4/5 z-40 relative rounded-md ring-4 ring-blue-400"
       >
         <i-ion-close-round
           class="text-black text-2xl absolute right-2 top-4 cursor-pointer"
@@ -975,7 +976,7 @@ onMounted(() => {
           <span class="flex flex-col font-semibold mb-4">
             <p class="text-lg font-semibold pb-3">STATUS:</p>
             <span
-              class="font-semibold text-lg px-12 text-center rounded py-1 w-1/4 bg-opacity-25"
+              class="font-semibold text-lg px-12 text-center rounded py-1 bg-opacity-25"
               :class="
                 editableUser[0].status === 'Successful'
                   ? 'text-brand-green bg-brand-green'
