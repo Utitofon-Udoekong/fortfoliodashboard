@@ -83,9 +83,19 @@ const approveWithdrawal = async (traxId: string) => {
     collectionGroup($db, "withdrawals"),
     where("traxId", "==", traxId)
   );
+  const notref = query(
+    collectionGroup($db, "withdrawals"),
+    where("traxId", "==", traxId)
+  );
   const querySnapshot = await getDocs(ref);
+  const notSnapshot = await getDocs(notref);
   try {
     querySnapshot.forEach((doc) => {
+      batch.update(doc.ref, {
+        status: "Successful",
+      });
+    });
+    notSnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Successful",
       });
@@ -111,8 +121,18 @@ const cancelWithdrawal = async (traxId: string) => {
     where("traxId", "==", traxId)
   );
   const querySnapshot = await getDocs(ref);
+  const notref = query(
+    collectionGroup($db, "withdrawals"),
+    where("traxId", "==", traxId)
+  );
+  const notSnapshot = await getDocs(notref);
   try {
     querySnapshot.forEach((doc) => {
+      batch.update(doc.ref, {
+        status: "Cancelled",
+      });
+    });
+    notSnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Cancelled",
       });

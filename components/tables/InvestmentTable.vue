@@ -68,21 +68,31 @@ const notificationMessage = ref("");
 
 // methods
 
-const cancelInvestment = async (uuid: string) => {
+const cancelInvestment = async (traxId: string) => {
   const ref = query(
     collectionGroup($db, "investments"),
-    where("uuid", "==", uuid)
+    where("traxId", "==", traxId)
   );
+  const notificationRef = query(
+    collectionGroup($db, 'notifications'),
+    where('id','==',traxId)
+  )
   const querySnapshot = await getDocs(ref);
+  const notifiSnap = await getDocs(notificationRef)
   try {
     querySnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Cancelled",
       });
     });
+    notifiSnap.forEach((doc) => {
+      batch.update(doc.ref, {
+        status: "Cancelled",
+      });
+    });
     await batch.commit().then(
       () => {
-        notificationMessage.value = `Investment for ${uuid} cancelled`;
+        notificationMessage.value = `Investment for ${traxId} cancelled`;
         showSuccess.value = true;
       },
       (d) => {
@@ -96,21 +106,31 @@ const cancelInvestment = async (uuid: string) => {
   }
 };
 
-const approveInvestment = async (uuid: string) => {
+const approveInvestment = async (traxId: string) => {
   const ref = query(
     collectionGroup($db, "investments"),
-    where("uuid", "==", uuid)
+    where("traxId", "==", traxId)
   );
+  const notificationRef = query(
+    collectionGroup($db, 'notifications'),
+    where('id','==',traxId)
+  )
   const querySnapshot = await getDocs(ref);
+  const notifiSnap = await getDocs(notificationRef)
   try {
     querySnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Successful",
       });
     });
+    notifiSnap.forEach((doc) => {
+      batch.update(doc.ref, {
+        status: "Successful",
+      });
+    });
     await batch.commit().then(
       () => {
-        notificationMessage.value = `Investment for ${uuid} Approved`;
+        notificationMessage.value = `Investment for ${traxId} Approved`;
         showSuccess.value = true;
       },
       (d) => {
@@ -525,7 +545,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              approveInvestment(investments.uuid),
+                              approveInvestment(investments.traxId),
                                 open(index, $event)
                             "
                           >
@@ -536,7 +556,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              cancelInvestment(investments.uuid),
+                              cancelInvestment(investments.traxId),
                                 open(index, $event)
                             "
                           >
