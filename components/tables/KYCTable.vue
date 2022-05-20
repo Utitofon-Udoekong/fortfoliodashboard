@@ -261,16 +261,6 @@ watch(showSuccess, (newVal) => {
   }
 });
 
-// const downloadImage = (url: string | URL) => {
-//   var xhr = new XMLHttpRequest();
-//   xhr.responseType = "blob";
-//   xhr.onload = (event) => {
-//     var blob = xhr.response;
-//   };
-//   xhr.open("GET", url);
-//   xhr.send();
-// };
-// const unwatch = watchEffect(() => {});
 
 // computed------------------------------------------------------------------------------
 

@@ -1,4 +1,6 @@
+import { createUserWithEmailAndPassword, signInWithEmailLink, signOut } from "@firebase/auth";
 import { defineStore } from "pinia";
+const {$auth} = useNuxtApp()
 export const useUserStore = defineStore('user', {
     state: () => ({
         users: [],
@@ -47,6 +49,17 @@ export const useUserStore = defineStore('user', {
         async setWithdrawals() {
             const { data } = await useAsyncData('withdrawals', () => $fetch('/api/withdrawals'))
             this.withdrawals = data.value
+        },
+        async register(email:string, password: string){
+            createUserWithEmailAndPassword($auth,email, password).then((admin) => {
+
+            })
+        },
+        async login(email:string, password: string){
+            signInWithEmailLink($auth,email, password)
+        },
+        async signOut(){
+            signOut($auth)
         }
         // async disableUser(uid: string){
         //     const message = await getAuth()
