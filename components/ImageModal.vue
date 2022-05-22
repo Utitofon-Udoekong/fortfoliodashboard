@@ -9,7 +9,7 @@ const props = defineProps<Props>()
 <template>
     <div class="modal-bg fixed inset-0 h-screen w-screen bg-gray-800 bg-opacity-25 flex justify-center items-center" v-if="props.show" >
         <div class="image-cap max-w-lg h-2/3 bg-white rounded-md overflow-hidden relative border-4 border-white ring-4 ring-blue-500">
-            <i-mdi-close class="absolute text-3xl text-white -right-6 -top-6 text-shadow-lg cursor-pointer" @click="props.toggleShow"/>
+            <i-mdi-close class="absolute text-xl text-white bg-black rounded-full right-2 cursor-pointer" @click="props.toggleShow"/>
             <img :src="props.imageSource" class="w-full h-full" alt="KYC_IMAGE" lazy >
         </div>
     </div>
