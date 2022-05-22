@@ -284,7 +284,7 @@ onMounted(() => {
         class="bg-white p-10 pt-14 w-full h-auto relative ring-4 ring-brand-light-blue rounded-md"
       >
         <div
-          class="closemodal absolute -right-10 -top-10 cursor-pointer bg-black"
+          class="closemodal absolute right-6 top-6 cursor-pointer "
           @click="toggleModal"
         >
           <i-ion-close-round class="text-black text-xl" />
@@ -334,7 +334,7 @@ onMounted(() => {
           </span>
           <div class="grid grid-cols-3 gap-x-4">
             <div class="flex font-semibold flex-col mb-4 border-2 border-brand-blue rounded-md">
-              <p class="text-lg font-semibold text-gray-500 pb-3">Frontside:</p>
+              <p class="text-lg font-semibold text-gray-500 p-3">Frontside:</p>
               <img
                 class="w-full"
                 :src="editableUser[0].documents[0].downloadUrl"
@@ -342,7 +342,7 @@ onMounted(() => {
               />
             </div>
             <div class="flex font-semibold flex-col mb-4 border-2 border-brand-blue rounded-md">
-              <p class="text-lg font-semibold text-gray-500 pb-3">Back side:</p>
+              <p class="text-lg font-semibold text-gray-500 p-3">Back side:</p>
               <img
                 class="w-full"
                 :src="editableUser[0].documents[1].downloadUrl"
@@ -350,7 +350,7 @@ onMounted(() => {
               />
             </div>
             <div class="flex font-semibold flex-col mb-4 border-2 border-brand-blue rounded-md">
-              <p class="text-lg font-semibold text-gray-500 pb-3">
+              <p class="text-lg font-semibold text-gray-500 p-3">
                 Utility Bill:
               </p>
               <img
