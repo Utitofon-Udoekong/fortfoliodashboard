@@ -149,7 +149,7 @@ const initialValues = { email: "", password: "", confirmed: "" };
               Submit
             </button>
             <NuxtLink
-              to="/dashboard"
+              to="/signup"
               class="hover:underline-current text-brand-light-blue text-sm"
               >Signup</NuxtLink
             >
