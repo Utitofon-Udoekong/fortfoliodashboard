@@ -2,11 +2,9 @@
 import { object, string, ref as yupRef } from "yup";
 import { configure } from "vee-validate";
 import { useUserStore } from "~~/store/users";
-// import { onMounted, ref } from "vue";
-
-// const { data } = await useAsyncData('kyc', () => $fetch('/api/kyc'))
 const store = useUserStore()
 const router = useRouter()
+const {$auth} = useNuxtApp()
 
 const mama = async () => {
   await store.setInvestments()
@@ -35,7 +33,7 @@ const existingEmail = async (value: string) => {
 const handleSubmit = (values: Login, actions: { resetForm: () => void; }) => {
   console.log(values);
   actions.resetForm();
-  store.login(values.email,values.password)
+  store.login($auth,values.email,values.password)
 };
 
 configure({

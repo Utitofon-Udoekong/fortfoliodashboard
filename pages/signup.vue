@@ -2,7 +2,8 @@
 import { object, string, ref as yupRef } from "yup";
 import { configure } from "vee-validate";
 import { useUserStore } from "~~/store/users";
-// import { onMounted, ref } from "vue";
+
+const router = useRouter()
 
 interface Signup {
     email: string,
@@ -25,7 +26,9 @@ const existingEmail = async (value: string) => {
 const handleSubmit = (values: Signup, actions: { resetForm: () => void; }) => {
   console.table(values);
   actions.resetForm();
-  store.register(values.email,values.password)
+  store.register($auth,values.email,values.password).then(() => {
+    router.replace("/dashboard")
+  })
 };
 
 configure({

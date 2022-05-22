@@ -1,8 +1,7 @@
-import { createUserWithEmailAndPassword, signOut } from "@firebase/auth";
+import { Auth, createUserWithEmailAndPassword, signOut } from "@firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { defineStore } from "pinia";
-const {$auth} = useNuxtApp()
-const router = useRouter()
+
 export const useUserStore = defineStore('user', {
     state: () => ({
         users: [],
@@ -52,30 +51,28 @@ export const useUserStore = defineStore('user', {
             const { data } = await useAsyncData('withdrawals', () => $fetch('/api/withdrawals'))
             this.withdrawals = data.value
         },
-        async register(email:string, password: string){
-            createUserWithEmailAndPassword($auth,email, password).then(async (admin) => {
+        async register(auth: Auth,email:string, password: string){
+            createUserWithEmailAndPassword(auth,email, password).then(async (admin) => {
                 await Promise.all([
                     this.setUsers(),
                     this.setKyc(),
                     this.setInvestments(),
                     this.setWithdrawals(),
                 ])
-                router.replace("/dashboard")
             })
         },
-        async login(email:string, password: string){
-            signInWithEmailAndPassword($auth,email,password).then(async (_) => {
+        async login(auth: Auth,email:string, password: string){
+            signInWithEmailAndPassword(auth,email,password).then(async (_) => {
                 await Promise.all([
                     this.setUsers(),
                     this.setKyc(),
                     this.setInvestments(),
                     this.setWithdrawals(),
                 ])
-                router.replace("/dashboard")
             })
         },
-        async signOut(){
-            signOut($auth)
+        async signOut(auth: Auth){
+            signOut(auth)
         }
         // async disableUser(uid: string){
         //     const message = await getAuth()
