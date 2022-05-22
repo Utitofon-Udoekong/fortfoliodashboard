@@ -85,7 +85,7 @@ const approveKYC = async (uid: string) => {
         refresh()
       },
       (d) => {
-        notificationMessage.value = `An error occured: ${d}`;
+        notificationMessage.value = `An error occured: ${d.message}`;
         showError.value = true;
       }
     );
