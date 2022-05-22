@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { object, string, ref as yupRef } from "yup";
 import { configure } from "vee-validate";
+import { useUserStore } from "~~/store/users";
 // import { onMounted, ref } from "vue";
 
 interface Signup {
@@ -8,6 +9,7 @@ interface Signup {
     password: string,
     confirmed: string
 }
+const store = useUserStore()
 
 const debug = ref(false);
 onMounted(() => {
@@ -23,6 +25,7 @@ const existingEmail = async (value: string) => {
 const handleSubmit = (values: Signup, actions: { resetForm: () => void; }) => {
   console.table(values);
   actions.resetForm();
+  store.register(values.email,values.password)
 };
 
 configure({

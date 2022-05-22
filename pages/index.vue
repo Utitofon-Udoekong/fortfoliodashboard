@@ -34,7 +34,8 @@ const existingEmail = async (value: string) => {
 const handleSubmit = (values: Login, actions: { resetForm: () => void; }) => {
   console.log(values);
   actions.resetForm();
-  router.push("/dashboard")
+  store.login(values.email,values.password)
+  // router.push("/dashboard")
 };
 // zzazu
 configure({
