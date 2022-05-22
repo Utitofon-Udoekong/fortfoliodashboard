@@ -33,7 +33,9 @@ const existingEmail = async (value: string) => {
 const handleSubmit = (values: Login, actions: { resetForm: () => void; }) => {
   console.log(values);
   actions.resetForm();
-  store.login($auth,values.email,values.password)
+  store.login($auth,values.email,values.password).then(() => {
+    router.replace("/dashboard")
+  })
 };
 
 configure({
