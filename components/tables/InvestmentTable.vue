@@ -116,9 +116,9 @@ const approveInvestment = async (traxId: string) => {
     collectionGroup($db, 'notifications'),
     where('id','==',traxId)
   )
-  const querySnapshot = await getDocs(ref);
-  const notifiSnap = await getDocs(notificationRef)
   try {
+    const querySnapshot = await getDocs(ref);
+    const notifiSnap = await getDocs(notificationRef)
     querySnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Successful",
