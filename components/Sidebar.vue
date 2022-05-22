@@ -7,9 +7,11 @@ const { clamp, changeClamp } = inject("clamp");
     :class="clamp ? 'w-1/12' : 'w-1/6'"
   >
     <div class="header flex justify-between items-center">
-      <span>
+      <NuxtLink to="/">
+        <span>
         <img src="@/assets/images/logo.png" alt="Fortfolio official Logo" />
       </span>
+      </NuxtLink>
       <div :class="clamp ? 'hidden' : 'block'">
         <p class="text-white">Fortfolio</p>
         <p class="text-xs text-white">Admin Dashboard</p>

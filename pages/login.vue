@@ -30,10 +30,10 @@ const existingEmail = async (value: string) => {
   return result ? true : false;
 };
 
-const handleSubmit = (values: Login, actions: { resetForm: () => void; }) => {
+const handleSubmit = async (values: Login, actions: { resetForm: () => void; }) => {
   console.log(values);
   actions.resetForm();
-  store.login($auth,values.email,values.password).then(() => {
+  await store.login().then(() => {
     router.replace("/dashboard")
   })
 };

@@ -61,15 +61,15 @@ export const useUserStore = defineStore('user', {
                 ])
             })
         },
-        async login(auth: Auth,email:string, password: string){
-            signInWithEmailAndPassword(auth,email,password).then(async (_) => {
-                await Promise.all([
-                    this.setUsers(),
-                    this.setKyc(),
-                    this.setInvestments(),
-                    this.setWithdrawals(),
-                ])
-            })
+        async login(){
+            await Promise.all([
+                this.setUsers(),
+                this.setKyc(),
+                this.setInvestments(),
+                this.setWithdrawals(),
+            ])
+            // signInWithEmailAndPassword(auth,email,password).then(async (_) => {
+            // })
         },
         async signOut(auth: Auth){
             signOut(auth)
