@@ -339,11 +339,20 @@ const get12MonthsFortShieldInvestment = computed(() => {
   return (_12months.length / investmentsData.value.length) * 100 ?? 0;
 });
 
-const activeInvestmentAmount = computed(() => {
+const activeInvestments = computed(() => {
   const activeInvestments = investmentsData.value.filter(
     (inv) => inv.status === "Successful"
   );
   return activeInvestments.length;
+});
+const activeInvestmentAmount = computed(() => {
+  const activeInvestments = investmentsData.value.filter(
+    (inv) => inv.status === "Successful"
+  );
+  const totalSum = activeInvestments.reduce((acc, inv) => {
+    return acc + (inv.description.includes("FortShield") ? inv.amount / 590 : inv.amount)
+  },0)
+  return totalSum
 });
 
 const currentMonthsInvestmentAmount = computed(() => {
@@ -663,6 +672,7 @@ onMounted(() => {
     <div class="py-4">
       <div class="flex gap-4">
         <InvestmentOverview
+        :activeInvestments="activeInvestments"
           :activeInvestmentAmount="activeInvestmentAmount"
           :currentMonthsInvestmentAmount="currentMonthsInvestmentAmount"
         />

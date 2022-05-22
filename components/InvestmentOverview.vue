@@ -2,6 +2,7 @@
 const openTab = ref(1);
 const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
 interface Props{
+  activeInvestments: number
   activeInvestmentAmount: number
   currentMonthsInvestmentAmount: number
 }
@@ -64,10 +65,11 @@ const props = defineProps<Props>()
           <div class="tab-content tab-space">
             <div v-bind:class="{ hidden: openTab !== 1, block: openTab === 1 }">
               <p class="text-sm text-gray-400 pb-3">Currently Active Investment</p>
-              <p class="text-lg font-medium">{{props.activeInvestmentAmount}} USD</p>
-              <p class="text-sm text-gray-400 pb-6">AMOUNT</p>
-              <p class="text-lg font-medium">49,395.395 USD</p>
+              <p class="text-lg font-medium pb-3">{{props.activeInvestments}} investment(s)</p>
+              <p class="text-sm text-gray-400 pb-3">AMOUNT</p>
+              <p class="text-lg font-medium pb-3">{{props.activeInvestmentAmount}} USD</p>
               <p class="text-sm text-gray-400 pb-3">PAID PROFIT</p>
+              <p class="text-lg font-medium">49,395.395 USD</p>
               <hr>
               <p class="text-sm text-gray-400 pt-2 pb-5">Investment made this month</p>
               <p class="text-lg font-medium">{{props.currentMonthsInvestmentAmount.toLocaleString()}} USD</p>

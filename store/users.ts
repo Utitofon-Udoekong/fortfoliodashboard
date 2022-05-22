@@ -49,6 +49,10 @@ export const useUserStore = defineStore('user', {
         },
         async setWithdrawals() {
             const { data } = await useAsyncData('withdrawals', () => $fetch('/api/withdrawals'))
+            if(data.value === null){
+                this.withdrawals = []
+                return
+            }
             this.withdrawals = data.value
         },
         async register(auth: Auth,email:string, password: string){
