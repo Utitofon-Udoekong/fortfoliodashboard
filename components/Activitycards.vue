@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { daysAhead } from '~~/helpers/daysAgo';
 import { useUserStore } from '~~/store/users';
 
 const store = useUserStore()
