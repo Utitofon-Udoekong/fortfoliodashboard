@@ -1,4 +1,4 @@
-const formatter = dateString => {
+const formatter = (dateString: string) => {
     const b = dateString.split(/\D+/);
     const offsetMult = dateString.indexOf('+') !== -1 ? -1 : 1;
     const hrOffset = offsetMult * (+b[7] || 0);
