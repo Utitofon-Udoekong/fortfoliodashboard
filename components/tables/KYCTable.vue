@@ -44,9 +44,7 @@ let sortCol: KYCTableData = reactive({
   submitted: "",
   status: "",
 });
-// const kycDataList = computed<KYCTableData[]>(() => {
-//   return store.kyc;
-// });
+
 const kycDataList = ref<KYCTableData[]>(store.kyc);
 let filteredKYC = ref<KYCTableData[]>([]);
 const showKYC = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
@@ -80,9 +78,9 @@ const approveKYC = async (uid: string) => {
     batch.delete(kycQuery);
     await batch.commit().then(
       () => {
+        refresh()
         notificationMessage.value = `KYC for ${uid} Approved`;
         showSuccess.value = true;
-        refresh()
       },
       (d) => {
         notificationMessage.value = `An error occured: ${d}`;
@@ -132,12 +130,10 @@ const selectRow = (user: KYCTableData) => {
   editableUser.push(user);
   showModal.value = true;
 };
-// const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
 
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
   leftPos.value = e.pageX - 120;
-  // console.log(top.value, left.value)
 };
 const open = async (index: number, e: MouseEvent) => {
   await getHeight(e).then(() => {
@@ -387,7 +383,7 @@ onMounted(() => {
           <div class="print-options flex justify-end mb-3">
             <div
               class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
-              @click="testPrint"
+              @click="print"
             >
               <i-system-uicons-printer /> Print
             </div>

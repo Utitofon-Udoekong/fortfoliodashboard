@@ -2,8 +2,6 @@
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file, object } from "alga-js";
 import { useUserStore } from "~~/store/users";
-// import AdminFunctions from "../../helpers/customFunctions"
-// const { data } = await useAsyncData("users", () => $fetch("/api/users"));
 // states
 const store = useUserStore()
 const columns = [
@@ -75,14 +73,7 @@ const open = async (index: number, e: MouseEvent) => {
     show.value === null ? (show.value = index) : (show.value = null);
   });
 };
-const filterByColumn = () => {
-  const filterCol = object.removeBy(col, "");
-  let filterData = getCurrentUsers();
-  if (Object.entries(filterCol).length >= 1) {
-    filterData = array.filter(getCurrentUsers(), filterCol);
-  }
-  paginateData(filterData);
-};
+
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
     searchUsers.value = array.search(usersData.value, searchInput.value);
@@ -150,9 +141,6 @@ const sortByColumn = (column: string) => {
   }
   paginateData(sortedUsers);
 };
-// const checks = () => {
-//   return Array.from(filteredUsers.value).filter(i => i.checked).map(i => i.id)
-// }
 const print = () => file.printed(usersData.value);
 const exportFile = (format: string) => {
   const genString = file.exported(usersData.value, format);
