@@ -56,8 +56,6 @@ let showUserData = ref(false);
 const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: IncomingInvestmentTableData[] = [];
-const openTab = ref(1);
-let showModal = ref(false);
 // states------------------------------------------------------------------------------
 
 // methods
@@ -66,12 +64,10 @@ const selectRow = (user: IncomingInvestmentTableData) => {
   editableUser.push(user);
   showUserData.value = true;
 };
-const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
 
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
   leftPos.value = e.pageX - 120;
-  // console.log(top.value, left.value)
 };
 const toggleUserData = () => {
   showUserData.value = !showUserData.value;
