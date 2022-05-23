@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "nuxi dev",
     "build": "nuxi build",
-    "start": "node .output/server/index.mjs"
+    "start": "node .output/server/index.mjs",
+    "preview": "nuxi preview"
   },
   "devDependencies": {
     "@iconify/json": "^2.0.33",

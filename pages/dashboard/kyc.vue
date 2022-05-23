@@ -1,7 +1,12 @@
 <template>
- 
+  <Html>
+    <Head>
+      <Title>Dashboard - KYC</Title>
+      <Meta name="description" content="Fortfolio Admin dashboard Kyc page" />
+    </Head>
+  </Html>
   <NuxtLayout name="dashboard">
-    <TablesKYCTable/>
+    <TablesKYCTable />
   </NuxtLayout>
 </template>
 
@@ -9,5 +14,4 @@
 definePageMeta({
   layout: false,
 });
-
 </script>
