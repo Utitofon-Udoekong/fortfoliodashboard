@@ -17,6 +17,7 @@
     "unplugin-vue-components": "^0.17.16"
   },
   "dependencies": {
+    "@nuxt/kit": "^3.0.0-rc.3",
     "@vee-validate/rules": "^4.5.11",
     "alga-js": "^0.1.0-wood-5",
     "firebase": "^9.6.6",
