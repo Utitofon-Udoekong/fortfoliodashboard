@@ -85,23 +85,20 @@ const open = async (index: number, e: MouseEvent) => {
 
 const filter3days = () => {
   const in3days = investmentsData.value.filter(
-    (inv) => inv.dueDate === daysAhead(3, new Date())
+    (inv) => new Date(inv.dueDate.slice(0,10)).toString() === new Date(daysAhead(3, new Date()).slice(0,10)).toString()
   );
-  console.log(in3days)
   paginateData(in3days);
 };
 const filter1Week = () => {
   const in1Week = investmentsData.value.filter(
-    (inv) => inv.dueDate === daysAhead(7, new Date())
+    (inv) => new Date(inv.dueDate.slice(0,10)).toString() === new Date(daysAhead(7, new Date()).slice(0,10)).toString()
   );
-  console.log(in1Week)
   paginateData(in1Week);
 };
 const filter2Weeks = () => {
   const in2Weeks = investmentsData.value.filter(
-    (inv) => inv.dueDate === daysAhead(14, new Date())
+    (inv) => new Date(inv.dueDate.slice(0,10)).toString() === new Date(daysAhead(14, new Date()).slice(0,10)).toString()
   );
-  console.log(in2Weeks)
   paginateData(in2Weeks);
 };
 const paginateUsers = () => {
@@ -171,10 +168,6 @@ const sortByColumn = (column) => {
   paginateData(sortedUsers);
 };
 
-const toggleModal = () => {
-  showModal.value = !showModal.value;
-  editableUser.pop();
-};
 
 // const print = () => file.printed(investmentsData.value);
 const exportFile = (format) => {
