@@ -22,9 +22,7 @@
     "firebase-admin": "^10.0.2",
     "moment": "^2.29.3",
     "pinia": "^2.0.14",
-    "swiper": "^6.8.4",
     "vee-validate": "^4.5.11",
-    "vue-chart-3": "^3.1.2",
     "yup": "^0.32.11"
   }
 }

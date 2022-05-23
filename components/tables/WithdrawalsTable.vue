@@ -3,10 +3,16 @@ import { WithdrawalsTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useUserStore } from "~~/store/users";
-import { collectionGroup, getDocs, query, where, writeBatch } from "@firebase/firestore";
-const store = useUserStore()
-const {$db} = useNuxtApp()
-const batch = writeBatch($db)
+import {
+  collectionGroup,
+  getDocs,
+  query,
+  where,
+  writeBatch,
+} from "@firebase/firestore";
+const store = useUserStore();
+const { $db } = useNuxtApp();
+const batch = writeBatch($db);
 // states
 const columns = [
   { name: "traxId", text: "Trax ID" },
@@ -28,7 +34,7 @@ let col: WithdrawalsTableData = reactive({
   roi: 0,
   paymentMethod: "",
   planName: "",
-  traxId: ""
+  traxId: "",
 });
 
 let sortCol: WithdrawalsTableData = reactive({
@@ -41,7 +47,7 @@ let sortCol: WithdrawalsTableData = reactive({
   roi: 0,
   paymentMethod: "",
   planName: "",
-  traxId: ""
+  traxId: "",
 });
 const withdrawalsData = ref<WithdrawalsTableData[]>(store.withdrawals);
 let filteredWithdrawals = ref<WithdrawalsTableData[]>([]);
@@ -68,7 +74,9 @@ const toggleModal = () => {
   editableUser.pop();
 };
 const selectRow = (traxId: string) => {
-  const withdrawalData = store.withdrawals.filter(data => data.traxId === traxId)
+  const withdrawalData = store.withdrawals.filter(
+    (data) => data.traxId === traxId
+  );
   editableUser.push(withdrawalData);
   showModal.value = true;
 };
@@ -114,7 +122,7 @@ const approveWithdrawal = async (traxId: string) => {
     notificationMessage.value = `An error occured: ${error}`;
     showError.value = true;
   }
-}
+};
 const cancelWithdrawal = async (traxId: string) => {
   const ref = query(
     collectionGroup($db, "withdrawals"),
@@ -151,7 +159,7 @@ const cancelWithdrawal = async (traxId: string) => {
     notificationMessage.value = `An error occured: ${error}`;
     showError.value = true;
   }
-}
+};
 const open = async (index: number, e: MouseEvent) => {
   await getHeight(e).then(() => {
     show.value === null ? (show.value = index) : (show.value = null);
@@ -170,15 +178,15 @@ const paginateUsers = () => {
     paginateData(withdrawalsData.value);
     col = {
       description: "",
-  status: "",
-  amount: 0,
-  createdat: "",
-  currency: "",
-  duration: 0,
-  roi: 0,
-  paymentMethod: "",
-  planName: "",
-  traxId: ""
+      status: "",
+      amount: 0,
+      createdat: "",
+      currency: "",
+      duration: 0,
+      roi: 0,
+      paymentMethod: "",
+      planName: "",
+      traxId: "",
     };
   }
 };
@@ -209,15 +217,15 @@ const getCurrentWithdrawals = () => {
 const sortByColumn = (column) => {
   col = {
     description: "",
-  status: "",
-  amount: 0,
-  createdat: "",
-  currency: "",
-  duration: 0,
-  roi: 0,
-  paymentMethod: "",
-  planName: "",
-  traxId: ""
+    status: "",
+    amount: 0,
+    createdat: "",
+    currency: "",
+    duration: 0,
+    roi: 0,
+    paymentMethod: "",
+    planName: "",
+    traxId: "",
   };
   let sortedUsers = getCurrentWithdrawals();
   let sortedColumn = sortCol[column];
@@ -258,7 +266,7 @@ const tableData = computed<WithdrawalsTableData[]>(() => {
 const showPagination = computed(() => {
   let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
   const formatedArray = stringArray.map((str) => {
-    return Number(str)
+    return Number(str);
   });
   return formatedArray;
 });
@@ -305,7 +313,12 @@ onMounted(() => {
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
             <!-- <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3" @click="print" > <i-system-uicons-printer/> Print </div> -->
-            <div class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md" @click="exportFile('csv')" > <i-ion-download /> Export </div>
+            <div
+              class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md"
+              @click="exportFile('csv')"
+            >
+              <i-ion-download /> Export
+            </div>
           </div>
           <div class="search-component w-80 mb-3">
             <div
@@ -326,7 +339,10 @@ onMounted(() => {
         <div class="overflow-x-scroll lg:overflow-x-hidden">
           <div class="py-2 align-middle inline-block min-w-full">
             <div class="overflow-hidden border-b border-gray-200 sm:rounded-lg">
-              <table class="min-w-full divide-y divide-gray-200">
+              <table
+                class="min-w-full divide-y divide-gray-200"
+                v-if="withdrawalData.length > 0"
+              >
                 <caption class="text-lg font-semibold">
                   Recent Withdrawals
                 </caption>
@@ -374,7 +390,9 @@ onMounted(() => {
                       </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm">{{data.currency}}{{ data.amount.toLocaleString() }}</div>
+                      <div class="text-sm">
+                        {{ data.currency }}{{ data.amount.toLocaleString() }}
+                      </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                       {{ data.createdat.toLocaleDateString("en-GB") }}
@@ -408,17 +426,50 @@ onMounted(() => {
                         role="button"
                         aria-label="option"
                       />
-                      <div v-if="show === index" :style="classObject" class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl">
-                        <ul class="py-1" >
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="selectRow(data.traxId)">Quick View</li>
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="approveWithdrawal(data.traxId),open(index,$event)">Approve withdrawal</li>
-                            <li tabindex="0" href="#" class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer" @click="cancelWithdrawal(data.traxId),open(index,$event)">Cancel withdrawal</li>
+                      <div
+                        v-if="show === index"
+                        :style="classObject"
+                        class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl"
+                      >
+                        <ul class="py-1">
+                          <li
+                            tabindex="0"
+                            href="#"
+                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                            @click="selectRow(data.traxId)"
+                          >
+                            Quick View
+                          </li>
+                          <li
+                            tabindex="0"
+                            href="#"
+                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                            @click="
+                              approveWithdrawal(data.traxId),
+                                open(index, $event)
+                            "
+                          >
+                            Approve withdrawal
+                          </li>
+                          <li
+                            tabindex="0"
+                            href="#"
+                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                            @click="
+                              cancelWithdrawal(data.traxId), open(index, $event)
+                            "
+                          >
+                            Cancel withdrawal
+                          </li>
                         </ul>
                       </div>
                     </td>
                   </tr>
                 </tbody>
               </table>
+              <div class="bg-white p-5 w-full" v-else>
+                <p class="text-2xl text-center">NO WITHDRAWAL REQUESTS</p>
+              </div>
               <div
                 class="py-3 px-6 table-controls h-full w-full items-center justify-between border border-t-gray-200"
               >
@@ -527,7 +578,9 @@ onMounted(() => {
           <p class="text-xl font-semibold pb-5">Withdrawal INFO</p>
           <p class="text-lg font-semibold pb-3">
             WITHDRAWAL ID:
-            <span class="font-normal text-base">{{ editableUser[0].traxId }}</span>
+            <span class="font-normal text-base">{{
+              editableUser[0].traxId
+            }}</span>
           </p>
           <p class="text-lg font-semibold pb-3">
             DESCRIPTION:
