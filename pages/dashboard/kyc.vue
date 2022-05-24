@@ -1,10 +1,10 @@
 <template>
-  <!-- <Html>
+  <Html>
     <Head>
       <Title>Dashboard - KYC</Title>
       <Meta name="description" content="Fortfolio Admin dashboard Kyc page" />
     </Head>
-  </Html> -->
+  </Html>
   <NuxtLayout name="dashboard">
     <TablesKYCTable />
   </NuxtLayout>

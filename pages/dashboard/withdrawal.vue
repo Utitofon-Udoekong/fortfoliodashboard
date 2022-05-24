@@ -1,5 +1,5 @@
 <template>
-  <!-- <Html>
+  <Html>
     <Head>
       <Title>Dashboard - Withdrawal</Title>
       <Meta
@@ -7,7 +7,7 @@
         content="Fortfolio Admin dashboard withdrawal page"
       />
     </Head>
-  </Html> -->
+  </Html>
   <NuxtLayout name="dashboard">
     <TablesWithdrawalsTable />
   </NuxtLayout>

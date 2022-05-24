@@ -1,5 +1,5 @@
 <template>
-  <!-- <Html>
+  <Html>
     <Head>
       <Title>Dashboard - Investments</Title>
       <Meta
@@ -7,7 +7,7 @@
         content="Fortfolio Admin dashboard investment page"
       />
     </Head>
-  </Html> -->
+  </Html>
   <NuxtLayout name="dashboard">
     <div class="py-4">
       <TablesInvestmentTable />

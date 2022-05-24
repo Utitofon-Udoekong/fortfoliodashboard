@@ -1,5 +1,5 @@
 <template>
-  <!-- <Html>
+  <Html>
     <Head>
       <Title>Dashboard - Users</Title>
       <Meta
@@ -7,7 +7,7 @@
         content="Fortfolio Admin dashboard landing page"
       />
     </Head>
-  </Html> -->
+  </Html>
   <NuxtLayout name="dashboard">
     <TablesUsersTable />
   </NuxtLayout>
