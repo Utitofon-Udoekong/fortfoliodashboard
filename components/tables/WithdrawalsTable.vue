@@ -2,7 +2,7 @@
 import { WithdrawalsTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { computed, onMounted, reactive, ref } from "vue";
-import { useUserStore } from "~~/store/users";
+import { useUserStore } from "~~/store/userStore";
 import {
   collectionGroup,
   getDocs,

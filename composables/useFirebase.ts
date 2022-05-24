@@ -13,10 +13,7 @@ import {
       auth,
       email,
       password
-    ).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    });
+    );
     return credentials;
   };
   
@@ -26,10 +23,7 @@ import {
       auth,
       email,
       password
-    ).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    });
+    );
     return credentials;
   };
   

@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "~~/store/users";
+import { useUserStore } from "~~/store/userStore";
 
 const store = useUserStore();
 const router = useRouter();

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useUserStore } from '~~/store/users';
+import { useUserStore } from '~~/store/userStore';
 
 const store = useUserStore()
 const userCount = store.getUserCount

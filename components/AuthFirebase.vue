@@ -2,7 +2,7 @@
     <div class="header w-full bg-brand-blue mb-3">
       <h2 class="text-xl p-2 mb-6 text-center text-white">{{ title }} Admin</h2>
     </div>
-    <div class="p-10">
+    <div class="p-8">
       <div class="formgroup mb-6 flex flex-col">
         <label for="email">Email</label>
         <input
@@ -26,10 +26,6 @@
         />
       </div>
 
-      <div v-if="message" class="text-brand-green p-3">
-        {{ message }}
-      </div>
-
       <button
         class="text-white p-4 text-center text-md w-full bg-brand-blue mb-3"
         @click="$emit('submit')"
@@ -43,6 +39,5 @@
 defineProps({
   form: Object,
   title: String,
-  message: String,
 });
 </script>

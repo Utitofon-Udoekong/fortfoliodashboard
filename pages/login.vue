@@ -1,23 +1,47 @@
 <script setup lang="ts">
-import { useUserStore } from "~~/store/users";
+import { useUserStore } from "~~/store/userStore";
 import AuthFirebase from "../components/AuthFirebase.vue";
 const store = useUserStore();
 const router = useRouter();
-const signin = () => {
+const showError = ref(false);
+const showSuccess = ref(false);
+const notificationMessage = ref("");
+const signin = async () => {
   console.log(signinForm.value);
-  signInUser(signinForm.value.email, signinForm.value.password).then(
-    async (_) => {
+  await signInUser(signinForm.value.email, signinForm.value.password)
+    .then(async (_) => {
+      showSuccess.value = true
       await store.login().then(() => {
         router.push("/dashboard");
       });
-    }
-  )
+    })
+    .catch((error) => {
+      notificationMessage.value = error.message;
+      showError.value = true
+    });
   signinForm.value = { email: "", password: "" };
 };
 const signinForm = ref({ email: "", password: "" });
+
+watch(showError, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showError.value = false;
+    }, 1500);
+  }
+});
+
+watch(showSuccess, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 1500);
+  }
+});
 </script>
 
 <template>
+  <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
   <div class="h-screen">
     <Html>
       <Head>
@@ -28,7 +52,7 @@ const signinForm = ref({ email: "", password: "" });
     <div class="flex justify-center items-center h-full">
       <div class="w-80 flex flex-col border">
         <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" />
-        <NuxtLink to="/signup" class="text-brand-light-blue">Signup ?</NuxtLink>
+        <NuxtLink to="/signup" class="text-brand-light-blue p-8">Signup ?</NuxtLink>
       </div>
     </div>
   </div>

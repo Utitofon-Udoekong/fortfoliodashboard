@@ -2,7 +2,7 @@
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 // import {search,paginate,pages} from "alga-js/array"
-import { useUserStore } from "~~/store/users";
+import { useUserStore } from "~~/store/userStore";
 import {
   collectionGroup,
   doc,

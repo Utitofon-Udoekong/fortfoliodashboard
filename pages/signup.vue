@@ -1,30 +1,49 @@
 <script setup lang="ts">
-import { useUserStore } from "~~/store/users";
+import { useUserStore } from "~~/store/userStore";
 const router = useRouter();
 const store = useUserStore();
+const showError = ref(false);
+const showSuccess = ref(false);
+const notificationMessage = ref("");
 
 const registerForm = ref({ email: "", password: "" });
-const registerMessage = ref();
 const register = async () => {
   console.log(registerForm.value);
-  const credentials = await createUser(
+  await createUser(
     registerForm.value.email,
     registerForm.value.password
-  );
+  ).then(async (credentials) => {
+    if (credentials) {
+      showSuccess.value = true
+      await store.login().then(() => {
+        router.push("/dashboard");
+      });
+    }
+  }).catch((error) => {
+    notificationMessage.value = error.message;
+      showError.value = true
+  })
   registerForm.value = { email: "", password: "" };
-  if (credentials) {
-    registerMessage.value = `Successfully registered: ${credentials.user.email}`;
-    setTimeout(() => {
-      registerMessage.value = "";
-    }, 3000);
-    await store.login().then(() => {
-      router.push("/dashboard");
-    });
-  }
 };
+watch(showError, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showError.value = false;
+    }, 1500);
+  }
+});
+
+watch(showSuccess, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 1500);
+  }
+});
 </script>
 
 <template>
+  <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
   <div class="h-screen">
     <Html>
       <Head>
@@ -38,9 +57,8 @@ const register = async () => {
             title="Register"
             @submit="register"
             :form="registerForm"
-            :message="registerMessage"
           />
-          <NuxtLink to="/login" class="text-brand-light-blue"
+          <NuxtLink to="/login" class="text-brand-light-blue p-8"
             >Login ?</NuxtLink
           >
         </div>

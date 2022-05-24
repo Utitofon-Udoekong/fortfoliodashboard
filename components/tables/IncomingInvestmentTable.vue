@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { IncomingInvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
-import { useUserStore } from "~~/store/users";
+import { useUserStore } from "~~/store/userStore";
 import {
   collectionGroup,
   getDocs,
