@@ -1,63 +1,63 @@
 <script setup lang="ts">
-import { object, string, ref as yupRef } from "yup";
-import { configure } from "vee-validate";
+// import { object, string, ref as yupRef } from "yup";
+// import { configure } from "vee-validate";
 import { useUserStore } from "~~/store/users";
 
 const router = useRouter()
 
-interface Signup {
-    email: string,
-    password: string,
-    confirmed: string
-}
-const store = useUserStore()
+// interface Signup {
+//     email: string,
+//     password: string,
+//     confirmed: string
+// }
+// const store = useUserStore()
 
-const debug = ref(false);
-onMounted(() => {
-  debug.value =
-    useRouter().currentRoute.value.query.debug === "true" ? true : false;
-});
+// const debug = ref(false);
+// onMounted(() => {
+//   debug.value =
+//     useRouter().currentRoute.value.query.debug === "true" ? true : false;
+// });
 
-const existingEmail = async (value: string) => {
-  const result = await $fetch("/api/checkemail?email=" + value);
-  return result ? true : false;
-};
+// const existingEmail = async (value: string) => {
+//   const result = await $fetch("/api/checkemail?email=" + value);
+//   return result ? true : false;
+// };
 
-const handleSubmit = (values: Signup, actions: { resetForm: () => void; }) => {
-  console.table(values);
-  actions.resetForm();
-  store.register($auth,values.email,values.password).then(() => {
-    router.replace("/dashboard")
-  })
-};
+// const handleSubmit = (values: Signup, actions: { resetForm: () => void; }) => {
+//   console.table(values);
+//   actions.resetForm();
+//   store.register($auth,values.email,values.password).then(() => {
+//     router.replace("/dashboard")
+//   })
+// };
 
-configure({
-  validateOnBlur: true, // controls if `blur` events should trigger validation with `handleChange` handler
-  validateOnChange: true, // controls if `change` events should trigger validation with `handleChange` handler
-  validateOnInput: false, // controls if `input` events should trigger validation with `handleChange` handler
-  validateOnModelUpdate: true, // controls if `update:modelValue` events should trigger validation with `handleChange` handler
-});
+// configure({
+//   validateOnBlur: true, // controls if `blur` events should trigger validation with `handleChange` handler
+//   validateOnChange: true, // controls if `change` events should trigger validation with `handleChange` handler
+//   validateOnInput: false, // controls if `input` events should trigger validation with `handleChange` handler
+//   validateOnModelUpdate: true, // controls if `update:modelValue` events should trigger validation with `handleChange` handler
+// });
 
-const schema = object({
-  email: string()
-    .required()
-    .email()
-    .test(
-      "email-is-taken",
-      "Email is already taken",
-      async (value) => !(await existingEmail(value))
-    )
-    .label("Email Address"),
-  password: string().required().min(8).label("Your Password"),
-  confirmed: string()
-    .required()
-    .oneOf([yupRef("password")], "Passwords do not match") //Cross-Field Validation
-    .label("Your Confirmation Password"),
-});
+// const schema = object({
+//   email: string()
+//     .required()
+//     .email()
+//     .test(
+//       "email-is-taken",
+//       "Email is already taken",
+//       async (value) => !(await existingEmail(value))
+//     )
+//     .label("Email Address"),
+//   password: string().required().min(8).label("Your Password"),
+//   confirmed: string()
+//     .required()
+//     .oneOf([yupRef("password")], "Passwords do not match") //Cross-Field Validation
+//     .label("Your Confirmation Password"),
+// });
 
-const initialValues = { email: "", password: "", confirmed: "" };
+// const initialValues = { email: "", password: "", confirmed: "" };
 
-const {$auth} = useNuxtApp()
+// const {$auth} = useNuxtApp()
 </script>
 
 <template>
@@ -71,7 +71,7 @@ const {$auth} = useNuxtApp()
     <div class="flex justify-center items-center h-full">
       <div class="">
         <h2 class="title p-2 text-center mb-6">Register Admin</h2>
-        <VForm
+        <!-- <VForm
           class="p-5 border border-brand-blue rounded-md"
           :validation-schema="schema"
           :initial-values="initialValues"
@@ -140,7 +140,7 @@ const {$auth} = useNuxtApp()
           <div class="debug" v-if="debug">
             <pre>{{ formMeta }}</pre>
           </div>
-        </VForm>
+        </VForm> -->
       </div>
     </div>
   </div>

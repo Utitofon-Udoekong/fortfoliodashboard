@@ -3,21 +3,17 @@ import { useUserStore } from '~~/store/users';
 
 const store = useUserStore()
 const userCount = store.getUserCount
-const totalInvestments = computed(() => {
-  const totalSum = store.investments.reduce((acc, inv) => {
+const totalInvestments = store.investments.reduce((acc, inv) => {
     return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount);
-  }, 0);
-  return totalSum;
-})
+  }, 0)
 const dueInvestmentAmount = computed(() => {
   const now = new Date().toISOString()
   const dueNow = store.investments.filter(
     (inv) => new Date(inv.dueDate.slice(0,10)).toString() === new Date(now.slice(0,10)).toString()
   );
-  const totalAmountDue = dueNow.reduce((acc, inv) => {
+  return dueNow.reduce((acc, inv) => {
     return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount);
   },0)
-  return totalAmountDue
 })
 const details = [
   {
@@ -27,7 +23,7 @@ const details = [
   },
   {
     url: "chart",
-    numbers: `$ ${totalInvestments.toLocaleString()}`,
+    numbers: `$ ${totalInvestments}`,
     title: "Total investment",
   },
   {
