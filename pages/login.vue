@@ -30,19 +30,23 @@ const login = async () => {
     </Html>
     <div class="flex justify-center items-center h-full">
       <div
-        class=""
+        class="max-w-sm flex flex-col"
       >
-        <h2 class="title p-2 text-center mb-6 ">
+        <div class="header w-full p-8 bg-brand-blue">
+          <h2 class="title p-2 text-center mb-6 text-white ">
           Login Admin
         </h2>
-        <label for="email">Email</label>
-        <input type="email" id="email" required v-model="email">
+        </div>
+       <div class="body p-8">
+          <label for="email">Email</label>
+        <input type="email" class="p-2" id="email" required v-model="email">
         <label for="password">Password</label>
-        <input type="text" id="password" required v-model="password">
+        <input type="text" id="password" class="p-2" required v-model="password">
         <button @click="login"
               class="hover:underline-current text-brand-light-blue text-sm"
               >Signup</button
             >
+       </div>
       </div>
     </div>
   </div>
