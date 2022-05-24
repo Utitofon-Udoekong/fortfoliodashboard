@@ -80,7 +80,7 @@ const signOut = async () => {
             <span class="pr-3"><i-mdi-arrow-down /></span>
             <li :class="clamp ? 'hidden' : 'block'">Manage news</li>
           </p>
-          <div class="body pl-2">
+          <div class="body pl-4">
             <NuxtLink
               :exact-active-class="'bg-brand-clear_white text-gray-50'"
               to="/dashboard/news"

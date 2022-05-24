@@ -1,9 +1,14 @@
 <template>
-  <!-- <Sidebar/> -->
   <Sidebar/>
 </template>
 
 <script setup lang="ts">
+let clamp = ref(false);
+const changeClamp = () => clamp.value = !clamp.value;
+provide("clamp", {
+    clamp,
+    changeClamp
+})
 // import { useUserStore } from "~~/store/userStore";
 
 // const store = useUserStore();
