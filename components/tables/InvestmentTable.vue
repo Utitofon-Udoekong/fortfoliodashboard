@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
-import { investments } from "~~/assets/inv";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/users";
 import {
@@ -47,7 +46,7 @@ let sortCol: InvestmentTableData = reactive({
   paymentMethod: "",
   duration: 0,
 });
-const investmentsData = ref<InvestmentTableData[]>(investments);
+const investmentsData = ref<InvestmentTableData[]>(store.investments);
 let filteredInvestment = ref<InvestmentTableData[]>([]);
 const showInvestment = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentInvestment = ref<number>(10);
@@ -388,7 +387,9 @@ watch(showSuccess, (newVal: boolean) => {
 // computed------------------------------------------------------------------------------
 // lifecycle
 onMounted(() => {
-  paginateData(investmentsData.value);
+  if(investmentsData.value.length > 0){
+    paginateData(investmentsData.value);
+  }
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>

@@ -4,7 +4,6 @@ import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/users";
 import formatter from "~~/helpers/formatIsoDate";
 import { doc, updateDoc, writeBatch } from "@firebase/firestore";
-// import ImageModal from "../ImageModal.vue";
 // const {$db} = useNuxtApp()
 const store = useUserStore();
 const { $db } = useNuxtApp();
@@ -262,7 +261,9 @@ watch(showSuccess, (newVal) => {
 
 // lifecycle
 onMounted(() => {
-  paginateData(kycDataList.value);
+  if(kycDataList.value.length > 0){
+    paginateData(kycDataList.value);
+  }
 });
 // lifecycle---------------------
 </script>

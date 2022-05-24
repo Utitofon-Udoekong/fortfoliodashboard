@@ -283,7 +283,9 @@ let classObject = computed(() => {
 
 // lifecycle
 onMounted(() => {
-  paginateData(withdrawalsData.value);
+  if(withdrawalsData.value.length > 0){
+    paginateData(withdrawalsData.value);
+  }
 });
 // lifecycle---------------------
 </script>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
-import { array, file, object } from "alga-js";
+import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/users";
 // states
 const store = useUserStore()

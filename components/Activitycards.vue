@@ -23,7 +23,7 @@ const details = [
   },
   {
     url: "chart",
-    numbers: `$ ${totalInvestments}`,
+    numbers: `$ ${totalInvestments.toLocaleString('en-US', {minimumFractionDigits: 2})}`,
     title: "Total investment",
   },
   {
