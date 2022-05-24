@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { useUserStore } from "~~/store/users";
 const router = useRouter();
 const store = useUserStore();
@@ -23,6 +22,14 @@ const register = async () => {
     });
   }
 };
+const firebaseUser = useFirebaseUser()
+onMounted(async () => {
+  if(firebaseUser){
+    await store.login().then(() => {
+        router.push("/dashboard");
+      });
+  }
+})
 </script>
 
 <template>
@@ -41,8 +48,8 @@ const register = async () => {
             :form="registerForm"
             :message="registerMessage"
           />
-          <NuxtLink to="/signup" class="text-brand-light-blue"
-            >Signup ?</NuxtLink
+          <NuxtLink to="/login" class="text-brand-light-blue"
+            >Login ?</NuxtLink
           >
         </div>
       </div>

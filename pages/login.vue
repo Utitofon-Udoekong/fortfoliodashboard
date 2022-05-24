@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { signInWithEmailAndPassword } from "@firebase/auth";
 import { useUserStore } from "~~/store/users";
-// import { signOutUser } from "../composables/useFirebase";
 import AuthFirebase from "../components/AuthFirebase.vue";
 const store = useUserStore();
 const router = useRouter();
@@ -17,6 +15,14 @@ const signin = () => {
   signinForm.value = { email: "", password: "" };
 };
 const signinForm = ref({ email: "", password: "" });
+const firebaseUser = useFirebaseUser();
+onMounted(async () => {
+  if(firebaseUser){
+    await store.login().then(() => {
+        router.push("/dashboard");
+      });
+  }
+})
 </script>
 
 <template>
