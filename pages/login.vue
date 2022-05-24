@@ -11,6 +11,7 @@ const signin = async () => {
   await signInUser(signinForm.value.email, signinForm.value.password)
     .then(async (_) => {
       showSuccess.value = true
+      notificationMessage.value = "Login successful"
       // await store.login().then(() => {
       //   router.push("/dashboard");
       // });

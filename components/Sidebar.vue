@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 const { clamp, changeClamp } = inject("clamp");
 const signOut = async () => {
-  await signOutUser()
-}
+  await signOutUser();
+};
+const openNews = ref(false);
+const openInvestment = ref(false);
+const toggleNews = () => (openNews.value = !openNews.value);
+const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
 </script>
 <template>
   <div
@@ -12,8 +16,8 @@ const signOut = async () => {
     <div class="header flex justify-between items-center">
       <NuxtLink to="/">
         <span>
-        <img src="@/assets/images/logo.png" alt="Fortfolio official Logo" />
-      </span>
+          <img src="@/assets/images/logo.png" alt="Fortfolio official Logo" />
+        </span>
       </NuxtLink>
       <div :class="clamp ? 'hidden' : 'block'">
         <p class="text-white">Fortfolio</p>
@@ -43,22 +47,36 @@ const signOut = async () => {
           <span class="pr-3"><i-ph-users-three /></span>
           <li :class="clamp ? 'hidden' : 'block'">Users</li>
         </NuxtLink>
-        <NuxtLink
-          :exact-active-class="'bg-brand-clear_white text-gray-50'"
-          class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
-          to="/dashboard/investment"
-        >
-          <span class="pr-3"><i-bx-bx-chart /></span>
-          <li :class="clamp ? 'hidden' : 'block'">Investments</li>
-        </NuxtLink>
-        <NuxtLink
-          :exact-active-class="'bg-brand-clear_white text-gray-50'"
-          class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
-          to="/dashboard/investment/upcoming"
-        >
-          <span class="pr-3"><i-bx-bx-chart /></span>
-          <li :class="clamp ? 'hidden' : 'block'">Upcoming Investments</li>
-        </NuxtLink>
+        <div class="">
+          <p
+            @click="toggleInvestment"
+            class="flex justify-between items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+          >
+            <li :class="clamp ? 'hidden' : 'block'">Manage Investments</li>
+            <span class="pr-3">
+              <i-ic-round-keyboard-arrow-up v-if="openInvestment" />
+              <i-ic-round-keyboard-arrow-down v-else />
+            </span>
+          </p>
+          <div class="body pl-4" v-if="openInvestment">
+            <NuxtLink
+              :exact-active-class="'bg-brand-clear_white text-gray-50'"
+              class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+              to="/dashboard/investment"
+            >
+              <span class="pr-3"><i-bx-bx-chart /></span>
+              <li :class="clamp ? 'hidden' : 'block'">Investments</li>
+            </NuxtLink>
+            <NuxtLink
+              :exact-active-class="'bg-brand-clear_white text-gray-50'"
+              class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+              to="/dashboard/investment/upcoming"
+            >
+              <span class="pr-3"><i-bx-bx-chart /></span>
+              <li :class="clamp ? 'hidden' : 'block'">Upcoming</li>
+            </NuxtLink>
+          </div>
+        </div>
         <NuxtLink
           :exact-active-class="'bg-brand-clear_white text-gray-50'"
           to="/dashboard/kyc"
@@ -76,11 +94,17 @@ const signOut = async () => {
           <li :class="clamp ? 'hidden' : 'block'">Withdrawals</li>
         </NuxtLink>
         <div class="">
-          <p class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
-            <span class="pr-3"><i-mdi-arrow-down /></span>
+          <p
+            @click="toggleNews"
+            class="flex justify-between items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+          >
             <li :class="clamp ? 'hidden' : 'block'">Manage news</li>
+            <span class="pr-3">
+              <i-ic-round-keyboard-arrow-up v-if="openNews" />
+              <i-ic-round-keyboard-arrow-down v-else />
+            </span>
           </p>
-          <div class="body pl-4">
+          <div class="body pl-4" v-if="openNews">
             <NuxtLink
               :exact-active-class="'bg-brand-clear_white text-gray-50'"
               to="/dashboard/news"
