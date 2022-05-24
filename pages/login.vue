@@ -1,22 +1,22 @@
 <script setup lang="ts">
+import { signInWithEmailAndPassword } from "@firebase/auth";
 import { useUserStore } from "~~/store/users";
+// import { signOutUser } from "../composables/useFirebase";
+import AuthFirebase from "../components/AuthFirebase.vue";
 const store = useUserStore();
 const router = useRouter();
-const { $auth } = useNuxtApp();
-
-interface Login {
-  email: string;
-  password: string;
-  confirmed: string;
-}
-let email = ref("");
-let password = ref("");
-
-const login = async () => {
-  await store.login().then(() => {
-    router.push("/dashboard");
-  });
+const signin = () => {
+  console.log(signinForm.value);
+  signInUser(signinForm.value.email, signinForm.value.password).then(
+    async (_) => {
+      await store.login().then(() => {
+        router.push("/dashboard");
+      });
+    }
+  );
+  signinForm.value = { email: "", password: "" };
 };
+const signinForm = ref({ email: "", password: "" });
 </script>
 
 <template>
@@ -29,37 +29,9 @@ const login = async () => {
     </Html>
     <div class="flex justify-center items-center h-full">
       <div class="w-80 flex flex-col border">
-        <div class="header w-full bg-brand-blue mb-3 grid place-items-center">
-          <h2 class="text-xl p-2 mb-6 text-white">Login Admin</h2>
-        </div>
-        <div class="p-10">
-          <div class="formgroup mb-6 flex flex-col">
-            <label for="email">Email</label>
-            <input
-              type="email"
-              class="p-2"
-              id="email"
-              required
-              v-model="email"
-            />
-          </div>
-          <div class="formgroup mb-6 flex flex-col">
-            <label for="password">Password</label>
-            <input
-              type="text"
-              id="password"
-              class="p-2"
-              required
-              v-model="password"
-            />
-          </div>
-          <button
-            @click="login"
-            class="hover:underline-current text-white p-4 text-center text-md w-full bg-brand-blue"
-          >
-            Signup
-          </button>
-        </div>
+        
+        <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" />
+        <NuxtLink to="/signup" class="text-brand-light-blue">Signup ?</NuxtLink>
       </div>
     </div>
   </div>

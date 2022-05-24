@@ -1,6 +1,28 @@
 <script setup lang="ts">
-const router = useRouter()
+import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { useUserStore } from "~~/store/users";
+const router = useRouter();
+const store = useUserStore();
 
+const registerForm = ref({ email: "", password: "" });
+const registerMessage = ref();
+const register = async () => {
+  console.log(registerForm.value);
+  const credentials = await createUser(
+    registerForm.value.email,
+    registerForm.value.password
+  );
+  registerForm.value = { email: "", password: "" };
+  if (credentials) {
+    registerMessage.value = `Successfully registered: ${credentials.user.email}`;
+    setTimeout(() => {
+      registerMessage.value = "";
+    }, 3000);
+    await store.login().then(() => {
+      router.push("/dashboard");
+    });
+  }
+};
 </script>
 
 <template>
@@ -11,10 +33,18 @@ const router = useRouter()
         <Meta name="description" content="Fortfolio Admin Signup page" />
       </Head>
     </Html>
-    <div class="flex justify-center items-center h-full">
-      <div class="">
-        <h2 class="title p-2 text-center mb-6">Register Admin</h2>
+      <div class="flex justify-center items-center h-full">
+        <div class="w-80 flex flex-col border">
+          <AuthFirebase
+            title="Register"
+            @submit="register"
+            :form="registerForm"
+            :message="registerMessage"
+          />
+          <NuxtLink to="/signup" class="text-brand-light-blue"
+            >Signup ?</NuxtLink
+          >
+        </div>
       </div>
-    </div>
   </div>
 </template>

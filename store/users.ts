@@ -52,7 +52,7 @@ export const useUserStore = defineStore('user', {
             this.withdrawals = data.value
         },
         async register(auth: Auth,email:string, password: string){
-            createUserWithEmailAndPassword(auth,email, password).then(async (admin) => {
+            createUserWithEmailAndPassword(auth,email, password).then(async (_) => {
                 await Promise.all([
                     this.setUsers(),
                     this.setKyc(),
