@@ -22,14 +22,6 @@ const register = async () => {
     });
   }
 };
-const firebaseUser = useFirebaseUser()
-onMounted(async () => {
-  if(firebaseUser){
-    await store.login().then(() => {
-        router.push("/dashboard");
-      });
-  }
-})
 </script>
 
 <template>

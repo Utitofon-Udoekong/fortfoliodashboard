@@ -15,14 +15,6 @@ const signin = () => {
   signinForm.value = { email: "", password: "" };
 };
 const signinForm = ref({ email: "", password: "" });
-const firebaseUser = useFirebaseUser();
-onMounted(async () => {
-  if(firebaseUser){
-    await store.login().then(() => {
-        router.push("/dashboard");
-      });
-  }
-})
 </script>
 
 <template>

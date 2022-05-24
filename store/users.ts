@@ -51,16 +51,6 @@ export const useUserStore = defineStore('user', {
             const { data } = await useAsyncData('withdrawals', () => $fetch('/api/withdrawals'))
             this.withdrawals = data.value
         },
-        async register(auth: Auth,email:string, password: string){
-            createUserWithEmailAndPassword(auth,email, password).then(async (_) => {
-                await Promise.all([
-                    this.setUsers(),
-                    this.setKyc(),
-                    this.setInvestments(),
-                    this.setWithdrawals(),
-                ])
-            })
-        },
         async login(){
             await Promise.all([
                 this.setUsers(),
@@ -68,12 +58,9 @@ export const useUserStore = defineStore('user', {
                 this.setInvestments(),
                 this.setWithdrawals(),
             ])
-            // signInWithEmailAndPassword(auth,email,password).then(async (_) => {
-            // })
+     
         },
-        async signOut(auth: Auth){
-            signOut(auth)
-        }
+        
         // async disableUser(uid: string){
         //     const message = await getAuth()
         //     .updateUser(uid, {

@@ -1,11 +1,20 @@
 <template>
-   <div class=""></div>
+  <div class=""></div>
 </template>
 
 <script setup lang="ts">
-const router = useRouter();
-onMounted(() => {
-    router.push("/login")
-})
+import { useUserStore } from "~~/store/users";
 
+const store = useUserStore();
+const router = useRouter();
+const firebaseUser = useFirebaseUser();
+onMounted(async () => {
+  if (firebaseUser) {
+    await store.login().then(() => {
+      router.push("/dashboard");
+    });
+  } else {
+    router.push("/login");
+  }
+});
 </script>
