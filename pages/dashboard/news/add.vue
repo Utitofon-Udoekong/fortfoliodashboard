@@ -4,7 +4,7 @@ definePageMeta({
 });
 </script>
 <template>
-<Html>
+  <Html>
     <Head>
       <Title>Dashboard - Add News</Title>
       <Meta
@@ -14,8 +14,7 @@ definePageMeta({
     </Head>
   </Html>
   <NuxtLayout name="dashboard">
-      <p>News addition</p>
+    
   </NuxtLayout>
 </template>
-<style>
-</style>
+<style></style>
