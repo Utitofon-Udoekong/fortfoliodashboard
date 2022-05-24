@@ -11,7 +11,7 @@ const signin = () => {
         router.push("/dashboard");
       });
     }
-  );
+  )
   signinForm.value = { email: "", password: "" };
 };
 const signinForm = ref({ email: "", password: "" });
@@ -27,7 +27,6 @@ const signinForm = ref({ email: "", password: "" });
     </Html>
     <div class="flex justify-center items-center h-full">
       <div class="w-80 flex flex-col border">
-        
         <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" />
         <NuxtLink to="/signup" class="text-brand-light-blue">Signup ?</NuxtLink>
       </div>

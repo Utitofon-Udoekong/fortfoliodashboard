@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div class="header w-full bg-brand-blue mb-3">
       <h2 class="text-xl p-2 mb-6 text-center text-white">{{ title }} Admin</h2>
     </div>
@@ -38,7 +37,6 @@
         Submit
       </button>
     </div>
-  </div>
 </template>
 
 <script setup>
