@@ -16,7 +16,7 @@ const signin = async () => {
       });
     })
     .catch((error) => {
-      notificationMessage.value = error.message;
+      notificationMessage.value = error;
       showError.value = true
     });
   signinForm.value = { email: "", password: "" };
