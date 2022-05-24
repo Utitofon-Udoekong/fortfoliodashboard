@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   form: Object,
   title: String,
   message: String,

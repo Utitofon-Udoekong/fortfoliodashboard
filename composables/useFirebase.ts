@@ -48,7 +48,7 @@ import {
         // https://firebase.google.com/docs/reference/js/firebase.User
       } else {
         //if signed out
-        router.push("/");
+        router.push("/login");
       }
   
       firebaseUser.value = user;
