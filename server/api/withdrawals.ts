@@ -4,7 +4,7 @@ import { db } from "~~/helpers/fireadmin";
 export default async (req:IncomingMessage, res: ServerResponse) => {
     
     const withdrawals = await db.collectionGroup("withdrawals").get()
-    if(withdrawals.empty) return console.log("no withdrawals")
+    if(withdrawals.empty) return []
    
     const withdrawalsData = withdrawals.docs.map((doc) => {
         return {

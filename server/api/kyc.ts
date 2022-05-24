@@ -4,7 +4,7 @@ import { db } from "~~/helpers/fireadmin";
 export default async (req:IncomingMessage, res: ServerResponse) => {
     
     const kyc = await db.collection("kyc").get()
-    if(kyc.empty) return console.log("no kyc")
+    if(kyc.empty) return []
    
     const kycData = kyc.docs.map((doc) => {
         return {

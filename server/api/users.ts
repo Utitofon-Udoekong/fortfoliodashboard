@@ -4,7 +4,7 @@ import { db } from "~~/helpers/fireadmin";
 
 export default async (request: IncomingMessage, response: ServerResponse) => {
     const usersSnap = await db.collection('authUsers').get();
-    if(usersSnap.empty) return "No user created"
+    if(usersSnap.empty) return []
     const users = usersSnap.docs.map((doc) => {
         return {
             uuid: doc.id,
