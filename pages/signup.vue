@@ -15,9 +15,7 @@ const register = async () => {
   ).then(async (credentials) => {
     if (credentials) {
       showSuccess.value = true
-      // await store.login().then(() => {
-      //   router.push("/dashboard");
-      // });
+      notificationMessage.value = "Registration successful"
     }
   }).catch((error) => {
     notificationMessage.value = error.message;

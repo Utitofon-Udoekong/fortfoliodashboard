@@ -12,9 +12,6 @@ const signin = async () => {
     .then(async (_) => {
       showSuccess.value = true
       notificationMessage.value = "Login successful"
-      // await store.login().then(() => {
-      //   router.push("/dashboard");
-      // });
     })
     .catch((error) => {
       notificationMessage.value = error;
