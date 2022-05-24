@@ -11,9 +11,9 @@ const signin = async () => {
   await signInUser(signinForm.value.email, signinForm.value.password)
     .then(async (_) => {
       showSuccess.value = true
-      await store.login().then(() => {
-        router.push("/dashboard");
-      });
+      // await store.login().then(() => {
+      //   router.push("/dashboard");
+      // });
     })
     .catch((error) => {
       notificationMessage.value = error;

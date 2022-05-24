@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 const { clamp, changeClamp } = inject("clamp");
+const signOut = async () => {
+  await signOutUser()
+}
 </script>
 <template>
   <div
@@ -72,6 +75,37 @@ const { clamp, changeClamp } = inject("clamp");
           <span class="pr-3"><i-ph-file-arrow-up /></span>
           <li :class="clamp ? 'hidden' : 'block'">Withdrawals</li>
         </NuxtLink>
+        <div class="">
+          <p class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl">
+            <span class="pr-3"><i-mdi-arrow-down /></span>
+            <li :class="clamp ? 'hidden' : 'block'">Manage news</li>
+          </p>
+          <div class="body pl-2">
+            <NuxtLink
+              :exact-active-class="'bg-brand-clear_white text-gray-50'"
+              to="/dashboard/news"
+              class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+            >
+              <span class="pr-3"><i-mdi-newspaper /></span>
+              <li :class="clamp ? 'hidden' : 'block'">News</li>
+            </NuxtLink>
+            <NuxtLink
+              :exact-active-class="'bg-brand-clear_white text-gray-50'"
+              to="/dashboard/news/add"
+              class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+            >
+              <span class="pr-3"><i-mdi-newspaper-plus /></span>
+              <li :class="clamp ? 'hidden' : 'block'">Add news</li>
+            </NuxtLink>
+          </div>
+        </div>
+        <p
+          @click="signOut"
+          class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+        >
+          <span class="pr-3"><i-mdi-logout /></span>
+          <li :class="clamp ? 'hidden' : 'block'">Signout</li>
+        </p>
       </ul>
     </div>
     <!--   -->

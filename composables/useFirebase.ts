@@ -6,6 +6,8 @@ import {
     signInWithEmailAndPassword,
     onAuthStateChanged,
   } from "firebase/auth";
+import { useUserStore } from "~~/store/userStore";
+  // const store = useUserStore()
   
   export const createUser = async (email, password) => {
     const auth = getAuth();
@@ -36,13 +38,15 @@ import {
   
     const router = useRouter();
   
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
+        // await store.login().then(() => {
+        //   router.push("/dashboard");
+        // });
       } else {
         //if signed out
-        router.push("/login");
       }
   
       firebaseUser.value = user;
