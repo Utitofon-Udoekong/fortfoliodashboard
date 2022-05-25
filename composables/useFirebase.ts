@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getStorage, ref, uploadBytesResumable, UploadMetadata } from "firebase/storage";
+import { getDownloadURL, getMetadata, getStorage, ref, uploadBytesResumable, UploadMetadata, uploadString } from "firebase/storage";
 
 import { useUserStore } from "~~/store/userStore";
 
@@ -15,6 +15,28 @@ export const uploadImage = (file, metadata: UploadMetadata) => {
   const newsRef = ref(storage, 'news/' + file.name);
   const uploadTask = uploadBytesResumable(newsRef, file.file, metadata)
   return uploadTask
+}
+
+export const saveFile = async (fullPath, file) => {
+  const storage = getStorage();
+  const imageRef = ref(storage, fullPath)
+  const snapshot = await uploadString(imageRef, file, "data_url")
+  if(snapshot){
+    const downloadUrl = await getDownloadURL(snapshot.ref)
+    const metadata = await getMetadata(imageRef)
+    return {snapshot, downloadUrl, metadata}
+  }
+}
+
+export const uploadFile = async (file) => {
+  return await new Promise((resolve, reject) => {
+    let reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = async (e) => {
+      const result = reader.result
+      const {snapshot, downloadUrl, metadata} = await saveFile(`news/${file.name}`,result)
+    }
+  })
 }
 export const createUser = async (email: string, password: string) => {
   const auth = getAuth();

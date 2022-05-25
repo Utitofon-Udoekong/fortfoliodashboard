@@ -4,7 +4,6 @@ import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
 import formatter from "~~/helpers/formatIsoDate";
 import { doc, updateDoc, writeBatch } from "@firebase/firestore";
-// const {$db} = useNuxtApp()
 const store = useUserStore();
 const { $db } = useNuxtApp();
 const batch = writeBatch($db);

@@ -79,7 +79,8 @@ watch(showSuccess, (newVal) => {
     </Head>
   </Html>
   <NuxtLayout name="dashboard">
-    <DropZone
+    <!-- <DropZone/> -->
+    <!-- <DropZone
       class="drop-area"
       @files-dropped="addFiles"
       #default="{ dropZoneActive }"
@@ -90,8 +91,8 @@ watch(showSuccess, (newVal) => {
       <div v-else>
         <div>Drag Your Files Here</div>
       </div>
-    </DropZone>
-    <div class="files">
+    </DropZone> -->
+    <!-- <div class="files">
       <div class="file" v-for="(file, index) in files" :key="index">
         {{ file.file }}
         <p>Upload progress</p>
@@ -103,7 +104,7 @@ watch(showSuccess, (newVal) => {
             <button class="p-3 mr-3 bg-brand-blue text-white" @click="cancelUpload">cancel</button>
         </div>
       </div>
-    </div>
+    </div> -->
   </NuxtLayout>
 </template>
 <style></style>
