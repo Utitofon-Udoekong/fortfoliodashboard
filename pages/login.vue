@@ -56,9 +56,8 @@ watch(userCount,(newVal) => {
       </Head>
     </Html>
     <div class="flex justify-center items-center h-full">
-      <div class="w-80 flex flex-col border">
+      <div class="w-80 flex flex-col border border-gray-600">
         <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" />
-        <NuxtLink to="/signup" class="text-brand-light-blue p-8">Signup ?</NuxtLink>
       </div>
     </div>
   </div>
