@@ -9,10 +9,9 @@ import {
 import { getDownloadURL, getMetadata, getStorage, ref, uploadString } from "firebase/storage";
 
 import { useUserStore } from "~~/store/userStore";
-
+const {$auth, $storage} = useNuxtApp()
 export const saveFile = async (fullPath, file) => {
-  const storage = getStorage();
-  const imageRef = ref(storage, fullPath)
+  const imageRef = ref($storage, fullPath)
   const snapshot = await uploadString(imageRef, file, "data_url")
   if(snapshot){
     const downloadUrl = await getDownloadURL(snapshot.ref)
@@ -36,20 +35,11 @@ export const uploadFile = async (file) => {
     }
   })
 }
-export const createUser = async (email: string, password: string) => {
-  const auth = getAuth();
-  const credentials = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  return credentials;
-};
+
 
 export const signInUser = async (email: string, password: string) => {
-  const auth = getAuth();
   const credentials = await signInWithEmailAndPassword(
-    auth,
+    $auth,
     email,
     password
   );
@@ -57,22 +47,19 @@ export const signInUser = async (email: string, password: string) => {
 };
 
 export const initUser = async () => {
-  const auth = getAuth();
   const firebaseUser = useFirebaseUser();
-  firebaseUser.value = auth.currentUser;
+  firebaseUser.value = $auth.currentUser;
 
   const userCookie = useCookie("userCookie");
 
   const router = useRouter();
 
   const store = useUserStore()
-  onAuthStateChanged(auth, async (user) => {
+  onAuthStateChanged($auth, async (user) => {
     if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
       await store.login()
     } else {
-      //if signed out
+      router.replace("/login")
     }
 
     firebaseUser.value = user;
@@ -88,7 +75,6 @@ export const initUser = async () => {
 };
 
 export const signOutUser = async () => {
-  const auth = getAuth();
-  const result = await auth.signOut();
+  const result = await $auth.signOut();
   return result;
 };

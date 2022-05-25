@@ -35,14 +35,14 @@
 //         })
 //       })
 
-//     return {
-//         provide: {
-//             firebaseApp: firebaseApp,
-//             auth: auth,
-//             db: db,
-//             storage: storage
-//         }
-//     }
+    // return {
+    //     provide: {
+    //         firebaseApp: firebaseApp,
+    //         auth: auth,
+    //         db: db,
+    //         storage: storage
+    //     }
+    // }
     
 // })
 
@@ -76,11 +76,16 @@ export default defineNuxtPlugin((nuxtApp) => {
   const firestore = getFirestore(app);
   const storage = getStorage(app)
 
-  nuxtApp.vueApp.provide('auth', auth);
-  nuxtApp.vueApp.provide('firestore', firestore);
-  nuxtApp.vueApp.provide('storage', storage);
-  nuxtApp.provide('auth', auth);
-  nuxtApp.provide('firestore', firestore);
-  nuxtApp.provide('storage', storage);
+  // nuxtApp.vueApp.provide('auth', auth);
+  // nuxtApp.vueApp.provide('firestore', firestore);
+  // nuxtApp.vueApp.provide('storage', storage);
+  return {
+    provide: {
+        firebaseApp: app,
+        auth: auth,
+        firestore: firestore,
+        storage: storage
+    }
+}
 
 });
