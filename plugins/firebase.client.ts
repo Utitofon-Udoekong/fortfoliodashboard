@@ -17,9 +17,9 @@
 
 //     const firebaseApp = initializeApp(firebaseConfig);
 //     const auth = getAuth(firebaseApp);
-    // const db = getFirestore(firebaseApp);
-    // const storage = getStorage(firebaseApp)
-    
+// const db = getFirestore(firebaseApp);
+// const storage = getStorage(firebaseApp)
+
 //     nuxtApp.hooks.hook('app:mounted', () => {
 //         // Listen to Supabase auth changes
 //         auth.onIdTokenChanged(async(user) => {
@@ -35,15 +35,15 @@
 //         })
 //       })
 
-    // return {
-    //     provide: {
-    //         firebaseApp: firebaseApp,
-    //         auth: auth,
-    //         db: db,
-    //         storage: storage
-    //     }
-    // }
-    
+// return {
+//     provide: {
+//         firebaseApp: firebaseApp,
+//         auth: auth,
+//         db: db,
+//         storage: storage
+//     }
+// }
+
 // })
 
 import { getFirestore } from "firebase/firestore";
@@ -59,33 +59,31 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const firebaseConfig = {
     apiKey: config.API_KEY,
-        authDomain: config.AUTH_DOMAIN,
-        projectId: config.PROJECT_ID,
-        storageBucket: config.STORAGE_BUCKET,
-        messagingSenderId: config.MESSAGING_SENDER_ID,
-        appId: config.APP_ID,
-        measurementId: config.MEASUREMENT_ID
+    authDomain: config.AUTH_DOMAIN,
+    projectId: config.PROJECT_ID,
+    storageBucket: config.STORAGE_BUCKET,
+    messagingSenderId: config.MESSAGING_SENDER_ID,
+    appId: config.APP_ID,
+    measurementId: config.MEASUREMENT_ID
   };
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
+
 
   initUser();
 
   const auth = getAuth(app);
   const firestore = getFirestore(app);
   const storage = getStorage(app)
-
-  // nuxtApp.vueApp.provide('auth', auth);
-  // nuxtApp.vueApp.provide('firestore', firestore);
-  // nuxtApp.vueApp.provide('storage', storage);
+  useState("storage",() => storage)
   return {
     provide: {
-        firebaseApp: app,
-        auth: auth,
-        firestore: firestore,
-        storage: storage
+      firebaseApp: app,
+      auth: auth,
+      firestore: firestore,
+      storage: storage
     }
-}
+  }
 
 });

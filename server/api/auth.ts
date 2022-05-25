@@ -1,5 +1,5 @@
-import type { IncomingMessage, ServerResponse } from "http";
-import { CompatibilityEvent, useBody } from 'h3'
+import type { ServerResponse } from "http";
+import { useBody } from 'h3'
 
 export default async (req, res: ServerResponse) => {
 

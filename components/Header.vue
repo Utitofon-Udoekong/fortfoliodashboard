@@ -8,8 +8,9 @@ const firebaseUser = useFirebaseUser()
     class="bg-white h-1/6 w-full flex justify-between items-center px-4 relative"
   >
     <div class="search-bar w-52 rounded relative">
-     <div v-if="firebaseUser">LoggedIn</div>
-     <div v-else><NuxtLink to="/login">Login</NuxtLink></div>
+     <ClientOnly>
+       <div v-if="firebaseUser">LoggedIn</div>
+     </ClientOnly>
     </div>
     <div class="">
       <div

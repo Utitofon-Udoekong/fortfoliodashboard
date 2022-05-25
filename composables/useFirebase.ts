@@ -9,7 +9,6 @@ import {
 import { getDownloadURL, getMetadata, getStorage, ref, uploadString } from "firebase/storage";
 
 import { useUserStore } from "~~/store/userStore";
-// const nuxtApp = useNuxtApp()
 export const saveFile = async (fullPath, file) => {
   const storage = getStorage();
   const imageRef = ref(storage, fullPath)
@@ -72,7 +71,7 @@ export const initUser = async () => {
       // https://firebase.google.com/docs/reference/js/firebase.User
       await store.login()
     } else {
-      //if signed out
+      router.replace("/login")
     }
 
     firebaseUser.value = user;
