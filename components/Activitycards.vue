@@ -3,17 +3,24 @@ import { useUserStore } from '~~/store/userStore';
 
 const store = useUserStore()
 const userCount = store.getUserCount
-const totalInvestments = store.investments.reduce((acc, inv) => {
+const totalInvestments = computed(() => {
+  const amount = store.investments.reduce((acc, inv) => {
     return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount);
   }, 0)
+  return amount
+})
 const dueInvestmentAmount = computed(() => {
   const now = new Date().toISOString()
   const dueNow = store.investments.filter(
     (inv) => new Date(inv.dueDate.slice(0,10)).toString() === new Date(now.slice(0,10)).toString()
   );
-  return dueNow.reduce((acc, inv) => {
+  // if(dueNow.length === 0){
+  //   return 0
+  // }
+  const totaldue = dueNow.reduce((acc, inv) => {
     return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount);
   },0)
+  return totaldue
 })
 const details = [
   {
@@ -23,12 +30,12 @@ const details = [
   },
   {
     url: "chart",
-    numbers: `$ ${totalInvestments.toLocaleString('en-US', {minimumFractionDigits: 2})}`,
+    numbers: `$ ${totalInvestments.value.toLocaleString('en-US', {minimumFractionDigits: 2})}`,
     title: "Total investment",
   },
   {
     url: "graph",
-    numbers: `$${dueInvestmentAmount}`,
+    numbers: `$${dueInvestmentAmount.value}`,
     title: "Total due investment",
   },
 ];
