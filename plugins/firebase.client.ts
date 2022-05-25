@@ -71,7 +71,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   // @ts-ignore
-  self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+  self.FIREBASE_APPCHECK_DEBUG_TOKEN = config.FIREBASE_DEBUG_TOKEN;
   initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(config.RECAPTCHA_SERVER_KEY),
     isTokenAutoRefreshEnabled: true
