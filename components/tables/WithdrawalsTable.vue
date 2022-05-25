@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { WithdrawalsTableData, TableHeader } from "~~/utils/types/table";
-import { array, file } from "alga-js";
+import { paginate, pagination, pages, pageInfo } from "alga-js/types/array/paginateArray";
+import { search } from "alga-js/types/array/searchArray";
+import { sortBy } from "alga-js/types/array/sortArray";
+import { download, exported } from "alga-js/types/file/exportedFile";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useUserStore } from "~~/store/userStore";
 import {
@@ -168,7 +171,7 @@ const open = async (index: number, e: MouseEvent) => {
 
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
-    searchWithdrawals.value = array.search(
+    searchWithdrawals.value = search(
       withdrawalsData.value,
       searchInput.value
     );
@@ -191,12 +194,12 @@ const paginateUsers = () => {
   }
 };
 const paginateData = (data: any) => {
-  filteredWithdrawals.value = array.paginate(
+  filteredWithdrawals.value = paginate(
     data,
     currentPage.value,
     currentWithdrawals.value
   );
-  totalPages.value = array.pages(data, currentWithdrawals.value);
+  totalPages.value = pages(data, currentWithdrawals.value);
 };
 const paginateEvent = (page: number) => {
   currentPage.value = page;
@@ -231,26 +234,26 @@ const sortByColumn = (column) => {
   let sortedColumn = sortCol[column];
   if (sortedColumn === "" || sortedColumn === null) {
     sortCol[column] = "asc";
-    sortedUsers = array.sortBy(getCurrentWithdrawals(), column, "asc");
+    sortedUsers = sortBy(getCurrentWithdrawals(), column, "asc");
   } else if (sortedColumn === "asc") {
     sortCol[column] = "desc";
-    sortedUsers = array.sortBy(getCurrentWithdrawals(), column, "desc");
+    sortedUsers = sortBy(getCurrentWithdrawals(), column, "desc");
   } else if (sortedColumn === "desc") {
     sortCol[column] = "";
   }
   paginateData(sortedUsers);
 };
-// const print = () => file.printed(withdrawalsData.value);
+// const print = () => printed(withdrawalsData.value);
 const exportFile = (format: string) => {
-  const genString = file.exported(withdrawalsData.value, format);
-  file.download(genString, format);
+  const genString = exported(withdrawalsData.value, format);
+  download(genString, format);
 };
 // methods------------------------------------------------------------------------------
 
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
-  return array.pageInfo(
+  return pageInfo(
     getCurrentWithdrawals(),
     currentPage.value,
     currentWithdrawals.value
@@ -264,7 +267,7 @@ const tableData = computed<WithdrawalsTableData[]>(() => {
 });
 
 const showPagination = computed(() => {
-  let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
+  let stringArray = pagination(totalPages.value, currentPage.value, 3);
   const formatedArray = stringArray.map((str) => {
     return Number(str);
   });

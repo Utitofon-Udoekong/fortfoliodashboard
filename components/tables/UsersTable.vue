@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
-import { array, file } from "alga-js";
+import { paginate, pagination, pages, pageInfo } from "alga-js/types/array/paginateArray";
+import { search } from "alga-js/types/array/searchArray";
+import { sortBy } from "alga-js/types/array/sortArray";
+import { download, exported } from "alga-js/types/file/exportedFile";
 import { useUserStore } from "~~/store/userStore";
 // states
 const store = useUserStore()
@@ -76,7 +79,7 @@ const open = async (index: number, e: MouseEvent) => {
 
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
-    searchUsers.value = array.search(usersData.value, searchInput.value);
+    searchUsers.value = search(usersData.value, searchInput.value);
     paginateData(searchUsers.value);
   } else {
     searchUsers.value = [];
@@ -95,12 +98,12 @@ const paginateUsers = () => {
   }
 };
 const paginateData = (data: any[]) => {
-  filteredUsers.value = array.paginate(
+  filteredUsers.value = paginate(
     data,
     currentPage.value,
     currentUsers.value
   );
-  totalPages.value = array.pages(data, currentUsers.value);
+  totalPages.value = pages(data, currentUsers.value);
 };
 const paginateEvent = (page: number) => {
   currentPage.value = page;
@@ -132,26 +135,26 @@ const sortByColumn = (column: string) => {
   let sortedColumn = sortCol[column];
   if (sortedColumn === "" || sortedColumn === null) {
     sortCol[column] = "asc";
-    sortedUsers = array.sortBy(getCurrentUsers(), column, "asc");
+    sortedUsers = sortBy(getCurrentUsers(), column, "asc");
   } else if (sortedColumn === "asc") {
     sortCol[column] = "desc";
-    sortedUsers = array.sortBy(getCurrentUsers(), column, "desc");
+    sortedUsers = sortBy(getCurrentUsers(), column, "desc");
   } else if (sortedColumn === "desc") {
     sortCol[column] = "";
   }
   paginateData(sortedUsers);
 };
-const print = () => file.printed(usersData.value);
+// const print = () => printed(usersData.value);
 const exportFile = (format: string) => {
-  const genString = file.exported(usersData.value, format);
-  file.download(genString, format);
+  const genString = exported(usersData.value, format);
+  download(genString, format);
 };
 // methods------------------------------------------------------------------------------
 
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
-  return array.pageInfo(
+  return pageInfo(
     getCurrentUsers(),
     currentPage.value,
     currentUsers.value
@@ -165,7 +168,7 @@ const tableData = computed<UsersTableData[]>(() => {
 });
 
 const showPagination = computed(() => {
-  let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
+  let stringArray = pagination(totalPages.value, currentPage.value, 3);
   const formatedArray = stringArray.map((str) => {
     return Number(str);
   });
@@ -411,12 +414,12 @@ onMounted(() => {
         <!-- implement print options -->
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
-            <div
+            <!-- <div
               class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md mr-3"
               @click="print"
             >
               <i-system-uicons-printer /> Print
-            </div>
+            </div> -->
             <div
               class="flex items-center border cursor-pointer border-brand-light-blue text-brand-light-blue px-4 py-2 rounded-md"
               @click="exportFile('csv')"

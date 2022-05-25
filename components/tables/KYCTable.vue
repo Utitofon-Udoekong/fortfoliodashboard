@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { KYCTableData, TableHeader } from "~~/utils/types/table";
-import { array, file } from "alga-js";
+import { paginate, pagination, pages, pageInfo } from "alga-js/types/array/paginateArray";
+import { search } from "alga-js/types/array/searchArray";
+import { sortBy } from "alga-js/types/array/sortArray";
+import { download, exported } from "alga-js/types/file/exportedFile";
 import { useUserStore } from "~~/store/userStore";
 import formatter from "~~/helpers/formatIsoDate";
 import { doc, updateDoc, writeBatch } from "@firebase/firestore";
@@ -141,7 +144,7 @@ const open = async (index: number, e: MouseEvent) => {
 };
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
-    searchKYC.value = array.search(kycDataList.value, searchInput.value);
+    searchKYC.value = search(kycDataList.value, searchInput.value);
     paginateData(searchKYC.value);
   } else {
     searchKYC.value = [];
@@ -162,8 +165,8 @@ const paginateUsers = () => {
   }
 };
 const paginateData = (data: any) => {
-  filteredKYC.value = array.paginate(data, currentPage.value, currentKYC.value);
-  totalPages.value = array.pages(data, currentKYC.value);
+  filteredKYC.value = paginate(data, currentPage.value, currentKYC.value);
+  totalPages.value = pages(data, currentKYC.value);
 };
 const paginateEvent = (page: number) => {
   currentPage.value = page;
@@ -197,25 +200,25 @@ const sortByColumn = (column: string) => {
   let sortedColumn = sortCol[column];
   if (sortedColumn === "") {
     sortCol[column] = "asc";
-    sortedUsers = array.sortBy(getCurrentKYC(), column, "asc");
+    sortedUsers = sortBy(getCurrentKYC(), column, "asc");
   } else if (sortedColumn === "asc") {
     sortCol[column] = "desc";
-    sortedUsers = array.sortBy(getCurrentKYC(), column, "desc");
+    sortedUsers = sortBy(getCurrentKYC(), column, "desc");
   } else if (sortedColumn === "desc") {
     sortCol[column] = "";
   }
   paginateData(sortedUsers);
 };
-// const print = () => file.printed(kycDataList.value);
+// const print = () => printed(kycDataList.value);
 const exportFile = (format: string) => {
-  const genString = file.exported(kycDataList.value, format);
-  file.download(genString, format);
+  const genString = exported(kycDataList.value, format);
+  download(genString, format);
 };
 // methods------------------------------------------------------------------------------
 
 // computed
 const showInfo = computed(() => {
-  return array.pageInfo(getCurrentKYC(), currentPage.value, currentKYC.value);
+  return pageInfo(getCurrentKYC(), currentPage.value, currentKYC.value);
 });
 const tableHeader = computed<TableHeader[]>(() => {
   return columns;
@@ -225,7 +228,7 @@ const tableData = computed<KYCTableData[]>(() => {
 });
 
 const showPagination = computed(() => {
-  let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
+  let stringArray = pagination(totalPages.value, currentPage.value, 3);
   const formatedArray = stringArray.map((str) => {
     return Number(str);
   });
