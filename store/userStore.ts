@@ -1,5 +1,3 @@
-import { Auth, createUserWithEmailAndPassword, signOut } from "@firebase/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { defineStore } from "pinia";
 
 export const useUserStore = defineStore('user', {
@@ -8,6 +6,7 @@ export const useUserStore = defineStore('user', {
         kyc: [],
         investments: [],
         withdrawals: [],
+        news: [],
         snackbarMessage: "",
         showSnackBar: false
     }),
@@ -23,6 +22,9 @@ export const useUserStore = defineStore('user', {
         },
         getWithdrawals(state){
             return state.withdrawals
+        },
+        getNews(state){
+            return state.news
         },
         getUserCount(state){
             return state.users.length
@@ -51,12 +53,17 @@ export const useUserStore = defineStore('user', {
             const { data } = await useAsyncData('withdrawals', () => $fetch('/api/withdrawals'))
             this.withdrawals = data.value
         },
+        async setNews() {
+            const { data } = await useAsyncData('news', () => $fetch('/api/news'))
+            this.news = data.value
+        },
         async login(){
             await Promise.all([
                 this.setUsers(),
                 this.setKyc(),
                 this.setInvestments(),
                 this.setWithdrawals(),
+                // this.setNews()
             ])
      
         },
