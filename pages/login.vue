@@ -36,6 +36,12 @@ watch(showSuccess, (newVal) => {
     }, 1500);
   }
 });
+onMounted(() => {
+  const userCount = store.getUserCount
+  if(userCount > 0){
+    router.replace("/dashboard")
+  }
+})
 </script>
 
 <template>

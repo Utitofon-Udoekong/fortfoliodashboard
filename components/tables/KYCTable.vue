@@ -3,7 +3,6 @@ import { KYCTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
 import formatter from "~~/helpers/formatIsoDate";
-import {kyc} from "~~/assets/inv.js"
 import { doc, updateDoc, writeBatch } from "@firebase/firestore";
 // const {$db} = useNuxtApp()
 const store = useUserStore();
@@ -45,7 +44,7 @@ let sortCol: KYCTableData = reactive({
   status: "",
 });
 
-const kycDataList = ref<KYCTableData[]>(kyc);
+const kycDataList = ref<KYCTableData[]>(store.kyc);
 let filteredKYC = ref<KYCTableData[]>([]);
 const showKYC = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentKYC = ref<number>(10);

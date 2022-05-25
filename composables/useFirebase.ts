@@ -50,12 +50,7 @@ export const initUser = async () => {
     if (user) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User
-      await store.login().then(() => {
-        const userCount = store.getUserCount
-        if(userCount > 0){
-          router.push("/dashboard");
-        }
-      });
+      await store.login()
     } else {
       //if signed out
     }
