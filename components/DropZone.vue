@@ -1,48 +1,22 @@
-<script lang="ts" setup>
-let active = ref(false)
-let inActiveTimeout = null
-
-const setActive = () => {
-    active.value = true
-    clearTimeout(inActiveTimeout)
+<script setup>
+const emits = defineEmits(["fileChange"])
+const onFileChange = async (e) => {
+    var files = e.target.files || e.dataTransfer.files
+    if(!files.length) return
+    const {snapshot, downloadUrl, metadata} = await uploadFile(files[0])
+    emits("fileChange",snapshot, downloadUrl, metadata)
 }
-const setInactive = () => {
-    inActiveTimeout = setTimeout(() => {
-        active.value = false
-    }, 50)
-}
-
-const emit = defineEmits(['files-dropped'])
-
-const  onDrop = (e: { dataTransfer: { files: any; }; }) => {
-    setInactive()
-    emit('files-dropped', [...e.dataTransfer.files])
-}
-
-const preventDefaults = (e: { preventDefault: () => void; }) => {
-    e.preventDefault()
-}
-
-
-const events = ['dragenter', 'dragover', 'dragleave', 'drop']
-
-onMounted(() => {
-    events.forEach((eventName) => {
-        document.body.addEventListener(eventName, preventDefaults)
-    })
-})
-
-onUnmounted(() => {
-    events.forEach((eventName) => {
-        document.body.removeEventListener(eventName, preventDefaults)
-    })
-})
 </script>
 <template>
-<div :data-active="active" @dragenter.prevent="setActive" @dragover.prevent="setActive" @dragleave.prevent="setInactive" @drop.prevent="onDrop">
-        <!-- share state with the scoped slot -->
-        <slot :dropZoneActive="active"></slot>
-    </div>
+<div class="mb-4 flex justify-center">
+    <input type="file" @change="onFileChange">
+    <label class="file-label">
+        <span>
+            <i-mdi-upload/>
+        </span>
+        <span>Upload</span>
+    </label>
+</div>
 </template>
 <style>
 </style>
