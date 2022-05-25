@@ -20,7 +20,9 @@ const signin = async () => {
   signinForm.value = { email: "", password: "" };
 };
 const signinForm = ref({ email: "", password: "" });
-
+const userCount = computed(() => {
+  return store.getUserCount
+})
 watch(showError, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {
@@ -36,12 +38,12 @@ watch(showSuccess, (newVal) => {
     }, 1500);
   }
 });
-onMounted(() => {
-  const userCount = store.getUserCount
-  if(userCount > 0){
-    router.replace("/dashboard")
+watch(userCount,(newVal) => {
+  if(newVal > 0){
+    router.push("/dashboard")
   }
 })
+
 </script>
 
 <template>
