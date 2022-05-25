@@ -67,7 +67,7 @@ const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
               class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
               to="/dashboard/investment"
             >
-              <span class="pr-3"><i-bx-bx-chart /></span>
+              <span class="pr-3"><i-ic-round-bar-chart /></span>
               <li :class="clamp ? 'hidden' : 'block'">Investments</li>
             </NuxtLink>
             <NuxtLink
@@ -75,7 +75,7 @@ const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
               class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
               to="/dashboard/investment/upcoming"
             >
-              <span class="pr-3"><i-bx-bx-chart /></span>
+              <span class="pr-3"><i-ic-baseline-area-chart /></span>
               <li :class="clamp ? 'hidden' : 'block'">Upcoming</li>
             </NuxtLink>
           </div>
