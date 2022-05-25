@@ -13,7 +13,7 @@ const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
 </script>
 <template>
   <div
-    class="bg-brand-blue h-full w-1/6 p-4"
+    class="bg-brand-blue h-screen w-1/6 p-4 overflow-y-auto"
     :class="clamp ? 'w-1/12' : 'w-1/6'"
   >
     <div class="header flex justify-between items-center">
