@@ -19,6 +19,7 @@
   "dependencies": {
     "@nuxt/kit": "^3.0.0-rc.3",
     "alga-js": "^0.1.0-wood-5",
+    "esbuild": "^0.14.39",
     "firebase": "^9.6.6",
     "firebase-admin": "^10.0.2",
     "moment": "^2.29.3",
