@@ -48,6 +48,7 @@
 
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check"
 import {
   getAuth,
 } from "firebase/auth";
@@ -69,6 +70,15 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
+  // @ts-ignore
+  self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+  const appCheck = initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(config.RECAPTCHA_SERVER_KEY),
+  
+    // Optional argument. If true, the SDK automatically refreshes App Check
+    // tokens as needed.
+    isTokenAutoRefreshEnabled: true
+  });
 
 
   initUser();
