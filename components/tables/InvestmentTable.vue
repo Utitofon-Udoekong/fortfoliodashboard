@@ -1,10 +1,7 @@
 <script lang="ts" setup>
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
-import { paginate, pagination, pages, pageInfo } from "alga-js/types/array/paginateArray";
-import { search } from "alga-js/types/array/searchArray";
-import { sortBy } from "alga-js/types/array/sortArray";
-import { download, exported } from "alga-js/types/file/exportedFile";
-
+import { array, file } from "alga-js";
+// import {search,paginate,pages} from "alga-js/array"
 import { useUserStore } from "~~/store/userStore";
 import {
   collectionGroup,
@@ -172,7 +169,7 @@ const open = async (index: number, e: MouseEvent) => {
 
 const paginateUsers = () => {
   if (searchInput.value.length >= 3) {
-    searchInvestment.value = search(
+    searchInvestment.value = array.search(
       investmentsData.value,
       searchInput.value
     );
@@ -193,12 +190,12 @@ const paginateUsers = () => {
   }
 };
 const paginateData = (data: any) => {
-  filteredInvestment.value = paginate(
+  filteredInvestment.value = array.paginate(
     data,
     currentPage.value,
     currentInvestment.value
   );
-  totalPages.value = pages(data, currentInvestment.value);
+  totalPages.value = array.pages(data, currentInvestment.value);
 };
 const paginateEvent = (page: number) => {
   currentPage.value = page;
@@ -231,10 +228,10 @@ const sortByColumn = (column) => {
   let sortedColumn = sortCol[column];
   if (sortedColumn === "" || sortedColumn === null) {
     sortCol[column] = "asc";
-    sortedUsers = sortBy(getCurrentUsers(), column, "asc");
+    sortedUsers = array.sortBy(getCurrentUsers(), column, "asc");
   } else if (sortedColumn === "asc") {
     sortCol[column] = "desc";
-    sortedUsers = sortBy(getCurrentUsers(), column, "desc");
+    sortedUsers = array.sortBy(getCurrentUsers(), column, "desc");
   } else if (sortedColumn === "desc") {
     sortCol[column] = "";
   }
@@ -243,15 +240,15 @@ const sortByColumn = (column) => {
 
 // const print = () => file.printed(investmentsData.value);
 const exportFile = (format: string) => {
-  const genString = exported(investmentsData.value, format);
-  download(genString, format);
+  const genString = file.exported(investmentsData.value, format);
+  file.download(genString, format);
 };
 // methods------------------------------------------------------------------------------
 
 // computed
 const showInfo = computed(() => {
   // const getCurrentEntries = getCurrentEntries()
-  return pageInfo(
+  return array.pageInfo(
     getCurrentUsers(),
     currentPage.value,
     currentInvestment.value
@@ -265,7 +262,7 @@ const tableData = computed<InvestmentTableData[]>(() => {
 });
 
 const showPagination = computed(() => {
-  let stringArray = pagination(totalPages.value, currentPage.value, 3);
+  let stringArray = array.pagination(totalPages.value, currentPage.value, 3);
   const formatedArray = stringArray.map((str) => {
     return Number(str);
   });
