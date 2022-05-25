@@ -3,6 +3,7 @@ import { KYCTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
 import formatter from "~~/helpers/formatIsoDate";
+import {kyc} from "~~/assets/inv.js"
 import { doc, updateDoc, writeBatch } from "@firebase/firestore";
 // const {$db} = useNuxtApp()
 const store = useUserStore();
@@ -12,7 +13,7 @@ const batch = writeBatch($db);
 // states
 const columns = [
   { name: "fullName", text: "User" },
-  { name: "docType", text: "Document Type" },
+  { name: "documentType", text: "Document Type" },
   { name: "documents", text: "Documents" },
   { name: "submitted", text: "Submitted" },
   { name: "status", text: "Status" },
@@ -20,7 +21,7 @@ const columns = [
 let col: KYCTableData = reactive({
   id: "",
   fullName: "",
-  docType: "",
+  documentType: "",
   documents: [
     {
       name: "",
@@ -33,7 +34,7 @@ let col: KYCTableData = reactive({
 let sortCol: KYCTableData = reactive({
   id: "",
   fullName: "",
-  docType: "",
+  documentType: "",
   documents: [
     {
       name: "",
@@ -44,7 +45,7 @@ let sortCol: KYCTableData = reactive({
   status: "",
 });
 
-const kycDataList = ref<KYCTableData[]>(store.kyc);
+const kycDataList = ref<KYCTableData[]>(kyc);
 let filteredKYC = ref<KYCTableData[]>([]);
 const showKYC = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentKYC = ref<number>(10);
@@ -149,7 +150,7 @@ const paginateUsers = () => {
     col = {
       id: "",
       fullName: "",
-      docType: "",
+      documentType: "",
       documents: [
         {
           name: "",
@@ -183,7 +184,7 @@ const sortByColumn = (column: string) => {
   col = {
     id: "",
     fullName: "",
-    docType: "",
+    documentType: "",
     documents: [
       {
         name: "",

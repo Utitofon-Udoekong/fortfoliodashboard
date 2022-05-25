@@ -36,7 +36,7 @@ interface Documentbody{
 export interface KYCTableData{
     id: string
     fullName: string
-    docType: string
+    documentType: string
     documents: Documentbody[]
     submitted: string
     status: string
