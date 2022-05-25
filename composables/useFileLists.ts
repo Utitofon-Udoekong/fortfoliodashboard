@@ -1,9 +1,10 @@
 import { ref } from 'vue'
+import UploadableFile from '~~/helpers/uploadableFile'
 
 export default function () {
     const files = ref([])
 
-    function addFiles(newFiles) {
+    function addFiles(newFiles: any) {
         let newUploadableFiles = [...newFiles]
             .map((file) => new UploadableFile(file))
             .filter((file) => !fileExists(file.id))
