@@ -9,7 +9,7 @@ import {
 import { getStorage, ref, uploadBytesResumable, UploadMetadata } from "firebase/storage";
 
 import { useUserStore } from "~~/store/userStore";
-// const store = useUserStore()
+
 export const uploadImage = (file, metadata: UploadMetadata) => {
   const storage = getStorage();
   const newsRef = ref(storage, 'news/' + file.name);
@@ -45,13 +45,14 @@ export const initUser = async () => {
 
   const router = useRouter();
 
+  const store = useUserStore()
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User
-      // await store.login().then(() => {
-      //   router.push("/dashboard");
-      // });
+      await store.login().then(() => {
+        router.push("/dashboard");
+      });
     } else {
       //if signed out
     }

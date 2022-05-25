@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 const { clamp, changeClamp } = inject("clamp");
+const router = useRouter()
 const signOut = async () => {
-  await signOutUser();
+  await signOutUser().then(() => {
+    router.replace("/login")
+  });
 };
 const openNews = ref(false);
 const openInvestment = ref(false);
