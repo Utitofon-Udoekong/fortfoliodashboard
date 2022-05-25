@@ -23,7 +23,7 @@ const onFileChange = async (e) => {
             SVG, PNG, JPG
           </p>
         </div>
-        <input id="dropzone-file" type="file" class="hidden" @change="onFileChange" />
+        <input id="dropzone-file" type="file" class="hidden" @change.prevent="onFileChange" />
       </label>
     </div>
   </div>
