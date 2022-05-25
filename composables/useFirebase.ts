@@ -9,7 +9,7 @@ import {
 import { getDownloadURL, getMetadata, getStorage, ref, uploadString } from "firebase/storage";
 
 import { useUserStore } from "~~/store/userStore";
-const nuxtApp = useNuxtApp()
+// const nuxtApp = useNuxtApp()
 export const saveFile = async (fullPath, file) => {
   const storage = getStorage();
   const imageRef = ref(storage, fullPath)

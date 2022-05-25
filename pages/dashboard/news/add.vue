@@ -3,6 +3,7 @@ import { getDownloadURL } from "firebase/storage";
 
 definePageMeta({
   layout: false,
+  middleware: ["auth"]
 });
 const showError = ref(false);
 const showSuccess = ref(false);
