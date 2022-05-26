@@ -78,12 +78,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
 
-  initUser();
+  // initUser();
 
   const auth = getAuth(app);
   const firestore = getFirestore(app);
   const storage = getStorage(app)
-  useState("storage",() => storage)
   return {
     provide: {
       firebaseApp: app,

@@ -4,7 +4,6 @@ import { ref, watchEffect } from 'vue'
 const props = defineProps({
   path: String,
   alt: String,
-  css: String,
 })
 
 const image = ref()
@@ -15,5 +14,5 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <img :src="image" :alt="alt" :class="css" />
+  <img :src="image" :alt="alt" />
 </template>

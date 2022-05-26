@@ -10,12 +10,12 @@
         </Head>
     </Html>
   <NuxtLayout name="dashboard">
-      <p>News</p>
+      <NewsComponent/>
   </NuxtLayout>
 </template>
 <script lang="ts" setup>
 definePageMeta({
   layout: false,
-  middleware: ["auth"]
+  // middleware: ["auth"]
 });
 </script>
