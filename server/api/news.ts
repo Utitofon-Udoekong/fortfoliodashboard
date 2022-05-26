@@ -1,7 +1,7 @@
 import { storage } from "~~/helpers/fireadmin"
 
 
-export default defineEventHandler(async () => {
-    const newsList = await storage.getFiles()
-    return newsList
-})
+export default async (req, res) => {
+    const newsList = storage.getFiles()
+    return console.log(newsList)
+}

@@ -3,7 +3,7 @@ import { useBody } from 'h3'
 
 export default async (req, res: ServerResponse) => {
 
-    if(req.method !== 'POST') return 'Must be post request'
+    if(req.method !== 'POST') return 'Invalid request'
 
     const { user } = await useBody(req) // only for POST request
     
