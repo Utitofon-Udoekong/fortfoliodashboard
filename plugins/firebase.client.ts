@@ -80,7 +80,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const analytics = getAnalytics(app);
 
 
-  // initUser();
+  initUser();
 
   const auth = getAuth(app);
   const firestore = getFirestore(app);
