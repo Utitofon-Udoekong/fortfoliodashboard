@@ -22,23 +22,19 @@ export const saveFile = async (fullPath, file) => {
 }
 
 export const getDollarPrice = async () => {
-  return await new Promise((resolve, reject) => {
-    const config = useRuntimeConfig()
-    console.log("EGO ID: %d",config.EGO_ID)
-    const db = getFirestore()
-    onSnapshot(doc(db, "egoPrice", config.EGO_ID), (doc) => {
-      const data = doc.data()
-      resolve({data})
-    });
-  })
+  $fetch("/api/getDollarPrice", {
+    method: "GET",
+  }).then((val) => {
+    console.log(val)
+  });
 }
 
 export const changeDollarPrice = async (newPrice) => {
-  const db = getFirestore()
-  const config = useRuntimeConfig()
-  const priceRef = doc(db, "egoPrice", config.EGO_ID);
-  await updateDoc(priceRef, {
-    dollarToNaira: newPrice
+  $fetch("/api/changeDollarPrice", {
+    method: "POST",
+    body: { newPrice },
+  }).then((val) => {
+    return console.log(val)
   });
 }
 
