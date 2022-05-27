@@ -30,7 +30,8 @@ watch(showSuccess, (newVal) => {
 </script>
 <template>
 <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
-  <Html>
+  <div>
+    <Html>
     <Head>
       <Title>Dashboard - Add News</Title>
       <Meta
@@ -42,5 +43,6 @@ watch(showSuccess, (newVal) => {
   <NuxtLayout name="dashboard">
     <DropZone @fileChange="fileChange"/>
   </NuxtLayout>
+  </div>
 </template>
 <style></style>

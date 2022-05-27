@@ -1,5 +1,6 @@
 <template>
-  <Html>
+  <div>
+    <Html>
     <Head>
       <Title>Dashboard - Investments</Title>
       <Meta
@@ -13,6 +14,7 @@
       <TablesInvestmentTable />
     </div>
   </NuxtLayout>
+  </div>
 </template>
 
 <script setup lang="ts">

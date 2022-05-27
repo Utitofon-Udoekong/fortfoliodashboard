@@ -1,5 +1,6 @@
 <template>
-  <Html>
+  <div>
+    <Html>
     <Head>
       <Title>Dashboard - Users</Title>
       <Meta
@@ -11,6 +12,7 @@
   <NuxtLayout name="dashboard">
     <TablesUsersTable />
   </NuxtLayout>
+  </div>
 </template>
 
 <script setup lang="ts">

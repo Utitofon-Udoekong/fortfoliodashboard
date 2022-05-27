@@ -10,19 +10,19 @@ const signin = async () => {
   console.log(signinForm.value);
   await signInUser(signinForm.value.email, signinForm.value.password)
     .then(async (_) => {
-      showSuccess.value = true
-      notificationMessage.value = "Login successful"
+      showSuccess.value = true;
+      notificationMessage.value = "Login successful";
     })
     .catch((error) => {
       notificationMessage.value = error;
-      showError.value = true
+      showError.value = true;
     });
   signinForm.value = { email: "", password: "" };
 };
 const signinForm = ref({ email: "", password: "" });
 const userCount = computed(() => {
-  return store.getUserCount
-})
+  return store.getUserCount;
+});
 watch(showError, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {
@@ -38,26 +38,31 @@ watch(showSuccess, (newVal) => {
     }, 1500);
   }
 });
-watch(userCount,(newVal) => {
-  if(newVal > 0){
-    router.push("/dashboard")
+watch(userCount, (newVal) => {
+  if (newVal > 0) {
+    router.push("/dashboard");
   }
-})
-
+});
 </script>
 
 <template>
-  <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
-  <div class="h-screen">
-    <Html>
-      <Head>
-        <Title>Login - Admin</Title>
-        <Meta name="description" content="Fortfolio Admin Signup page" />
-      </Head>
-    </Html>
-    <div class="flex justify-center items-center h-full">
-      <div class="w-80 flex flex-col border border-gray-600">
-        <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" />
+  <div>
+    <Notifications
+      :showError="showError"
+      :showSuccess="showSuccess"
+      :message="notificationMessage"
+    />
+    <div class="h-screen">
+      <Html>
+        <Head>
+          <Title>Login - Admin</Title>
+          <Meta name="description" content="Fortfolio Admin Signup page" />
+        </Head>
+      </Html>
+      <div class="flex justify-center items-center h-full">
+        <div class="w-80 flex flex-col border border-gray-600">
+          <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" />
+        </div>
       </div>
     </div>
   </div>

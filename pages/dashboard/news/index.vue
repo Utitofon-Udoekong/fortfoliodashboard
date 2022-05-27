@@ -1,5 +1,6 @@
 
 <template>
+  <div>
     <Html>
         <Head>
         <Title>Dashboard - News</Title>
@@ -12,6 +13,7 @@
   <NuxtLayout name="dashboard">
       <NewsComponent/>
   </NuxtLayout>
+  </div>
 </template>
 <script lang="ts" setup>
 definePageMeta({
