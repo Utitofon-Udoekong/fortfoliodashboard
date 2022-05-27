@@ -19,6 +19,19 @@ const signin = async () => {
     });
   signinForm.value = { email: "", password: "" };
 };
+const signup = async () => {
+  console.log(signinForm.value);
+  await createUser(signinForm.value.email, signinForm.value.password)
+    .then(async (_) => {
+      showSuccess.value = true;
+      notificationMessage.value = "Registration successful";
+    })
+    .catch((error) => {
+      notificationMessage.value = error;
+      showError.value = true;
+    });
+  signinForm.value = { email: "", password: "" };
+};
 const signinForm = ref({ email: "", password: "" });
 const userCount = computed(() => {
   return store.getUserCount;
@@ -61,7 +74,7 @@ watch(userCount, (newVal) => {
       </Html>
       <div class="flex justify-center items-center h-full">
         <div class="w-80 flex flex-col border border-gray-600">
-          <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" />
+          <AuthFirebase title="Sign in" @submit="signup" :form="signinForm" />
         </div>
       </div>
     </div>

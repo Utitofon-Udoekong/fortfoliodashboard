@@ -53,7 +53,6 @@ export const useUserStore = defineStore('user', {
                 this.setKyc(),
                 this.setInvestments(),
                 this.setWithdrawals(),
-                // this.setNews()
             ])
      
         },

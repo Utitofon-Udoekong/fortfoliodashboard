@@ -110,8 +110,6 @@ export const initUser = async () => {
   const store = useUserStore()
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
       await store.login()
     } else {
       router.replace("/login")
