@@ -1,26 +1,62 @@
 <script lang="ts" setup>
 const { $storage } = useNuxtApp();
 const news = ref([]);
+const showError = ref(false);
+const showSuccess = ref(false);
+const notificationMessage = ref("");
+const deleteSelectedNews = async (index) => {
+  const newsObj = news.value[index]
+  const ref = newsObj.ref
+  await deleteNews(ref).then(() => {
+    showSuccess.value = true
+    getNews()
+    notificationMessage.value = "File deleted"
+  }).catch((error) => {
+    showError.value = true
+    notificationMessage.value = `An error occured. Code: ${error}`
+  });
+}
 const getNews = async () => {
   // @ts-ignore
-  await listNews($storage)
-    .then((newsList: any[]) => {
-      news.value = newsList;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  await listNews($storage).then((newsList: any[]) => {
+    news.value = newsList
+  }).catch((error) => {
+    console.error(error)
+  });
 };
 definePageMeta({
   layout: false,
-  // middleware: ["auth"]
+  middleware: ["auth"]
 });
 watchEffect(async () => {
-  await getNews();
+  await getNews()
+})
+watch(showError, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showError.value = false;
+    }, 1500);
+  }
 });
+
+watch(showSuccess, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 1500);
+  }
+});
+// onMounted(async () => {
+//   await getNews()
+// })
 </script>
 
 <template>
+    <Notifications
+      :showError="showError"
+      :showSuccess="showSuccess"
+      :message="notificationMessage"
+    />
   <div>
     <Html>
       <Head>
@@ -32,7 +68,12 @@ watchEffect(async () => {
       </Head>
     </Html>
     <NuxtLayout name="dashboard">
-      <NewsComponent :newsList="news" />
+      <Suspense>
+        <NewsComponent :newsList="news" @deleteNews="deleteSelectedNews"/>
+        <template #fallback>
+          loading...
+        </template>
+      </Suspense>
     </NuxtLayout>
   </div>
 </template>

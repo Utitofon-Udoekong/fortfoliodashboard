@@ -1,8 +1,13 @@
 <script lang="ts" setup>
+
 interface Props {
-  newsList: string[];
+  newsList: any[]
 }
 const props = defineProps<Props>();
+const emits = defineEmits(["deleteNews"])
+const deleteNews = (index) => {
+  emits("deleteNews",index)
+}
 </script>
 <template>
   <div class="news grid grid-cols-4 grid-flow-row auto-rows-[minmax(0,_180px)] gap-4 my-4">
@@ -12,9 +17,9 @@ const props = defineProps<Props>();
       :key="index"
     > 
       <div class="overlay">
-        <i-mdi-delete class="text-white text-3xl"/>
+        <i-mdi-delete class="text-white text-3xl cursor-pointer" @click="deleteNews(index)"/>
       </div>
-      <img :src="item" :alt="`News-${index}`" class="w-full h-full" />
+      <img :src="item.url" :alt="`News-${index}`" class="w-full h-full" />
     </div>
   </div>
 </template>
@@ -27,11 +32,10 @@ const props = defineProps<Props>();
   width: 100%;
   height: 100%;
   display: none;
-  display: flex;
   justify-content: center;
   align-items: center;
 }
 .image-con:hover .overlay {
-  display: unset;
+  display: flex;
 }
 </style>
