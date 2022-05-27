@@ -1,20 +1,62 @@
-<script setup>
+<script lang="ts" setup>
 const {$firestore} = useNuxtApp()
-const newPrice = ref(0)
-const price = ref(0)
-const getDollarPrice = async () => {
-  const zazu = await getDollarPrice($firestore)
-  price.value = zazu.data.dollarToNaira
+const newPrice = ref<number>(null)
+const price = ref<number>(0)
+const showError = ref(false);
+const showSuccess = ref(false);
+const notificationMessage = ref("");
+
+const changePrice = async () => {
+  const {changed} = await changeDollarPrice(newPrice.value, $firestore)
+  if(changed){
+    newPrice.value = null
+    await getPrice().then(() => {
+      showSuccess.value = true
+      notificationMessage.value = "Price Updated"
+    })
+  }else{
+    showError.value = true
+    notificationMessage.value = "Encountered a server error"
+  }
 }
+const getPrice = async () => {
+  const zazu = await getDollarPrice($firestore)
+  price.value = zazu
+}
+watch(showError, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showError.value = false;
+    }, 1500);
+  }
+});
+
+watch(showSuccess, (newVal) => {
+  if (newVal === true) {
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 1500);
+  }
+});
+
+onMounted(async () => {
+  await getPrice()
+})
+
 </script>
 <template>
   <div
     class="bg-white h-1/6 w-full flex justify-end items-center px-4"
   >
+  <Notifications
+      :showError="showError"
+      :showSuccess="showSuccess"
+      :message="notificationMessage"
+    />
     <div class="price mr-4">
       <p>Current Dollar Price: <span class="font-semibold text-2xl">N{{price}}</span></p>
     </div>
-    <div class="search-component w-1/6 mb-3">
+    <div class="search-component w-1/6 mr-3">
       <div
         class="app-search-bar rounded-lg border border-[#D0D5DD] flex w-full h-11 px-4 py-2 focus-within:border-brand-light-blue"
       >
@@ -26,8 +68,8 @@ const getDollarPrice = async () => {
         />
       </div>
     </div>
-    <div v-if="newPrice.length > 0">
-      <button class="p-3 rounded-md bg-brand-blue" @click="changePrice">Save</button>
+    <div v-if="newPrice > 0">
+      <button class="p-2 rounded-md bg-brand-blue text-white" @click="changePrice">Save Price</button>
     </div>
   </div>
 </template>

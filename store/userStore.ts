@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', {
         withdrawals: [],
         news: [],
         snackbarMessage: "",
-        showSnackBar: false
+        showSnackBar: false,
     }),
     getters: {
         getUsers(state) {

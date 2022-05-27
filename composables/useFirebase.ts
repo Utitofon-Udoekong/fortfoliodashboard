@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import { doc, getFirestore, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, Firestore, getDoc, getFirestore, onSnapshot, updateDoc } from "firebase/firestore";
 import { getDownloadURL, getMetadata, getStorage, ref, uploadString } from "firebase/storage";
 
 import { useUserStore } from "~~/store/userStore";
@@ -21,23 +21,26 @@ export const saveFile = async (fullPath, file) => {
   }
 }
 
-export const getDollarPrice = async (db) => {
-  return await new Promise((resolve, reject) => {
-    const config = useRuntimeConfig()
-    console.log("EGO ID: %d",config.EGO_ID)
-    onSnapshot(doc(db, "egoPrice", config.EGO_ID), (doc) => {
-      const data = doc.data()
-      resolve({data})
-    });
-  })
+export const getDollarPrice = async (db: Firestore) => {
+  const config = useRuntimeConfig()
+  const docRef = doc(db, "egoPrice", config.EGO_ID);
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.data()
+  if (docSnap.exists()) {
+    const dollarToNaira = docData["dollarToNaira"]
+    return dollarToNaira
+  } else {
+    return 0;
+  }
 }
 
-export const changeDollarPrice = async (newPrice,db) => {
+export const changeDollarPrice = async (newPrice: number,db: Firestore) => {
   const config = useRuntimeConfig()
   const priceRef = doc(db, "egoPrice", config.EGO_ID);
   await updateDoc(priceRef, {
     dollarToNaira: newPrice
   });
+  return {changed: true}
 }
 
 export const uploadFile = async (file) => {
