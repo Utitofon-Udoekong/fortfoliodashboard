@@ -34,7 +34,7 @@ onMounted(async() => {
           >
             <div class="overlay">
               <i-mdi-check
-                class="absolute right-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer text-white text-xl"
+                class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer text-white text-xl"
               />
             </div>
             <img :src="news" alt="news" lazy class="w-full h-full object-contain"/>
@@ -45,12 +45,12 @@ onMounted(async() => {
         get news
       </button>
       <div class="news flex">
-        <div class="image w-24 h-24 border overflow-hidden relative border-gray-400 rounded-md relative image-con mx-3" v-for="(item, index) in news" :key="index">
-          <img :src="item" :alt="`News-${index}`" lazy class="w-full h-full object-contain" />
+        <div class="w-24 h-24 border overflow-hidden relative border-gray-400 rounded-md mx-3" v-for="(item, index) in news" :key="index">
+          <img :src="item" :alt="`News-${index}`" class="w-full h-full object-contain" />
         </div>
       </div>
     </div>
-    <!-- {{news}} -->
+    {{news}}
   </div>
 </template>
 <style>
