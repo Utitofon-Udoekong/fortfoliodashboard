@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useUserStore } from "~~/store/userStore";
 import AuthFirebase from "../components/AuthFirebase.vue";
 const router = useRouter();
 const firebaseUser = useFirebaseUser()
@@ -19,7 +18,9 @@ const signin = async () => {
     });
   signinForm.value = { email: "", password: "" };
 };
+
 const signinForm = ref({ email: "", password: "" });
+
 watch(showError, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {
