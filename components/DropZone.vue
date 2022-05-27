@@ -8,7 +8,8 @@ const onFileChange = async (e) => {
 };
 </script>
 <template>
-  <div class="mb-4 flex justify-center">
+  <div class="max-w- mx-auto">
+    <div class="mb-4 flex justify-center">
     <div class="flex justify-center items-center w-full">
       <label
         for="dropzone-file"
@@ -26,6 +27,7 @@ const onFileChange = async (e) => {
         <input id="dropzone-file" type="file" class="hidden" @change.prevent="onFileChange" />
       </label>
     </div>
+  </div>
   </div>
 </template>
 <style></style>

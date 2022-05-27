@@ -1,6 +1,7 @@
 <template>
 <div class="p-8"><div class="news">
     <DropZone/>
+    {{news}}
 </div>
 <button @click="mama" class="bg-brand-blue text-white mr-3 p-3">get news</button>
 <button @click="papa" class="bg-brand-blue text-white mr-3 p-3">print news</button></div>
