@@ -8,7 +8,7 @@ const onFileChange = async (e) => {
 };
 </script>
 <template>
-  <div class="max-w- mx-auto">
+  <div class="mx-auto">
     <div class="mb-4 flex justify-center">
     <div class="flex justify-center items-center w-full">
       <label
