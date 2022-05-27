@@ -10,7 +10,7 @@ provide("clamp", {
   <div class="flex h-screen relative overflow-hidden">
     <Sidebar />
     <div class="h-full" :class="clamp ? 'w-11/12' : 'w-5/6'">
-      <Header />
+      <BaseHeader />
       <main class="h-5/6 px-5 overflow-y-auto">
         <BaseTitle />
         <slot />
