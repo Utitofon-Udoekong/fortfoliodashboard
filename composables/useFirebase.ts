@@ -10,8 +10,7 @@ import { doc, Firestore, getDoc, getFirestore, onSnapshot, updateDoc } from "fir
 import { getDownloadURL, getMetadata, getStorage, ref, uploadString } from "firebase/storage";
 
 import { useUserStore } from "~~/store/userStore";
-export const saveFile = async (fullPath, file) => {
-  const storage = getStorage();
+export const saveFile = async (fullPath, file, storage) => {
   const imageRef = ref(storage, fullPath)
   const snapshot = await uploadString(imageRef, file, "data_url")
   if(snapshot){
@@ -43,13 +42,13 @@ export const changeDollarPrice = async (newPrice: number,db: Firestore) => {
   return {changed: true}
 }
 
-export const uploadFile = async (file) => {
+export const uploadFile = async (file, storage) => {
   return await new Promise((resolve, reject) => {
     let reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = async (e) => {
       const result = reader.result
-      const {snapshot, downloadUrl, metadata} = await saveFile(`news/${file.name}`,result)
+      const {snapshot, downloadUrl, metadata} = await saveFile(`news/${file.name}`,result, storage)
       if(snapshot){
         resolve({snapshot, downloadUrl, metadata})
       }else{

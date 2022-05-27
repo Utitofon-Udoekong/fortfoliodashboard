@@ -1,9 +1,11 @@
 <script setup>
+const {$storage} = useNuxtApp()
 const emits = defineEmits(["fileChange"]);
+
 const onFileChange = async (e) => {
   var files = e.target.files || e.dataTransfer.files;
   if (!files.length) return;
-  const { snapshot, downloadUrl, metadata } = await uploadFile(files[0]);
+  const { snapshot, downloadUrl, metadata } = await uploadFile(files[0],$storage);
   emits("fileChange", snapshot, downloadUrl, metadata);
 };
 </script>
