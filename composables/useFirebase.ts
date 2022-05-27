@@ -21,20 +21,22 @@ export const saveFile = async (fullPath, file) => {
   }
 }
 
-export const getDollarPrice = async () => {
-  $fetch("/api/getDollarPrice", {
-    method: "GET",
-  }).then((val) => {
-    console.log(val)
-  });
+export const getDollarPrice = async (db) => {
+  return await new Promise((resolve, reject) => {
+    const config = useRuntimeConfig()
+    console.log("EGO ID: %d",config.EGO_ID)
+    onSnapshot(doc(db, "egoPrice", config.EGO_ID), (doc) => {
+      const data = doc.data()
+      resolve({data})
+    });
+  })
 }
 
-export const changeDollarPrice = async (newPrice) => {
-  $fetch("/api/changeDollarPrice", {
-    method: "POST",
-    body: { newPrice },
-  }).then((val) => {
-    return console.log(val)
+export const changeDollarPrice = async (newPrice,db) => {
+  const config = useRuntimeConfig()
+  const priceRef = doc(db, "egoPrice", config.EGO_ID);
+  await updateDoc(priceRef, {
+    dollarToNaira: newPrice
   });
 }
 

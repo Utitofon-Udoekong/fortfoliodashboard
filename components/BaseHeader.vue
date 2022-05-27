@@ -1,9 +1,10 @@
 <script setup>
-
+const {$firestore} = useNuxtApp()
 const newPrice = ref(0)
-const changePrice = async () => {
-  const {price} = await getDollarPrice()
-  console.log(price)
+const price = ref(0)
+const getDollarPrice = async () => {
+  const zazu = await getDollarPrice($firestore)
+  price.value = zazu.data.dollarToNaira
 }
 </script>
 <template>
@@ -11,7 +12,7 @@ const changePrice = async () => {
     class="bg-white h-1/6 w-full flex justify-end items-center px-4"
   >
     <div class="price mr-4">
-      <p>Current Dollar Price: <span class="font-semibold text-2xl">N590</span></p>
+      <p>Current Dollar Price: <span class="font-semibold text-2xl">N{{price}}</span></p>
     </div>
     <div class="search-component w-1/6 mb-3">
       <div
