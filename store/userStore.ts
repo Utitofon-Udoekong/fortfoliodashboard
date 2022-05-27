@@ -6,9 +6,6 @@ export const useUserStore = defineStore('user', {
         kyc: [],
         investments: [],
         withdrawals: [],
-        news: [],
-        snackbarMessage: "",
-        showSnackBar: false,
     }),
     getters: {
         getUsers(state) {
@@ -22,9 +19,6 @@ export const useUserStore = defineStore('user', {
         },
         getWithdrawals(state){
             return state.withdrawals
-        },
-        getNews(state){
-            return state.news
         },
         getUserCount(state){
             return state.users.length
@@ -52,10 +46,6 @@ export const useUserStore = defineStore('user', {
         async setWithdrawals() {
             const { data } = await useAsyncData('withdrawals', () => $fetch('/api/withdrawals'))
             this.withdrawals = data.value
-        },
-        async setNews() {
-            const { data } = await useAsyncData('news', () => $fetch('/api/news'))
-            this.news = data.value
         },
         async login(){
             await Promise.all([

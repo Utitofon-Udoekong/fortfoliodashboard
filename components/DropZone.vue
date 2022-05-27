@@ -22,7 +22,7 @@ const onFileChange = async (e) => {
         <div class="flex flex-col justify-center items-center pt-5 pb-6">
           <i-ic-round-upload class="mb-3 w-10 h-10 text-gray-400"/>
           <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-            <span class="font-semibold">Click to upload</span> or drag and drop
+            <span class="font-semibold">Click to upload</span>
           </p>
           <p class="text-xs text-gray-500 dark:text-gray-400">
             SVG, PNG, JPG

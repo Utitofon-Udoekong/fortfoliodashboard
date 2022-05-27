@@ -4,15 +4,18 @@
         "graph",
         "users"
     ])
-    const popNews = (index: number) => newsList.value.splice(index,1)
+    interface Props {
+        newsList: string[]
+    }
+    const props = defineProps<Props>()
 </script>
 <template>
 <div class="flex">
-    <div class="image w-16 h-16 border overflow-hidden border-gray-400 rounded-md relative image-con mx-3" v-for="(news, index) in newsList" :key="index">
+    <div class="image w-16 h-16 border overflow-hidden border-gray-400 rounded-md relative image-con mx-3" v-for="(news, index) in props.newsList" :key="index">
         <div class="overlay">
-            <i-mdi-close class="absolute right-1 top-1 cursor-pointer text-white" @click="popNews(index)"/>
+            <i-mdi-check class="absolute right-1 top-1 cursor-pointer text-white text-sm "/>
         </div>
-        <img :src="`../assets/images/${news}.png`" alt="">
+        <img :src="props.news" alt="news" lazy>
     </div>
 </div>
 </template>

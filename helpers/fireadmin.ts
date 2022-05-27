@@ -7,7 +7,7 @@ const config = useRuntimeConfig()
 if (!getApps().length) {
     app = initializeApp({
         credential: cert('./serviceAccount.json'),
-        storageBucket: config.STORAGE_BUCKET_URL
+        storageBucket: config.STORAGE_BUCKET
     });
 } else {
     app = getApp(); 
