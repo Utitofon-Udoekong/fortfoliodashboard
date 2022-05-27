@@ -1,12 +1,14 @@
 <script setup>
 const {$storage} = useNuxtApp()
-const emits = defineEmits(["fileChange"]);
+const emits = defineEmits(["fileChange","loading"]);
 
 const onFileChange = async (e) => {
+  emits("loading", true)
   var files = e.target.files || e.dataTransfer.files;
   if (!files.length) return;
-  const { snapshot, downloadUrl, metadata } = await uploadFile(files[0],$storage);
-  emits("fileChange", snapshot, downloadUrl, metadata);
+  const { downloadUrl} = await uploadFile(files[0],$storage);
+  emits("loading", false)
+  emits("fileChange", downloadUrl);
 };
 </script>
 <template>
@@ -26,7 +28,7 @@ const onFileChange = async (e) => {
             SVG, PNG, JPG
           </p>
         </div>
-        <input id="dropzone-file" type="file" class="hidden" @change.prevent="onFileChange" />
+        <input id="dropzone-file" type="file" class="hidden" @change.prevent="onFileChange" accept="image/*" />
       </label>
     </div>
   </div>

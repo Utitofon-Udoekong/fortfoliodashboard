@@ -40,7 +40,7 @@ watch(showSuccess, (newVal) => {
 });
 
 onMounted(async () => {
-  await getPrice()
+  // await getPrice()
 })
 
 </script>

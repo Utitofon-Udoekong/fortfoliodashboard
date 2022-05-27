@@ -15,8 +15,7 @@ export const saveFile = async (fullPath, file, storage) => {
   const snapshot = await uploadString(imageRef, file, "data_url")
   if(snapshot){
     const downloadUrl = await getDownloadURL(snapshot.ref)
-    const metadata = await getMetadata(imageRef)
-    return {snapshot, downloadUrl, metadata}
+    return {snapshot,downloadUrl}
   }
 }
 
@@ -48,9 +47,9 @@ export const uploadFile = async (file, storage) => {
     reader.readAsDataURL(file)
     reader.onload = async (e) => {
       const result = reader.result
-      const {snapshot, downloadUrl, metadata} = await saveFile(`news/${file.name}`,result, storage)
+      const {downloadUrl, snapshot} = await saveFile(`news/${file.name}`,result, storage)
       if(snapshot){
-        resolve({snapshot, downloadUrl, metadata})
+        resolve({downloadUrl})
       }else{
         reject()
       }
