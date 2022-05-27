@@ -7,10 +7,10 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { doc, Firestore, getDoc, getFirestore, onSnapshot, updateDoc } from "firebase/firestore";
-import { getDownloadURL, getMetadata, getStorage, ref, uploadString } from "firebase/storage";
+import { FirebaseStorage, getDownloadURL, getMetadata, getStorage, listAll, ref, uploadString } from "firebase/storage";
 
 import { useUserStore } from "~~/store/userStore";
-export const saveFile = async (fullPath, file, storage) => {
+export const saveFile = async (fullPath: string, file, storage: FirebaseStorage) => {
   const imageRef = ref(storage, fullPath)
   const snapshot = await uploadString(imageRef, file, "data_url")
   if(snapshot){
@@ -30,6 +30,21 @@ export const getDollarPrice = async (db: Firestore) => {
   } else {
     return 0;
   }
+}
+
+export const listNews = async (storage: FirebaseStorage) => {
+  return await new Promise((resolve, reject) => {
+    const listRef = ref(storage, 'news');
+    const newsList = []
+    listAll(listRef)
+    .then((res) => {
+      res.items.forEach(async (itemRef) => {
+        const url = await getDownloadURL(itemRef)
+        newsList.push(url)
+      });
+      resolve({newsList})
+    })
+  })
 }
 
 export const changeDollarPrice = async (newPrice: number,db: Firestore) => {

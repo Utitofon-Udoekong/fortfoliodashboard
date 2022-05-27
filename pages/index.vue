@@ -1,18 +1,22 @@
 <script setup lang="ts">
-import { useUserStore } from "~~/store/userStore";
-
-const store = useUserStore();
+const { $storage } = useNuxtApp();
 const loading = ref(false);
-const newsList = ref([]);
+const addedNews = ref([]);
 const loadingEvent = (e) => (loading.value = e);
-// const news = computed(() => {
-//   return store.getNews;
-// });
+const news = ref([]);
+const getNews = async () => {
+  // @ts-ignore
+  const { newsList } = await listNews($storage);
+    news.value = newsList;
+};
 
 const fileChangeEvent = (e) => {
-  console.log(e);
-  newsList.value.push(e);
+  addedNews.value.push(e);
 };
+
+onMounted(async() => {
+   await getNews()
+})
 </script>
 
 <template>
@@ -20,38 +24,46 @@ const fileChangeEvent = (e) => {
     <Loader :loading="loading" />
     <BaseHeader />
     <div class="p-8">
-      <div class="news mb-5">
+      <div class="mb-5">
         <DropZone @fileChange="fileChangeEvent" @loading="loadingEvent" />
         <div class="flex">
-          <div class="image w-16 h-16 border overflow-hidden border-gray-400 rounded-md relative image-con mx-3" v-for="(news, index) in newsList" :key="index">
-        <div class="overlay">
-            <i-mdi-check class="absolute right-1 top-1 cursor-pointer text-white text-sm "/>
+          <div
+            class="image w-16 h-16 border overflow-hidden border-gray-400 rounded-md relative image-con mx-3"
+            v-for="(news, index) in addedNews"
+            :key="index"
+          >
+            <div class="overlay">
+              <i-mdi-check
+                class="absolute right-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer text-white text-xl"
+              />
+            </div>
+            <img :src="news" alt="news" lazy class="w-full h-full object-contain"/>
+          </div>
         </div>
-        <img :src="news" alt="news" lazy>
-        </div>
-    </div>
       </div>
-      <button @click="mama" class="bg-brand-blue text-white mr-3 p-3">
+      <button @click="getNews" class="bg-brand-blue text-white mr-3 p-3">
         get news
       </button>
-      <button @click="papa" class="bg-brand-blue text-white mr-3 p-3">
-        print news
-      </button>
+      <div class="news flex">
+        <div class="image w-24 h-24 border overflow-hidden relative border-gray-400 rounded-md relative image-con mx-3" v-for="(item, index) in news" :key="index">
+          <img :src="item" :alt="`News-${index}`" lazy class="w-full h-full object-contain" />
+        </div>
+      </div>
     </div>
-    {{news}}
+    <!-- {{news}} -->
   </div>
 </template>
 <style>
-.overlay{
-    background: rgba(19, 19, 19, 0.479);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
+.overlay {
+  background: rgba(19, 19, 19, 0.479);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
 }
-.image-con:hover .overlay{
-    display: unset;
+.image-con:hover .overlay {
+  display: unset;
 }
 </style>
