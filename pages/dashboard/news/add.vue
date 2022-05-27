@@ -1,16 +1,18 @@
 <script lang="ts" setup>
-import { getDownloadURL } from "firebase/storage";
-
 definePageMeta({
   layout: false,
-  middleware: ["auth"]
+  // middleware: ["auth"]
 });
+const { $storage } = useNuxtApp();
 const showError = ref(false);
 const showSuccess = ref(false);
 const notificationMessage = ref("");
-const fileChange = (value) => {
-  console.log(value)
-}
+const loading = ref(false);
+const addedNews = ref([]);
+const loadingEvent = (e) => (loading.value = e);
+const fileChangeEvent = (e) => {
+  addedNews.value.push(e);
+};
 
 watch(showError, (newVal) => {
   if (newVal === true) {
@@ -30,6 +32,7 @@ watch(showSuccess, (newVal) => {
 </script>
 <template>
 <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
+<Loader :loading="loading" />
   <div>
     <Html>
     <Head>
@@ -41,7 +44,21 @@ watch(showSuccess, (newVal) => {
     </Head>
   </Html>
   <NuxtLayout name="dashboard">
-    <DropZone @fileChange="fileChange"/>
+    <DropZone @fileChange="fileChangeEvent" @loading="loadingEvent"/>
+    <div class="flex my-3">
+          <div
+            class="image w-16 h-16 border overflow-hidden border-gray-400 rounded-md relative image-con mx-3"
+            v-for="(news, index) in addedNews"
+            :key="index"
+          >
+            <div class="overlay">
+              <i-mdi-check
+                class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer text-white text-xl"
+              />
+            </div>
+            <img :src="news" alt="news" lazy class="w-full h-full"/>
+          </div>
+        </div>
   </NuxtLayout>
   </div>
 </template>

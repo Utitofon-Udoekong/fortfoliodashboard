@@ -27,15 +27,7 @@ definePageMeta({
       </Head>
     </Html>
     <NuxtLayout name="dashboard">
-      <div class="news grid auto-cols-auto my-4">
-        <div
-          class="w-24 h-24 border overflow-hidden relative border-gray-400 rounded-md mx-3"
-          v-for="(item, index) in news"
-          :key="index"
-        >
-          <img :src="item" :alt="`News-${index}`" class="w-full h-full" />
-        </div>
-      </div>
+      <NewsComponent :newsList="news"/>
     </NuxtLayout>
   </div>
 </template>
