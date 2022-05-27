@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useUserStore } from "~~/store/userStore";
 import AuthFirebase from "../components/AuthFirebase.vue";
-const store = useUserStore();
 const router = useRouter();
+const firebaseUser = useFirebaseUser()
 const showError = ref(false);
 const showSuccess = ref(false);
 const notificationMessage = ref("");
@@ -19,23 +19,7 @@ const signin = async () => {
     });
   signinForm.value = { email: "", password: "" };
 };
-const signup = async () => {
-  console.log(signinForm.value);
-  await createUser(signinForm.value.email, signinForm.value.password)
-    .then(async (_) => {
-      showSuccess.value = true;
-      notificationMessage.value = "Registration successful";
-    })
-    .catch((error) => {
-      notificationMessage.value = error;
-      showError.value = true;
-    });
-  signinForm.value = { email: "", password: "" };
-};
 const signinForm = ref({ email: "", password: "" });
-const userCount = computed(() => {
-  return store.getUserCount;
-});
 watch(showError, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {
@@ -51,8 +35,8 @@ watch(showSuccess, (newVal) => {
     }, 1500);
   }
 });
-watch(userCount, (newVal) => {
-  if (newVal > 0) {
+watch(firebaseUser, (newVal) => {
+  if (newVal) {
     router.push("/dashboard");
   }
 });
@@ -74,7 +58,7 @@ watch(userCount, (newVal) => {
       </Html>
       <div class="flex justify-center items-center h-full">
         <div class="w-80 flex flex-col border border-gray-600">
-          <AuthFirebase title="Sign in" @submit="signup" :form="signinForm" />
+          <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" />
         </div>
       </div>
     </div>
