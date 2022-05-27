@@ -18,7 +18,7 @@ const dueInvestmentAmount = computed(() => {
   //   return 0
   // }
   const totaldue = dueNow.reduce((acc, inv) => {
-    return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount);
+    return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount) + inv.planYield;
   },0)
   return totaldue
 })
@@ -30,12 +30,12 @@ const details = [
   },
   {
     url: "chart",
-    numbers: `$ ${totalInvestments.value.toLocaleString('en-US', {minimumFractionDigits: 2})}`,
+    numbers: `$${totalInvestments.value.toLocaleString('en-US', {minimumFractionDigits: 2})}`,
     title: "Total investment",
   },
   {
     url: "graph",
-    numbers: `$${dueInvestmentAmount.value}`,
+    numbers: `$${dueInvestmentAmount.value.toLocaleString('en-US', {minimumFractionDigits: 2})}`,
     title: "Total due investment",
   },
 ];
