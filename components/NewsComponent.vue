@@ -5,12 +5,15 @@ interface Props {
 const props = defineProps<Props>();
 </script>
 <template>
-  <div class="news grid grid-cols-5 my-4">
+  <div class="news grid grid-cols-4 grid-flow-row auto-rows-[minmax(0,_180px)] gap-4 my-4">
     <div
-      class="w-full h-auto border overflow-hidden relative border-gray-400 rounded-md mx-3"
+      class="w-full h-auto border overflow-hidden relative border-gray-400 rounded-md mx-3 image-con"
       v-for="(item, index) in props.newsList"
       :key="index"
-    >
+    > 
+      <div class="overlay">
+        <i-mdi-delete class="text-white text-3xl"/>
+      </div>
       <img :src="item" :alt="`News-${index}`" class="w-full h-full" />
     </div>
   </div>
@@ -24,6 +27,9 @@ const props = defineProps<Props>();
   width: 100%;
   height: 100%;
   display: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .image-con:hover .overlay {
   display: unset;

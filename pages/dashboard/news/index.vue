@@ -3,15 +3,20 @@ const { $storage } = useNuxtApp();
 const news = ref([]);
 const getNews = async () => {
   // @ts-ignore
-  const { newsList } = await listNews($storage);
-  news.value = newsList;
+  await listNews($storage)
+    .then((newsList: any[]) => {
+      news.value = newsList;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
-onMounted(async () => {
-  await getNews();
-});
 definePageMeta({
   layout: false,
   // middleware: ["auth"]
+});
+watchEffect(async () => {
+  await getNews();
 });
 </script>
 
@@ -27,7 +32,7 @@ definePageMeta({
       </Head>
     </Html>
     <NuxtLayout name="dashboard">
-      <NewsComponent :newsList="news"/>
+      <NewsComponent :newsList="news" />
     </NuxtLayout>
   </div>
 </template>

@@ -42,7 +42,7 @@ export const listNews = async (storage: FirebaseStorage) => {
         const url = await getDownloadURL(itemRef)
         newsList.push(url)
       });
-      resolve({newsList})
+      resolve(newsList)
     })
   })
 }
