@@ -20,6 +20,12 @@ export const saveFile = async (fullPath, file) => {
   }
 }
 
+export const dollarPrice = async () => {
+  return await new Promise((resolve, reject) => {
+    
+  })
+}
+
 export const uploadFile = async (file) => {
   return await new Promise((resolve, reject) => {
     let reader = new FileReader()
