@@ -1,10 +1,16 @@
-<script lang="ts" setup>
+<script setup>
+
+const newPrice = ref(0)
+const changePrice = async () => {
+  const {price} = await getDollarPrice()
+  console.log(price)
+}
 </script>
 <template>
   <div
     class="bg-white h-1/6 w-full flex justify-end items-center px-4"
   >
-    <div class="price">
+    <div class="price mr-4">
       <p>Current Dollar Price: <span class="font-semibold text-2xl">N590</span></p>
     </div>
     <div class="search-component w-1/6 mb-3">
@@ -15,10 +21,12 @@
           type="search"
           class="placeholder-gray-500 w-full bg-transparent text-base font-normal text-gray-500 outline-none focus:border-none"
           placeholder="Set New Dollar Price"
-          v-model="searchInput"
-          @keyup="searchEvent"
+          v-model="newPrice"
         />
       </div>
+    </div>
+    <div v-if="newPrice.length > 0">
+      <button class="p-3 rounded-md bg-brand-blue" @click="changePrice">Save</button>
     </div>
   </div>
 </template>

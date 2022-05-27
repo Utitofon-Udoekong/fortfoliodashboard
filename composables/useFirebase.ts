@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
+import { doc, getFirestore, onSnapshot, updateDoc } from "firebase/firestore";
 import { getDownloadURL, getMetadata, getStorage, ref, uploadString } from "firebase/storage";
 
 import { useUserStore } from "~~/store/userStore";
@@ -20,10 +21,25 @@ export const saveFile = async (fullPath, file) => {
   }
 }
 
-export const dollarPrice = async () => {
+export const getDollarPrice = async () => {
   return await new Promise((resolve, reject) => {
-    
+    const config = useRuntimeConfig()
+    console.log("EGO ID: %d",config.EGO_ID)
+    const db = getFirestore()
+    onSnapshot(doc(db, "egoPrice", config.EGO_ID), (doc) => {
+      const data = doc.data()
+      resolve({data})
+    });
   })
+}
+
+export const changeDollarPrice = async (newPrice) => {
+  const db = getFirestore()
+  const config = useRuntimeConfig()
+  const priceRef = doc(db, "egoPrice", config.EGO_ID);
+  await updateDoc(priceRef, {
+    dollarToNaira: newPrice
+  });
 }
 
 export const uploadFile = async (file) => {
