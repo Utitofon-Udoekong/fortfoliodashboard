@@ -5,8 +5,9 @@ const firebaseUser = useFirebaseUser()
 const showError = ref(false);
 const showSuccess = ref(false);
 const notificationMessage = ref("");
+const loading = ref(false);
+const loadingEvent = (e) => (loading.value = e);
 const signin = async () => {
-  console.log(signinForm.value);
   await signInUser(signinForm.value.email, signinForm.value.password)
     .then(async (_) => {
       showSuccess.value = true;
@@ -23,6 +24,7 @@ const signinForm = ref({ email: "", password: "" });
 
 watch(showError, (newVal) => {
   if (newVal === true) {
+    loading.value = false
     setTimeout(() => {
       showError.value = false;
     }, 1500);
@@ -30,6 +32,7 @@ watch(showError, (newVal) => {
 });
 
 watch(showSuccess, (newVal) => {
+  loading.value = false
   if (newVal === true) {
     setTimeout(() => {
       showSuccess.value = false;
@@ -50,6 +53,7 @@ watch(firebaseUser, (newVal) => {
       :showSuccess="showSuccess"
       :message="notificationMessage"
     />
+    <Loader :loading="loading" />
     <div class="h-screen">
       <Html>
         <Head>
@@ -59,7 +63,7 @@ watch(firebaseUser, (newVal) => {
       </Html>
       <div class="flex justify-center items-center h-full">
         <div class="w-80 flex flex-col border border-gray-600">
-          <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" />
+          <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" @loading="loadingEvent" />
         </div>
       </div>
     </div>

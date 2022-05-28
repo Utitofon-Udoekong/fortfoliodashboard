@@ -26,7 +26,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     provider: new ReCaptchaV3Provider(config.RECAPTCHA_SERVER_KEY),
     isTokenAutoRefreshEnabled: true
   });
-
+  console.log(config.RECAPTCHA_SERVER_KEY)
 
   initUser();
 

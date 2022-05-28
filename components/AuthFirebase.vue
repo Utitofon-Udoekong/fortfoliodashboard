@@ -28,7 +28,7 @@
 
       <button
         class="text-white p-4 text-center text-md w-full bg-brand-blue mb-3"
-        @click="$emit('submit')"
+        @click="$emit(['submit','loading'])"
       >
         Submit
       </button>
@@ -36,6 +36,11 @@
 </template>
 
 <script setup>
+const emits = defineEmits(["submit",'loading'])
+const submit = () => {
+  emits("submit")
+  emits("loading", true)
+}
 defineProps({
   form: Object,
   title: String,
