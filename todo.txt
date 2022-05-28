@@ -1,7 +1,0 @@
-Add collectiongroups to security rules
-/investment/....
-
-add single indexes to firestore
-
-storage. Omo
-Add field to set new dollar amount
