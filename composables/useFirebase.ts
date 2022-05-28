@@ -118,7 +118,7 @@ export const initUser = async () => {
     firebaseUser.value = user;
 
     // @ts-ignore
-    userCookie.value = user; //ignore error because nuxt will serialize to json
+    userCookie.value = user;
 
     $fetch("/api/auth", {
       method: "POST",
