@@ -28,7 +28,7 @@
 
       <button
         class="text-white p-4 text-center text-md w-full bg-brand-blue mb-3"
-        @click="$emit(['submit','loading'])"
+        @click="submit"
       >
         Submit
       </button>
