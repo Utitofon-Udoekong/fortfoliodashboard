@@ -23,7 +23,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   // set recaptcha key in firebase
   const app = initializeApp(firebaseConfig);
   initializeAppCheck(app, {
-    provider: new ReCaptchaV3Provider(config.RECAPTCHA_SERVER_KEY),
+    provider: new ReCaptchaV3Provider("6Le-eCcgAAAAAC3IN0RKos4l2gLT60GvLLGoobbq"),
     isTokenAutoRefreshEnabled: true
   });
   console.log(config.RECAPTCHA_SERVER_KEY)
