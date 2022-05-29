@@ -21,11 +21,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   };
 
   const app = initializeApp(firebaseConfig);
-  // @ts-ignore
-  self.FIREBASE_APPCHECK_DEBUG_TOKEN = "463cd0bb-4b76-48db-bc8b-589335c19622";
 
   initializeAppCheck(app, {
-    provider: new ReCaptchaV3Provider(config.FIREBASE_APPCHECK_DEBUG_TOKEN),
+    provider: new ReCaptchaV3Provider(config.RECAPTCHA_SITE_KEY),
     isTokenAutoRefreshEnabled: true
   });
 
