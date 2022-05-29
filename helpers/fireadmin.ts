@@ -4,9 +4,12 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 let app;
 const config = useRuntimeConfig()
+const serviceAccount = JSON.parse(
+    config.FIREBASE_SERVICE_ACCOUNT_KEY as string
+);
 if (!getApps().length) {
     app = initializeApp({
-        credential: cert('./serviceAccount.json'),
+        credential: cert(serviceAccount),
         storageBucket: config.STORAGE_BUCKET
     });
 } else {

@@ -41,6 +41,7 @@ export default defineNuxtConfig({
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
     FIREBASE_DEBUG_TOKEN: process.env.FIREBASE_DEBUG_TOKEN,
     EGO_ID: process.env.EGO_ID,
+    FIREBASE_SERVICE_ACCOUNT_KEY: process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
   },
   privateRuntimeConfig: {
     API_KEY: process.env.API_KEY,
@@ -53,5 +54,6 @@ export default defineNuxtConfig({
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
     FIREBASE_DEBUG_TOKEN: process.env.FIREBASE_DEBUG_TOKEN,
     EGO_ID: process.env.EGO_ID,
+    FIREBASE_SERVICE_ACCOUNT_KEY: process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
   },
 })
