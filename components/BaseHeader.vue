@@ -23,10 +23,10 @@ const changePrice = async () => {
   }
 }
 const snapPrice = (snap) => price.value = snap
-const getPrice = async () => {
-  const zazu = await getDollarPrice($firestore)
-  price.value = zazu
-}
+// const getPrice = async () => {
+//   const zazu = await getDollarPrice($firestore)
+//   price.value = zazu
+// }
 watchEffect(() =>{
   const unsubscribe = onSnapshot(doc($firestore,"egoPrice",config.EGO_ID), (querySnapshot) => {
     const docData = querySnapshot.data()

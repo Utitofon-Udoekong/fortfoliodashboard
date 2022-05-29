@@ -5,8 +5,8 @@ import { useUserStore } from "~~/store/userStore";
 import formatter from "~~/helpers/formatIsoDate";
 import { doc, updateDoc, writeBatch } from "@firebase/firestore";
 const store = useUserStore();
-const { $db } = useNuxtApp();
-const batch = writeBatch($db);
+const { $firestore } = useNuxtApp();
+
 
 // states
 const columns = [
@@ -67,8 +67,9 @@ const notificationMessage = ref("");
 // methods
 const refresh = () => {store.setKyc()}
 const approveKYC = async (uid: string) => {
-  const userVerifiedQuery = doc($db, "authUsers", uid);
-  const kycQuery = doc($db, "kyc", uid);
+  const batch = writeBatch($firestore);
+  const userVerifiedQuery = doc($firestore, "authUsers", uid);
+  const kycQuery = doc($firestore, "kyc", uid);
   try {
     batch.update(userVerifiedQuery, {
       isVerified: true,
@@ -92,7 +93,7 @@ const approveKYC = async (uid: string) => {
 };
 
 const rejectKYC = async (uid: string) => {
-  const ref = doc($db, "kyc", uid);
+  const ref = doc($firestore, "kyc", uid);
   try {
     await updateDoc(ref, {
       isVerified: false,

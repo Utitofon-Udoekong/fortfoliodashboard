@@ -3,6 +3,7 @@ import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
 // states
+
 const store = useUserStore()
 const columns = [
   { name: "id", text: "User ID" },
@@ -57,7 +58,6 @@ const selectRow = (user: UsersTableData) => {
   editableUser.push(user);
   showUserData.value = true;
 };
-const toggleTabs = (toggleNumber: number) => (openTab.value = toggleNumber);
 
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
@@ -185,9 +185,9 @@ let classObject = computed(() => {
 // lifecycle
 onMounted(() => {
   // store.setuser()
-  if(usersData.value.length > 0){
     paginateData(usersData.value);
-  }
+  // if(usersData.value.length > 0){
+  // }
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>

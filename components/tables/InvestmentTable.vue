@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { InvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
-// import {search,paginate,pages} from "alga-js/array"
 import { useUserStore } from "~~/store/userStore";
 import {
   collectionGroup,
@@ -13,8 +12,8 @@ import {
 } from "@firebase/firestore";
 import formatter from "~~/helpers/formatIsoDate";
 const store = useUserStore();
-const { $db } = useNuxtApp();
-const batch = writeBatch($db);
+const { $firestore } = useNuxtApp();
+const batch = writeBatch($firestore);
 
 // states
 const columns = [
@@ -71,11 +70,11 @@ const notificationMessage = ref("");
 const refresh = () => {store.setInvestments()}
 const cancelInvestment = async (traxId: string) => {
   const ref = query(
-    collectionGroup($db, "investments"),
+    collectionGroup($firestore, "investments"),
     where("traxId", "==", traxId)
   );
   const notificationRef = query(
-    collectionGroup($db, 'notifications'),
+    collectionGroup($firestore, 'notifications'),
     where('id','==',traxId)
   )
   const querySnapshot = await getDocs(ref);
@@ -110,11 +109,11 @@ const cancelInvestment = async (traxId: string) => {
 
 const approveInvestment = async (traxId: string) => {
   const ref = query(
-    collectionGroup($db, "investments"),
+    collectionGroup($firestore, "investments"),
     where("traxId", "==", traxId)
   );
   const notificationRef = query(
-    collectionGroup($db, 'notifications'),
+    collectionGroup($firestore, 'notifications'),
     where('id','==',traxId)
   )
   try {
@@ -446,7 +445,7 @@ onMounted(() => {
         <div class="overflow-x-scroll lg:overflow-x-hidden">
           <div class="py-2 align-middle inline-block min-w-full">
             <div class="overflow-hidden border-b border-gray-200 sm:rounded-lg">
-              <table class="min-w-full divide-y divide-gray-200">
+              <table class="min-w-full divide-y divide-gray-200" v-if="investmentsData.length > 0">
                 <thead class="bg-transparent">
                   <tr>
                     <th
@@ -581,6 +580,9 @@ onMounted(() => {
                   </tr>
                 </tbody>
               </table>
+              <div class="bg-white p-5 w-full" v-else>
+                  <p class="text-2xl text-center">NO UPCOMING INVESTMENTS</p>
+                </div>
               <div
                 class="py-3 px-6 table-controls h-full w-full items-center justify-between border border-t-gray-200"
               >
@@ -659,14 +661,14 @@ onMounted(() => {
                   </button>
                 </div>
 
-                <div class="entries my-3">
+                <!-- <div class="entries my-3">
                   <p
                     class="text-gray-700 text-sm font-normal whitespace-nowrap"
                   >
                     Showing {{ showInfo.from }} to {{ showInfo.to }} of
                     {{ showInfo.of }}
                   </p>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

@@ -29,7 +29,11 @@ definePageMeta({
   middleware: ["auth"]
 });
 watchEffect(async () => {
-  await getNews()
+  await listNews($storage).then((newsList: any[]) => {
+    news.value = newsList
+  }).catch((error) => {
+    console.error(error)
+  });
 })
 watch(showError, (newVal) => {
   if (newVal === true) {

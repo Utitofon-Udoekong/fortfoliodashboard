@@ -11,8 +11,8 @@ import {
   writeBatch,
 } from "@firebase/firestore";
 const store = useUserStore();
-const { $db } = useNuxtApp();
-const batch = writeBatch($db);
+const { $firestore } = useNuxtApp();
+
 // states
 const columns = [
   { name: "traxId", text: "Trax ID" },
@@ -87,12 +87,13 @@ const getHeight = async (e: MouseEvent) => {
 };
 
 const approveWithdrawal = async (traxId: string) => {
+  const batch = writeBatch($firestore);
   const ref = query(
-    collectionGroup($db, "withdrawals"),
+    collectionGroup($firestore, "withdrawals"),
     where("traxId", "==", traxId)
   );
   const notref = query(
-    collectionGroup($db, "withdrawals"),
+    collectionGroup($firestore, "withdrawals"),
     where("traxId", "==", traxId)
   );
   const querySnapshot = await getDocs(ref);
@@ -124,13 +125,14 @@ const approveWithdrawal = async (traxId: string) => {
   }
 };
 const cancelWithdrawal = async (traxId: string) => {
+  const batch = writeBatch($firestore);
   const ref = query(
-    collectionGroup($db, "withdrawals"),
+    collectionGroup($firestore, "withdrawals"),
     where("traxId", "==", traxId)
   );
   const querySnapshot = await getDocs(ref);
   const notref = query(
-    collectionGroup($db, "withdrawals"),
+    collectionGroup($firestore, "withdrawals"),
     where("traxId", "==", traxId)
   );
   const notSnapshot = await getDocs(notref);
