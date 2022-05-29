@@ -20,7 +20,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     measurementId: config.MEASUREMENT_ID
   };
 
-  // set recaptcha key in firebase
   const app = initializeApp(firebaseConfig);
   initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(config.RECAPTCHA_KEY),
