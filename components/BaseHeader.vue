@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+import { query, onSnapshot, doc } from '@firebase/firestore';
+
 const {$firestore} = useNuxtApp()
+const config = useRuntimeConfig()
 const newPrice = ref<number>(null)
 const price = ref<number>(0)
 const showError = ref(false);
@@ -10,19 +13,26 @@ const changePrice = async () => {
   const {changed} = await changeDollarPrice(newPrice.value, $firestore)
   if(changed){
     newPrice.value = null
-    await getPrice().then(() => {
       showSuccess.value = true
       notificationMessage.value = "Price Updated"
-    })
+    // await getPrice().then(() => {
+    // })
   }else{
     showError.value = true
     notificationMessage.value = "Encountered a server error"
   }
 }
+const snapPrice = (snap) => price.value = snap
 const getPrice = async () => {
   const zazu = await getDollarPrice($firestore)
   price.value = zazu
 }
+watchEffect(() =>{
+  const unsubscribe = onSnapshot(doc($firestore,"egoPrice",config.EGO_ID), (querySnapshot) => {
+    const docData = querySnapshot.data()
+    snapPrice(docData["dollarToNaira"])
+  });
+})
 watch(showError, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {
@@ -40,7 +50,7 @@ watch(showSuccess, (newVal) => {
 });
 
 onMounted(async () => {
-  await getPrice()
+  // await getPrice()
 })
 
 </script>
