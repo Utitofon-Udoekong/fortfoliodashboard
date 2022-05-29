@@ -21,7 +21,7 @@
     "alga-js": "^0.1.0-wood-6",
     "dropzone": "^6.0.0-beta.2",
     "esbuild": "^0.14.39",
-    "firebase": "^9.6.6",
+    "firebase": "^9.8.2",
     "firebase-admin": "^10.0.2",
     "moment": "^2.29.3",
     "pinia": "^2.0.14"
