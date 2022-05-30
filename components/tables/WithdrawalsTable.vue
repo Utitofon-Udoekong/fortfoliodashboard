@@ -302,6 +302,8 @@ onMounted(() => {
 // lifecycle---------------------
 </script>
 <template>
+  <Loader :loading="loading"/>
+  <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
   <div class="h-auto mt-4">
     <div class="table-form">
       <div class="flex mb-3 justify-between">

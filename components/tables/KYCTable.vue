@@ -276,6 +276,7 @@ onMounted(() => {
 </script>
 <template>
   <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
+  <Loader :loading="loading"/>
   <div class="h-auto mb-5">
     <ImageModal
       :imageSource="imageSource"
