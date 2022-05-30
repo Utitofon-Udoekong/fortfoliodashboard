@@ -180,10 +180,7 @@ let classObject = computed(() => {
 
 // lifecycle
 onMounted(() => {
-  // store.setuser()
-    paginateData(usersData.value);
-  // if(usersData.value.length > 0){
-  // }
+  paginateData(usersData.value);
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>

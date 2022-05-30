@@ -1,6 +1,5 @@
 {
   "functions": {
-    "source": ".output/server",
     "runtime": "nodejs16"
   },
   "hosting": {

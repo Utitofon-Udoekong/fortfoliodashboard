@@ -392,9 +392,7 @@ watch(showSuccess, (newVal: boolean) => {
 // computed------------------------------------------------------------------------------
 // lifecycle
 onMounted(() => {
-  if(investmentsData.value.length > 0){
-    paginateData(investmentsData.value);
-  }
+  paginateData(investmentsData.value);
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>

@@ -268,9 +268,7 @@ watch(showSuccess, (newVal) => {
 
 // lifecycle
 onMounted(() => {
-  if(kycDataList.value.length > 0){
-    paginateData(kycDataList.value);
-  }
+  paginateData(kycDataList.value);
 });
 // lifecycle---------------------
 </script>
