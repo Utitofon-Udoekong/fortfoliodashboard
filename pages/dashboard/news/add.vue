@@ -13,8 +13,8 @@ const fileChangeEvent = (e) => {
 
 </script>
 <template>
-  <Loader :loading="loading" />
   <div>
+    <Loader :loading="loading" />
     <Html>
       <Head>
         <Title>Dashboard - Add News</Title>

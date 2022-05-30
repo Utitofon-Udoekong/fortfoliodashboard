@@ -2,16 +2,16 @@
   <div>
     <Html>
     <Head>
-      <Title>Dashboard - Users</Title>
-      <Meta
-        name="description"
-        content="Fortfolio Admin dashboard landing page"
-      />
-    </Head>
-  </Html>
-  <NuxtLayout name="dashboard">
-    <TablesUsersTable />
-  </NuxtLayout>
+        <Title>Dashboard - Users</Title>
+        <Meta
+          name="description"
+          content="Fortfolio Admin dashboard landing page"
+        />
+      </Head>
+    </Html>
+    <NuxtLayout name="dashboard">
+      <TablesUsersTable />
+    </NuxtLayout>
   </div>
 </template>
 

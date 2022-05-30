@@ -101,13 +101,13 @@ definePageMeta({
 </script>
 
 <template>
-  <Notifications
-    :showError="showError"
-    :showSuccess="showSuccess"
-    :message="notificationMessage"
-  />
-  <Loader :loading="loading" />
   <div>
+    <Notifications
+      :showError="showError"
+      :showSuccess="showSuccess"
+      :message="notificationMessage"
+    />
+    <Loader :loading="loading" />
     <Html>
       <Head>
         <Title>Dashboard - News</Title>
