@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { getDownloadURL, listAll, ref as imageRef } from "@firebase/storage";
+
 const { $storage } = useNuxtApp();
 const news = ref([]);
 const showError = ref(false);
@@ -6,39 +8,54 @@ const showSuccess = ref(false);
 const loading = ref(false);
 const notificationMessage = ref("");
 const deleteSelectedNews = async (index) => {
-  const newsObj = news.value[index]
-  const ref = newsObj.ref
-  await deleteNews(ref).then(() => {
-    showSuccess.value = true
-    getNews()
-    notificationMessage.value = "File deleted"
-  }).catch((error) => {
-    showError.value = true
-    notificationMessage.value = `An error occured. Code: ${error}`
-  });
-}
+  const newsObj = news.value[index];
+  const ref = newsObj.ref;
+  await deleteNews(ref)
+    .then(() => {
+      showSuccess.value = true;
+      getNews();
+      notificationMessage.value = "File deleted";
+    })
+    .catch((error) => {
+      showError.value = true;
+      notificationMessage.value = `An error occured. Code: ${error}`;
+    });
+};
 const getNews = async () => {
   // @ts-ignore
-  await listNews($storage).then((newsList: any[]) => {
-    news.value = newsList
-  }).catch((error) => {
-    console.error(error)
-  });
+  await listNews($storage)
+    .then((newsList: any[]) => {
+      news.value = newsList;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 definePageMeta({
   layout: false,
-  middleware: ["auth"]
+  middleware: ["auth"],
 });
-watchEffect(async () => {
-  loading.value = true
-  await listNews($storage).then((newsList: any[]) => {
-    loading.value = false
-    news.value = newsList
-  }).catch((error) => {
-    loading.value = false
-    console.error(error)
-  });
-})
+watchEffect(() => {
+  loading.value = true;
+  const listRef = imageRef($storage, "news");
+
+  listAll(listRef)
+    .then((res) => {
+      res.items.forEach(async (itemRef) => {
+        const url = await getDownloadURL(itemRef)
+        news.value.push({
+          ref: itemRef,
+          url: url
+        })
+      });
+    })
+    .catch((error) => {
+      loading.value = false
+      showError.value = true
+      notificationMessage.value = error
+      console.error(error)
+    });
+});
 watch(showError, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {
@@ -60,12 +77,12 @@ watch(showSuccess, (newVal) => {
 </script>
 
 <template>
-    <Notifications
-      :showError="showError"
-      :showSuccess="showSuccess"
-      :message="notificationMessage"
-    />
-    <Loader :loading="loading"/>
+  <Notifications
+    :showError="showError"
+    :showSuccess="showSuccess"
+    :message="notificationMessage"
+  />
+  <Loader :loading="loading" />
   <div>
     <Html>
       <Head>
@@ -78,10 +95,8 @@ watch(showSuccess, (newVal) => {
     </Html>
     <NuxtLayout name="dashboard">
       <Suspense>
-        <NewsComponent :newsList="news" @deleteNews="deleteSelectedNews"/>
-        <template #fallback>
-          loading...
-        </template>
+        <NewsComponent :newsList="news" @deleteNews="deleteSelectedNews" />
+        <template #fallback> loading... </template>
       </Suspense>
     </NuxtLayout>
   </div>
