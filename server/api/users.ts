@@ -1,10 +1,8 @@
-import { IncomingMessage, ServerResponse } from "http";
-import { snapshot } from "unstorage";
 import { db } from "~~/helpers/fireadmin";
 
-export default async (request: IncomingMessage, response: ServerResponse) => {
+export default async () => {
     const usersSnap = await db.collection('authUsers').get();
-    if(usersSnap.empty) return []
+    if(usersSnap.empty || !usersSnap) return []
     const users = usersSnap.docs.map((doc) => {
         return {
             uuid: doc.id,

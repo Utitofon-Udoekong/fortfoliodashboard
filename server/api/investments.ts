@@ -1,11 +1,10 @@
-import { IncomingMessage, ServerResponse } from "http";
 import { db } from "~~/helpers/fireadmin";
 
 
-export default async (req:IncomingMessage, res: ServerResponse) => {
+export default async () => {
     
     const investments = await db.collectionGroup("investments").get()
-    if(investments.empty) return []
+    if(investments.empty || !investments) return []
    
     const investmentsData = investments.docs.map((doc) => {
         return {

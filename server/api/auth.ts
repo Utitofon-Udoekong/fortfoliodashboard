@@ -1,7 +1,6 @@
-import type { ServerResponse } from "http";
 import { useBody } from 'h3'
 
-export default async (req, res: ServerResponse) => {
+export default async (req) => {
 
     if(req.method !== 'POST') return 'Invalid request'
 

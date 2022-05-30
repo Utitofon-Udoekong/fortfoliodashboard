@@ -39,9 +39,13 @@ watch(showSuccess, (newVal) => {
     }, 1500);
   }
 });
-watch(firebaseUser, (newVal) => {
-  if (newVal) {
-    router.push("/dashboard");
+watchEffect(() => {
+  const firebaseUser = useFirebaseUser()
+  if (!firebaseUser) {
+    loading.value = true
+  }else{
+    loading.value = false
+    router.push("/dashboard")
   }
 });
 </script>
