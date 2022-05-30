@@ -667,14 +667,14 @@ onMounted(() => {
                   </button>
                 </div>
 
-                <!-- <div class="entries my-3">
+                <div class="entries my-3">
                   <p
                     class="text-gray-700 text-sm font-normal whitespace-nowrap"
                   >
                     Showing {{ showInfo.from }} to {{ showInfo.to }} of
                     {{ showInfo.of }}
                   </p>
-                </div> -->
+                </div>
               </div>
             </div>
           </div>
