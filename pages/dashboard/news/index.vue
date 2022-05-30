@@ -33,16 +33,14 @@ const getNews = async () => {
   await listAll(listRef)
     .then((res) => {
       loading.value = false
-      const newsList = []
       if(res.items.length > 0){
         res.items.forEach(async (itemRef) => {
           const url = await getDownloadURL(itemRef)
-          newsList.push({
+          news.value.push({
             ref: itemRef,
             url: url
           })
         });
-        news.value = newsList
       }
     })
     .catch((error) => {
@@ -59,17 +57,15 @@ watchEffect(async () => {
 
   await listAll(listRef)
     .then((res) => {
-      const newsList = []
       loading.value = false
       if(res.items.length > 0){
         res.items.forEach(async (itemRef) => {
           const url = await getDownloadURL(itemRef)
-          newsList.push({
+          news.value.push({
             ref: itemRef,
             url: url
           })
         });
-        news.value = newsList
       }
     })
     .catch((error) => {
