@@ -62,31 +62,34 @@ let imageSource = ref("");
 const showError = ref(false);
 const showSuccess = ref(false);
 const notificationMessage = ref("");
+const loading = ref(false)
 // states------------------------------------------------------------------------------
 
 // methods
-const refresh = () => {store.setKyc()}
+const refresh = async () => {await store.setKyc()}
 const approveKYC = async (uid: string) => {
   const batch = writeBatch($firestore);
   const userVerifiedQuery = doc($firestore, "authUsers", uid);
-  const kycQuery = doc($firestore, "kyc", uid);
   try {
+    loading.value = true
     batch.update(userVerifiedQuery, {
       isVerified: true,
     });
-    batch.delete(kycQuery);
     await batch.commit().then(
-      () => {
-        refresh()
+      async () => {
+        await refresh()
+        loading.value = false
         notificationMessage.value = `KYC for ${uid} Approved`;
         showSuccess.value = true;
       },
       (d) => {
+        loading.value = false
         notificationMessage.value = `An error occured: ${d}`;
         showError.value = true;
       }
     );
   } catch (error) {
+    loading.value = false
     notificationMessage.value = `An error occured: ${error}`;
     showError.value = true;
   }
@@ -95,20 +98,24 @@ const approveKYC = async (uid: string) => {
 const rejectKYC = async (uid: string) => {
   const ref = doc($firestore, "kyc", uid);
   try {
+    loading.value = true
     await updateDoc(ref, {
       isVerified: false,
       status: "Rejected",
     }).then(
       () => {
+        loading.value = false
         notificationMessage.value = `KYC for ${uid} Approved`;
         showSuccess.value = true;
       },
       (d) => {
+        loading.value = false
         notificationMessage.value = `An error occured: ${d}`;
         showError.value = true;
       }
     );
   } catch (error) {
+    loading.value = false
     notificationMessage.value = `An error occured: ${error}`;
     showError.value = true;
   }

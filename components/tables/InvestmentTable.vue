@@ -64,10 +64,11 @@ const openTab = ref(1);
 const showError = ref(false);
 const showSuccess = ref(false);
 const notificationMessage = ref("");
+const loading = ref(false);
 // states------------------------------------------------------------------------------
 
 // methods
-const refresh = () => {store.setInvestments()}
+const refresh = async () => {await store.setInvestments()}
 const cancelInvestment = async (traxId: string) => {
   const ref = query(
     collectionGroup($firestore, "investments"),
@@ -91,8 +92,8 @@ const cancelInvestment = async (traxId: string) => {
       });
     });
     await batch.commit().then(
-      () => {
-        refresh()
+      async () => {
+        await refresh()
         notificationMessage.value = `Investment for ${traxId} cancelled`;
         showSuccess.value = true;
       },
@@ -117,6 +118,7 @@ const approveInvestment = async (traxId: string) => {
     where('id','==',traxId)
   )
   try {
+    loading.value = true
     const querySnapshot = await getDocs(ref);
     const notifiSnap = await getDocs(notificationRef)
     querySnapshot.forEach((doc) => {
@@ -130,17 +132,20 @@ const approveInvestment = async (traxId: string) => {
       });
     });
     await batch.commit().then(
-      () => {
-        refresh()
+      async () => {
+        await refresh()
+        loading.value = false
         notificationMessage.value = `Investment for ${traxId} Approved`;
         showSuccess.value = true;
       },
       (d) => {
+        loading.value = false
         notificationMessage.value = `An error occured: ${d}`;
         showError.value = true;
       }
     );
   } catch (error) {
+    loading.value = false
     notificationMessage.value = `An error occured: ${error}`;
     showError.value = true;
   }
@@ -395,6 +400,7 @@ onMounted(() => {
 </script>
 <template>
   <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
+  <Loader :loading="loading"/>
   <div class="h-auto">
     <div class="table-form">
       <div class="flex mb-3 justify-between">

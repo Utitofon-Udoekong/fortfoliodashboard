@@ -66,6 +66,7 @@ let showModal = ref(false);
 const showError = ref(false);
 const showSuccess = ref(false);
 const notificationMessage = ref("");
+const loading = ref(false)
 // states------------------------------------------------------------------------------
 
 // methods
@@ -80,7 +81,7 @@ const selectRow = (traxId: string) => {
   editableUser.push(withdrawalData);
   showModal.value = true;
 };
-
+const refresh = async () => {await store.setWithdrawals()}
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
   leftPos.value = e.pageX - 120;
@@ -99,6 +100,7 @@ const approveWithdrawal = async (traxId: string) => {
   const querySnapshot = await getDocs(ref);
   const notSnapshot = await getDocs(notref);
   try {
+    loading.value = true
     querySnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Successful",
@@ -110,16 +112,20 @@ const approveWithdrawal = async (traxId: string) => {
       });
     });
     await batch.commit().then(
-      () => {
+      async () => {
+        await refresh()
+        loading.value = false
         notificationMessage.value = `Withdrawal for ${traxId} approved`;
         showSuccess.value = true;
       },
       (d) => {
+        loading.value = false
         notificationMessage.value = `An error occured: ${d}`;
         showError.value = true;
       }
     );
   } catch (error) {
+    loading.value = false
     notificationMessage.value = `An error occured: ${error}`;
     showError.value = true;
   }
@@ -137,6 +143,7 @@ const cancelWithdrawal = async (traxId: string) => {
   );
   const notSnapshot = await getDocs(notref);
   try {
+    loading.value = true
     querySnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Cancelled",
@@ -149,15 +156,18 @@ const cancelWithdrawal = async (traxId: string) => {
     });
     await batch.commit().then(
       () => {
+        loading.value = false
         notificationMessage.value = `Withdrawal for ${traxId} cancelled`;
         showSuccess.value = true;
       },
       (d) => {
+        loading.value = false
         notificationMessage.value = `An error occured: ${d}`;
         showError.value = true;
       }
     );
   } catch (error) {
+    loading.value = false
     notificationMessage.value = `An error occured: ${error}`;
     showError.value = true;
   }

@@ -50,7 +50,6 @@ let showUserData = ref(false);
 const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: UsersTableData[] = [];
-const openTab = ref(1);
 // states------------------------------------------------------------------------------
 
 // methods
@@ -64,10 +63,7 @@ const getHeight = async (e: MouseEvent) => {
   leftPos.value = e.pageX - 120;
   // console.log(top.value, left.value)
 };
-const toggleUserData = () => {
-  showUserData.value = !showUserData.value;
-  editableUser.pop();
-};
+
 const open = async (index: number, e: MouseEvent) => {
   await getHeight(e).then(() => {
     show.value === null ? (show.value = index) : (show.value = null);
