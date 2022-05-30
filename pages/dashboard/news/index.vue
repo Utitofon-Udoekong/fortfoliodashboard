@@ -32,13 +32,16 @@ const getNews = async () => {
 
   await listAll(listRef)
     .then((res) => {
-      res.items.forEach(async (itemRef) => {
-        const url = await getDownloadURL(itemRef)
-        news.value.push({
-          ref: itemRef,
-          url: url
-        })
-      });
+      loading.value = false
+      if(res.items.length > 0){
+        res.items.forEach(async (itemRef) => {
+          const url = await getDownloadURL(itemRef)
+          news.value.push({
+            ref: itemRef,
+            url: url
+          })
+        });
+      }
     })
     .catch((error) => {
       loading.value = false
@@ -115,10 +118,7 @@ definePageMeta({
       </Head>
     </Html>
     <NuxtLayout name="dashboard">
-      <Suspense>
-        <NewsComponent :newsList="news" @deleteNews="deleteSelectedNews" />
-        <template #fallback> loading... </template>
-      </Suspense>
+      <NewsComponent :newsList="news" @deleteNews="deleteSelectedNews" />
     </NuxtLayout>
   </div>
 </template>
