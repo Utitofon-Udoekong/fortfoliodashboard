@@ -54,6 +54,7 @@ watchEffect(async () => {
 
   await listAll(listRef)
     .then((res) => {
+      loading.value = false
       res.items.forEach(async (itemRef) => {
         const url = await getDownloadURL(itemRef)
         news.value.push({
