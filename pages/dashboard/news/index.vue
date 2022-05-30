@@ -3,6 +3,7 @@ const { $storage } = useNuxtApp();
 const news = ref([]);
 const showError = ref(false);
 const showSuccess = ref(false);
+const loading = ref(false);
 const notificationMessage = ref("");
 const deleteSelectedNews = async (index) => {
   const newsObj = news.value[index]
@@ -29,9 +30,12 @@ definePageMeta({
   middleware: ["auth"]
 });
 watchEffect(async () => {
+  loading.value = true
   await listNews($storage).then((newsList: any[]) => {
+    loading.value = false
     news.value = newsList
   }).catch((error) => {
+    loading.value = false
     console.error(error)
   });
 })
@@ -61,6 +65,7 @@ watch(showSuccess, (newVal) => {
       :showSuccess="showSuccess"
       :message="notificationMessage"
     />
+    <Loader :loading="loading"/>
   <div>
     <Html>
       <Head>
