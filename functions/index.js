@@ -66,11 +66,19 @@ exports.firestoreLogger = functions.firestore
   .document('{collection}/{id}')
   .onWrite(async (change, context) => {
     const { collection, id } = context.params;
+    const {uid} = context.auth;
     if (collection !== 'firestore_log') {
-      const event = context.eventType;
-      const data = change.after.data();
-      const created_at = Date.now();
-      admin.firestore().collection('firestore_log').add({ collection, id, event, data, created_at });
+      try {
+        const event = context.eventType;
+        const data = {
+          before: change.before.data() ?? "Data unavailable",
+          after: change.after.data() ?? "Data unavailable"
+        };
+        const created_at = admin.firestore.FieldValue.serverTimestamp();
+        admin.firestore().collection('firestore_log').add({ userId: uid, collection, documentId: id, event, data, created_at });
+      } catch (error) {
+        functions.logger.error(error);
+      }
     }
   });
 exports.webhookHandler = functions.https.onRequest(async (req, res) => {

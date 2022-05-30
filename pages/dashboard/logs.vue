@@ -3,6 +3,9 @@ definePageMeta({
   layout: false,
   middleware: ["auth"],
 });
+watchEffect(() => {
+  
+})
 </script>
 <template>
     <div>
