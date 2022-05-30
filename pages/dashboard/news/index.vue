@@ -55,13 +55,15 @@ watchEffect(async () => {
   await listAll(listRef)
     .then((res) => {
       loading.value = false
-      res.items.forEach(async (itemRef) => {
-        const url = await getDownloadURL(itemRef)
-        news.value.push({
-          ref: itemRef,
-          url: url
-        })
-      });
+      if(res.items.length > 0){
+        res.items.forEach(async (itemRef) => {
+          const url = await getDownloadURL(itemRef)
+          news.value.push({
+            ref: itemRef,
+            url: url
+          })
+        });
+      }
     })
     .catch((error) => {
       loading.value = false
