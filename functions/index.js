@@ -25,13 +25,13 @@ exports.scheduleInvestments = functions.pubsub.schedule('0 0 * * *')
           const roi = documentData["roi"] ?? 0
           const duration = documentData["duration"]
           const numberOfDays = documentData["numberOfDays"]
-          const currentRoiForDuration = ((roi / 100) * duration) / 12 
+          const currentRoiForDuration = ((roi / 100) * duration) / 12
           const returnsAtEndOfDuration = currentRoiForDuration * amountInvested
           const returnsPerDay = returnsAtEndOfDuration / numberOfDays
           const dueDate = documentData["dueDate"]
           if (new Date(now.slice(0, 10)) < new Date(dueDate.slice(0, 10)) || new Date(now.slice(0, 10)).toString() === new Date(dueDate.slice(0, 10)).toString()) {
-            batch.update(doc.ref, { planYield: admin.firestore.FieldValue.increment(returnsPerDay)});
-          }else{
+            batch.update(doc.ref, { planYield: admin.firestore.FieldValue.increment(returnsPerDay) });
+          } else {
             return null;
           }
         });
@@ -47,22 +47,32 @@ exports.scheduleInvestments = functions.pubsub.schedule('0 0 * * *')
 
 
 exports.createCharge = functions.https.onRequest((req, res) => {
-    cors(req, res, async () => {
-      const chargeData = {
-        name: "Fort Crypto",
-        description: "Investment",
-        local_price: {
-          currency: 'USD',
-          amount: req.query.amount
-        },
-        pricing_type: 'fixed_price',
-      };
+  cors(req, res, async () => {
+    const chargeData = {
+      name: "Fort Crypto",
+      description: "Investment",
+      local_price: {
+        currency: 'USD',
+        amount: req.query.amount
+      },
+      pricing_type: 'fixed_price',
+    };
 
-      const charge = await Charge.create(chargeData);
-      res.send(charge);
-    });
+    const charge = await Charge.create(chargeData);
+    res.send(charge);
   });
-
+});
+exports.firestoreLogger = functions.firestore
+  .document('{collection}/{id}')
+  .onWrite(async (change, context) => {
+    const { collection, id } = context.params;
+    if (collection !== 'firestore_log') {
+      const event = context.eventType;
+      const data = change.after.data();
+      const created_at = Date.now();
+      admin.firestore().collection('firestore_log').add({ collection, id, event, data, created_at });
+    }
+  });
 exports.webhookHandler = functions.https.onRequest(async (req, res) => {
   cors(req, res, () => {
     const rawBody = req.rawBody;
