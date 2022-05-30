@@ -126,6 +126,14 @@ const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
             </NuxtLink>
           </div>
         </div>
+        <NuxtLink
+          :exact-active-class="'bg-brand-clear_white text-gray-50'"
+          to="/dashboard/logs"
+          class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+        >
+          <span class="pr-3"><i-mdi-math-log /></span>
+          <li :class="clamp ? 'hidden' : 'block'">Logs</li>
+        </NuxtLink>
         <p
           @click="signOut"
           class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"

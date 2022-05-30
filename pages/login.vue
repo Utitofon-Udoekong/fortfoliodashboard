@@ -45,10 +45,11 @@ watch(firebaseUser, (newVal) => {
     router.push("/dashboard")
   }
 });
-onMounted(() => {
-  const firebaseUser = useFirebaseUser()
-  if(!firebaseUser){
+watchEffect(() => {
+  if(firebaseUser === null){
     loading.value = true
+  }else{
+    loading.value = false
   }
 })
 
