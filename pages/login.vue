@@ -5,7 +5,7 @@ const firebaseUser = useFirebaseUser()
 const showError = ref(false);
 const showSuccess = ref(false);
 const notificationMessage = ref("");
-const loading = ref(false);
+const loading = ref(true);
 const loadingEvent = (e) => (loading.value = e);
 const signin = async () => {
   await signInUser(signinForm.value.email, signinForm.value.password)
@@ -43,15 +43,10 @@ watch(firebaseUser, (newVal) => {
   if (newVal) {
     loading.value = false
     router.push("/dashboard")
-  }
-});
-watchEffect(() => {
-  if(firebaseUser === null){
-    loading.value = true
   }else{
     loading.value = false
   }
-})
+});
 
 </script>
 
