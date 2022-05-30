@@ -28,6 +28,13 @@ watchEffect(() =>{
     snapPrice(docData["dollarToNaira"])
   });
 })
+
+onUnmounted(() => {
+  const unsubscribe = onSnapshot(doc($firestore,"egoPrice",config.EGO_ID), (querySnapshot) => {
+  });
+  unsubscribe()
+})
+
 watch(showError, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {

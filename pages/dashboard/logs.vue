@@ -35,6 +35,12 @@ watchEffect(() => {
     });
   });
 });
+onUnmounted(() => {
+  const q = query(collection($firestore, "firestore_log"));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+  });
+  unsubscribe()
+})
 </script>
 <template>
   <div>
