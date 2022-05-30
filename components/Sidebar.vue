@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 const { clamp, changeClamp } = inject("clamp");
-const router = useRouter()
+const router = useRouter();
 const signOut = async () => {
   await signOutUser().then(() => {
-    router.replace("/login")
+    router.replace("/login");
   });
 };
 const openNews = ref(false);
@@ -96,36 +96,15 @@ const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
           <span class="pr-3"><i-ph-file-arrow-up /></span>
           <li :class="clamp ? 'hidden' : 'block'">Withdrawals</li>
         </NuxtLink>
-        <div class="">
-          <p
-            @click="toggleNews"
-            class="flex justify-between items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
-          >
-            <li :class="clamp ? 'hidden' : 'block'">Manage news</li>
-            <span class="pr-3">
-              <i-ic-round-keyboard-arrow-up v-if="openNews" />
-              <i-ic-round-keyboard-arrow-down v-else />
-            </span>
-          </p>
-          <div class="body pl-4" v-if="openNews">
-            <NuxtLink
-              :exact-active-class="'bg-brand-clear_white text-gray-50'"
-              to="/dashboard/news"
-              class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
-            >
-              <span class="pr-3"><i-mdi-newspaper /></span>
-              <li :class="clamp ? 'hidden' : 'block'">News</li>
-            </NuxtLink>
-            <NuxtLink
-              :exact-active-class="'bg-brand-clear_white text-gray-50'"
-              to="/dashboard/news/add"
-              class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
-            >
-              <span class="pr-3"><i-mdi-newspaper-plus /></span>
-              <li :class="clamp ? 'hidden' : 'block'">Add news</li>
-            </NuxtLink>
-          </div>
-        </div>
+
+        <NuxtLink
+          :exact-active-class="'bg-brand-clear_white text-gray-50'"
+          to="/dashboard/news"
+          class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+        >
+          <span class="pr-3"><i-mdi-newspaper /></span>
+          <li :class="clamp ? 'hidden' : 'block'">Manage News</li>
+        </NuxtLink>
         <NuxtLink
           :exact-active-class="'bg-brand-clear_white text-gray-50'"
           to="/dashboard/logs"
