@@ -3,7 +3,6 @@ definePageMeta({
   layout: false,
   middleware: ["auth"]
 });
-const { $storage } = useNuxtApp();
 const showError = ref(false);
 const showSuccess = ref(false);
 const notificationMessage = ref("");
