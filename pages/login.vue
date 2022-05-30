@@ -5,7 +5,7 @@ const firebaseUser = useFirebaseUser()
 const showError = ref(false);
 const showSuccess = ref(false);
 const notificationMessage = ref("");
-const loading = ref(true);
+const loading = ref(false);
 const loadingEvent = (e) => (loading.value = e);
 const signin = async () => {
   await signInUser(signinForm.value.email, signinForm.value.password)

@@ -32,24 +32,6 @@ export const getDollarPrice = async (db: Firestore) => {
   }
 }
 
-// export const listNews = async (storage: FirebaseStorage) => {
-//   return await new Promise((resolve, reject) => {
-//     const listRef = ref(storage, 'news');
-//     const newsList = []
-//     listAll(listRef)
-//     .then((res) => {
-//       res.items.forEach(async (itemRef) => {
-//         const url = await getDownloadURL(itemRef)
-//         newsList.push({
-//           ref: itemRef,
-//           url: url
-//         })
-//       });
-//       resolve(newsList)
-//     })
-//   })
-// }
-
 export const deleteNews = async (ref: StorageReference) => {
   await deleteObject(ref)
 }

@@ -28,12 +28,23 @@ const deleteSelectedNews = async (index) => {
 
 const getNews = async () => {
   // @ts-ignore
-  await listNews($storage)
-    .then((newsList: any[]) => {
-      news.value = newsList;
+  const listRef = imageRef($storage, "news");
+
+  await listAll(listRef)
+    .then((res) => {
+      res.items.forEach(async (itemRef) => {
+        const url = await getDownloadURL(itemRef)
+        news.value.push({
+          ref: itemRef,
+          url: url
+        })
+      });
     })
     .catch((error) => {
-      console.error(error);
+      loading.value = false
+      showError.value = true
+      notificationMessage.value = error
+      console.error(error)
     });
 };
 
