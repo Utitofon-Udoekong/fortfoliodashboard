@@ -15,18 +15,13 @@ const changePrice = async () => {
     newPrice.value = null
       showSuccess.value = true
       notificationMessage.value = "Price Updated"
-    // await getPrice().then(() => {
-    // })
   }else{
     showError.value = true
     notificationMessage.value = "Encountered a server error"
   }
 }
 const snapPrice = (snap) => price.value = snap
-// const getPrice = async () => {
-//   const zazu = await getDollarPrice($firestore)
-//   price.value = zazu
-// }
+
 watchEffect(() =>{
   const unsubscribe = onSnapshot(doc($firestore,"egoPrice",config.EGO_ID), (querySnapshot) => {
     const docData = querySnapshot.data()
