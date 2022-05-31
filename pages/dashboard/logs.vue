@@ -126,29 +126,37 @@ onUnmounted(() => {
                   <div
                     v-bind:class="{ hidden: openTab !== 1, block: openTab === 1, }"
                   >
-                  <div class="" v-for="(log, index) in adminLogs">
-                    {{index}}: {{log}}
+                  <div v-for="(log, index) in adminLogs">
+                    <div class="border-t border-b border-brand-ash">
+                      {{index}}: {{log}}
+                    </div>
                   </div>
                   </div>
                   <div
                     v-bind:class="{ hidden: openTab !== 2, block: openTab === 2, }"
                   >
-                  <div class="" v-for="(log, index) in addLogs">
-                    {{index}}: {{log}}
+                  <div v-for="(log, index) in addLogs">
+                    <div class="border-t border-b border-brand-ash">
+                      {{index}}: {{log}}
+                    </div>
                   </div>
                   </div>
                   <div
                     v-bind:class="{ hidden: openTab !== 3, block: openTab === 3, }"
                   >
-                  <div class="" v-for="(log, index) in removeLogs">
-                    {{index}}: {{log}}
+                  <div v-for="(log, index) in removeLogs">
+                    <div class="border-t border-b border-brand-ash">
+                      {{index}}: {{log}}
+                    </div>
                   </div>
                   </div>
                   <div
                     v-bind:class="{ hidden: openTab !== 3, block: openTab === 3, }"
                   >
-                  <div class="" v-for="(log, index) in editLogs">
-                    {{index}}: {{log}}
+                  <div v-for="(log, index) in editLogs">
+                    <div class="border-t border-b border-brand-ash">
+                      {{index}}: {{log}}
+                    </div>
                   </div>
                   </div>
                 </div>
