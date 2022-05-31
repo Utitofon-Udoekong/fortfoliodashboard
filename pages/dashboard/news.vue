@@ -135,7 +135,7 @@ definePageMeta({
     <NuxtLayout name="dashboard">
       <div>
         <div class="add-modal fixed inset-0 h-screen w-screen bg-gray-800/30 flex items-center justify-center" v-if="showAddModal" >
-          <div class="modal min-w-2xl mx-auto bg-white p-8 relative">
+          <div class="modal w-2xl mx-auto bg-white p-8 relative">
             <i-ion-close-round
               class="text-black text-2xl absolute right-2 top-2 cursor-pointer"
               @click="toggleShowAddModal"
