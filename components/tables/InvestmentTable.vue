@@ -792,7 +792,7 @@ onMounted(() => {
                         >
                           <p class="">FortShield</p>
                           <p>
-                            {{ get3MonthsFortDollarInvestment.toFixed(2) }}%
+                            {{ get3MonthsFortShieldInvestment.toFixed(2) }}%
                           </p>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-1.5">

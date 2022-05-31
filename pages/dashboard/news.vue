@@ -38,7 +38,7 @@ const deleteSelectedNews = async (index) => {
 
 
 const getNews = async () => {
-  clearNews()
+  //clearNews()
   // @ts-ignore
   const listRef = imageRef($storage, "news");
   await listAll(listRef)
@@ -63,7 +63,7 @@ const getNews = async () => {
 };
 
 watchEffect(async () => {
-  clearNews()
+  //clearNews()
   loading.value = true;
   const listRef = imageRef($storage, "news");
   await listAll(listRef)
