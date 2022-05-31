@@ -19,7 +19,7 @@ const deleteNews = (index) => {
       <div class="overlay">
         <i-mdi-delete class="text-white text-3xl cursor-pointer" @click="deleteNews(index)"/>
       </div>
-      <img :src="item.url" :alt="`News-${index}`" class="w-full h-full object-cover" />
+      <img :src="item.url" :alt="`News-${index}`" class="w-full h-full object-fill" />
     </div>
   </div>
 </template>
