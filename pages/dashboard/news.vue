@@ -38,8 +38,6 @@ const deleteSelectedNews = async (index) => {
 
 
 const getNews = async () => {
-  //clearNews()
-  // @ts-ignore
   const listRef = imageRef($storage, "news");
   await listAll(listRef)
     .then((res) => {
