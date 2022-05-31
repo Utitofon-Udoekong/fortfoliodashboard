@@ -10,7 +10,7 @@ const deleteNews = (index) => {
 }
 </script>
 <template>
-  <div class="news grid grid-cols-4 grid-flow-row auto-rows-[minmax(0,_210px)] gap-4 my-4">
+  <div class="news grid grid-cols-4 grid-flow-row auto-rows-[minmax(0,_200px)] gap-4 my-4">
     <div
       class="w-full h-auto border overflow-hidden relative border-gray-400 rounded-md mx-3 image-con"
       v-for="(item, index) in props.newsList"
@@ -19,7 +19,7 @@ const deleteNews = (index) => {
       <div class="overlay">
         <i-mdi-delete class="text-white text-3xl cursor-pointer" @click="deleteNews(index)"/>
       </div>
-      <img :src="item.url" :alt="`News-${index}`" class="w-full h-full" />
+      <img :src="item.url" :alt="`News-${index}`" class="w-full h-full object-cover" />
     </div>
   </div>
 </template>
