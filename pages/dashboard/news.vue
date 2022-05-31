@@ -47,10 +47,13 @@ const getNews = async () => {
       if (res.items.length > 0) {
         res.items.forEach(async (itemRef) => {
           const url = await getDownloadURL(itemRef);
-          news.value.push({
+          const obj = {
             ref: itemRef,
             url: url,
-          });
+          }
+          if(!news.value.includes(obj)){
+            news.value.push(obj);
+          }
         });
       }
     })
@@ -72,10 +75,13 @@ watchEffect(async () => {
       if (res.items.length > 0) {
         res.items.forEach(async (itemRef) => {
           const url = await getDownloadURL(itemRef);
-          news.value.push({
+          const obj = {
             ref: itemRef,
             url: url,
-          });
+          }
+          if(!news.value.includes(obj)){
+            news.value.push(obj);
+          }
         });
       }
     })
