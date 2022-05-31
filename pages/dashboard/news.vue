@@ -11,6 +11,7 @@ const addedNews = ref([]);
 const showAddModal = ref(false)
 
 const loadingEvent = (e) => (loading.value = e);
+const clearNews = () => news.value.length = 0
 const fileChangeEvent = (e) => {
   addedNews.value.push(e);
 };
@@ -34,10 +35,12 @@ const deleteSelectedNews = async (index) => {
     });
 };
 
+
+
 const getNews = async () => {
+  clearNews()
   // @ts-ignore
   const listRef = imageRef($storage, "news");
-  news.value.length = 0;
   await listAll(listRef)
     .then((res) => {
       loading.value = false;
@@ -60,9 +63,9 @@ const getNews = async () => {
 };
 
 watchEffect(async () => {
+  clearNews()
   loading.value = true;
   const listRef = imageRef($storage, "news");
-  news.value.length = 0;
   await listAll(listRef)
     .then((res) => {
       loading.value = false;
