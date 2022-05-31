@@ -127,7 +127,7 @@ definePageMeta({
       <div>
         <div
           class="add-modal fixed inset-0 h-screen w-screen bg-gray-800/30 flex items-center justify-center"
-
+  v-if="showAddModal"
         >
           <div class="modal max-w-2xl mx-auto bg-white p-8 relative">
             <i-ion-close-round
