@@ -73,7 +73,7 @@ exports.firestoreLogger = functions.firestore
           before: change.before.data() ?? "Data unavailable",
           after: change.after.data() ?? "Data unavailable"
         };
-        const created_at = admin.firestore.FieldValue.serverTimestamp();
+        const created_at = admin.firestore.Timestamp.fromDate(new Date()).toDate()
         admin.firestore().collection('firestore_log').add({ collection, documentId: id, event, data, created_at });
       } catch (error) {
         functions.logger.error(error);
