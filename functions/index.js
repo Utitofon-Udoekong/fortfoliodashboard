@@ -107,3 +107,33 @@ exports.webhookHandler = functions.https.onRequest(async (req, res) => {
     }
   })
 });
+
+
+exports.scheduleUserDeletion = functions.pubsub.schedule('0 0 * * *')
+.onRun((context) => {
+  const investment = firestore.collection("authUsers").where("isAccountActive", "==", false)
+  const now = new Date().toISOString()
+  return investment.get().then(querySnapshot => {
+    if (querySnapshot.empty) {
+      functions.logger.log("No deleted account")
+      return null;
+    } else {
+      let batch = firestore.batch();
+      querySnapshot.forEach(doc => {
+        const documentData = doc.data()
+        const dueDate = documentData["deleteDate"]
+        if (new Date(now.slice(0, 10)).toString() === new Date(dueDate.slice(0, 10)).toString()) {
+          batch.delete(doc.ref)
+        } else {
+          return null;
+        }
+      });
+      return batch.commit()
+    }
+
+  }).catch(error => {
+    functions.logger.log(error);
+    return null;
+  });
+
+});
