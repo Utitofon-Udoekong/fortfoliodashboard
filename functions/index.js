@@ -111,19 +111,23 @@ exports.webhookHandler = functions.https.onRequest(async (req, res) => {
 
 exports.scheduleUserDeletion = functions.pubsub.schedule('0 0 * * *')
 .onRun((context) => {
-  const investment = firestore.collection("authUsers").where("isAccountActive", "==", false)
+  const userSnap = firestore.collection("authUsers").where("isAccountActive", "==", false)
   const now = new Date().toISOString()
-  return investment.get().then(querySnapshot => {
+  return userSnap.get().then(querySnapshot => {
     if (querySnapshot.empty) {
       functions.logger.log("No deleted account")
       return null;
     } else {
       let batch = firestore.batch();
-      querySnapshot.forEach(doc => {
+      querySnapshot.forEach(async (doc) => {
         const documentData = doc.data()
         const dueDate = documentData["deleteDate"]
         if (new Date(now.slice(0, 10)).toString() === new Date(dueDate.slice(0, 10)).toString()) {
-          batch.delete(doc.ref)
+          await admin.auth().deleteUser(doc.id).then(() => {
+            batch.delete(doc.ref)
+          }).catch((error) => {
+            functions.logger.log('Error deleting user:', doc.id + 'error: ' + error);
+          });
         } else {
           return null;
         }
