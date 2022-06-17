@@ -1,21 +1,5 @@
 {
   "functions": {
     "runtime": "nodejs16"
-  },
-  "hosting": {
-    "site": "fortfolio-c25d3",
-    "public": ".output/public",
-    "cleanUrls": true,
-    "rewrites": [
-      {
-        "source": "**",
-        "function": "server"
-      }
-    ],
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
   }
 }
