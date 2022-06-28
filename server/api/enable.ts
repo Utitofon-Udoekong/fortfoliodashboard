@@ -1,16 +1,16 @@
 import { getAuth } from "firebase-admin/auth";
 
 export default async (req) => {
+    if(req.method !== 'POST') return 'Invalid request'
     const {uid} = await useBody(req)
     await getAuth()
     .updateUser(uid, {
         disabled: false,
     })
     .then((_) => {
-        // See the UserRecord reference doc for the contents of userRecord.
-        return 'Successfully deleted user'
+        return 'Successfully enabled user'
     })
     .catch((error) => {
-        return "Error deleting user " + error
+        return "Error enabling userz: " + error
     });
 }

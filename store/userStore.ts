@@ -81,17 +81,14 @@ export const useUserStore = defineStore('user', {
             const message = data.value
             console.log(message)
         },
-        // async deleteUser(uid: string){
-        //     const message = await getAuth()
-        //     .deleteUser(uid)
-        //     .then(() => {
-        //         return console.log('Successfully deleted user');
-        //     })
-        //     .catch((error) => {
-        //         return console.log('Error deleting user:', error);
-        //     });
-        //     this.showSnackbar(message)
-        // },
+        async deleteUser(uid: string){
+            const {data} = await useAsyncData('deleteUser', () => $fetch('/api/delete', {
+                method: "POST",
+                body: {uid}
+            }))
+            const message = data.value
+            console.log(message)
+        },
         // showSnackbar(message: string){
         //     this.snackbarMessage = message
         // },
