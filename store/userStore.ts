@@ -65,34 +65,22 @@ export const useUserStore = defineStore('user', {
      
         },
         
-        // async disableUser(uid: string){
-        //     const message = await getAuth()
-        //     .updateUser(uid, {
-        //         disabled: true,
-        //     })
-        //     .then((_) => {
-        //         // See the UserRecord reference doc for the contents of userRecord.
-        //         return 'Successfully disabled user'
-        //     })
-        //     .catch((error) => {
-        //         return "Error disabling user " + error
-        //     });
-        //     this.showSnackbar(message)
-        // },
-        // async enableUser(uid: string){
-        //     const message = await getAuth()
-        //     .updateUser(uid, {
-        //         disabled: false,
-        //     })
-        //     .then((_) => {
-        //         // See the UserRecord reference doc for the contents of userRecord.
-        //         return 'Successfully deleted user';
-        //     })
-        //     .catch((error) => {
-        //         return "Error deleting user " + error
-        //     });
-        //     this.showSnackbar(message)
-        // },
+        async disableUser(uid: string){
+            const {data} = await useAsyncData('disableUser', () => $fetch('/api/disable', {
+                method: "POST",
+                body: {uid}
+            }))
+            const message = data.value
+            console.log(message)
+        },
+        async enableUser(uid: string){
+            const {data} = await useAsyncData('enableUser', () => $fetch('/api/enable', {
+                method: "POST",
+                body: {uid}
+            }))
+            const message = data.value
+            console.log(message)
+        },
         // async deleteUser(uid: string){
         //     const message = await getAuth()
         //     .deleteUser(uid)

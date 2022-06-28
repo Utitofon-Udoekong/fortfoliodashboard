@@ -7,7 +7,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { doc, Firestore, getDoc, getFirestore, onSnapshot, updateDoc } from "firebase/firestore";
-import { deleteObject, FirebaseStorage, getDownloadURL, getMetadata, getStorage, listAll, ref, StorageReference, uploadString } from "firebase/storage";
+import { deleteObject, FirebaseStorage, getDownloadURL, ref, StorageReference, uploadString } from "firebase/storage";
 
 import { useUserStore } from "~~/store/userStore";
 export const saveFile = async (fullPath: string, file, storage: FirebaseStorage) => {

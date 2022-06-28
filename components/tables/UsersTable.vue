@@ -53,6 +53,9 @@ let editableUser: UsersTableData[] = [];
 // states------------------------------------------------------------------------------
 
 // methods
+const enableUser = (id: string) => {}
+const disableUser = (id: string) => {}
+const deleteUser = (id: string) => {}
 const selectRow = (user: UsersTableData) => {
   editableUser.push(user);
   showUserData.value = true;
