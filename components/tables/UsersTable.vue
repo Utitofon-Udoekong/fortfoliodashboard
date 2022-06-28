@@ -2,6 +2,7 @@
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
+import { async } from "@firebase/util";
 // states
 
 const store = useUserStore()
@@ -53,9 +54,9 @@ let editableUser: UsersTableData[] = [];
 // states------------------------------------------------------------------------------
 
 // methods
-const enableUser = (id: string) => {}
-const disableUser = (id: string) => {}
-const deleteUser = (id: string) => {}
+const enableUser = async (id: string) => await store.enableUser(id)
+const disableUser = async (id: string) => await store.disableUser(id)
+const deleteUser = async (id: string) => await store.deleteUser(id)
 const selectRow = (user: UsersTableData) => {
   editableUser.push(user);
   showUserData.value = true;
@@ -527,9 +528,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                            // (AdminFunctions.update)
-                              // (tableData[index].status = 'Active'),
-                                open(index, $event)
+                            enableUser(data.id)
                             "
                           >
                             Enable User
@@ -539,8 +538,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              AdminFunctions.disableUser(tableData[index].uuid),
-                                open(index, $event)
+                              disableUser(data.id)
                             "
                           >
                             Disable User
@@ -550,8 +548,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              (AdminFunctions.deleteUser(tableData[index].uuid)),
-                                open(index, $event)
+                              deleteUser(data.id)
                             "
                           >
                             Delete User
