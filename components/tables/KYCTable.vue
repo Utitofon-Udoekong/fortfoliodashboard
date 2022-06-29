@@ -66,7 +66,11 @@ const loading = ref(false)
 // states------------------------------------------------------------------------------
 
 // methods
-const refresh = async () => {await store.setKyc()}
+const refresh = async () => {
+  await store.setKyc()
+  const kyc = store.getKyc
+  paginateData(kyc)
+}
 const approveKYC = async (uid: string) => {
   const batch = writeBatch($firestore);
   const userVerifiedQuery = doc($firestore, "authUsers", uid);
@@ -103,7 +107,8 @@ const rejectKYC = async (uid: string) => {
       isVerified: false,
       status: "Rejected",
     }).then(
-      () => {
+      async () => {
+        await refresh()
         loading.value = false
         notificationMessage.value = `KYC for ${uid} Approved`;
         showSuccess.value = true;

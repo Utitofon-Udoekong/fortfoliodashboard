@@ -68,7 +68,11 @@ const loading = ref(false);
 // states------------------------------------------------------------------------------
 
 // methods
-const refresh = async () => {await store.setInvestments()}
+const refresh = async () => {
+  await store.setInvestments()
+  const investment = store.getInvestments
+  paginateData(investment)
+}
 const cancelInvestment = async (traxId: string) => {
   const ref = query(
     collectionGroup($firestore, "investments"),
@@ -81,6 +85,7 @@ const cancelInvestment = async (traxId: string) => {
   const querySnapshot = await getDocs(ref);
   const notifiSnap = await getDocs(notificationRef)
   try {
+    loading.value = true
     querySnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Cancelled",
@@ -94,15 +99,18 @@ const cancelInvestment = async (traxId: string) => {
     await batch.commit().then(
       async () => {
         await refresh()
+        loading.value = false
         notificationMessage.value = `Investment for ${traxId} cancelled`;
         showSuccess.value = true;
       },
       (d) => {
+        loading.value = false
         notificationMessage.value = `An error occured: ${d}`;
         showError.value = true;
       }
     );
   } catch (error) {
+    loading.value = false
     notificationMessage.value = `An error occured: ${error}`;
     showError.value = true;
   }

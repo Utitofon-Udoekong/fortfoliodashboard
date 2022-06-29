@@ -2,7 +2,7 @@
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
-import { async } from "@firebase/util";
+import { getAuth } from "firebase-admin/auth";
 // states
 
 const store = useUserStore()
@@ -12,7 +12,7 @@ const columns = [
   { name: "email", text: "Email Address" },
   { name: "phoneNumber", text: "Phone Number" },
   { name: "createdat", text: "Created At" },
-  { name: "isVerified", text: "Status" },
+  { name: "isVerified", text: "Verified" },
 ];
 let col = reactive({
   id: "",
@@ -57,6 +57,9 @@ let editableUser: UsersTableData[] = [];
 const enableUser = async (id: string) => await store.enableUser(id)
 const disableUser = async (id: string) => await store.disableUser(id)
 const deleteUser = async (id: string) => await store.deleteUser(id)
+const getStatus = async (id: string) => {
+  return (await getAuth().getUser(id)).disabled
+}
 const selectRow = (user: UsersTableData) => {
   editableUser.push(user);
   showUserData.value = true;
@@ -472,7 +475,11 @@ onMounted(() => {
                     v-for="(data, index) in tableData"
                     :key="index"
                     @contextmenu.prevent="selectRow(data)"
-                    class="hover:bg-gray-300 cursor-pointer"
+                    :class="[
+                      'hover:bg-gray-300 cursor-pointer',
+                      'bg-gray-500':
+                      getStatus() === true
+                    ]"
                   >
                     <td class="px-3 py-4 whitespace-nowrap">
                       <div class="flex items-center">
