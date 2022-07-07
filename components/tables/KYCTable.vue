@@ -257,7 +257,7 @@ watch(showError, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {
       showError.value = false;
-    }, 1500);
+    }, 3000);
   }
 });
 
@@ -265,7 +265,7 @@ watch(showSuccess, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {
       showSuccess.value = false;
-    }, 1500);
+    }, 3000);
   }
 });
 
