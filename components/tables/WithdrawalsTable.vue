@@ -360,7 +360,7 @@ onMounted(() => {
             <div class="overflow-hidden border-b border-gray-200 sm:rounded-lg">
               <table
                 class="min-w-full divide-y divide-gray-200"
-                v-if="withdrawalData.length > 0"
+                v-if="tableData.length > 0"
               >
                 <caption class="text-lg font-semibold">
                   Recent Withdrawals
