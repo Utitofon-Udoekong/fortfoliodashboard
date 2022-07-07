@@ -2,7 +2,6 @@
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
-import { getAuth } from "firebase-admin/auth";
 // states
 
 const store = useUserStore()
@@ -58,7 +57,7 @@ const enableUser = async (id: string) => await store.enableUser(id)
 const disableUser = async (id: string) => await store.disableUser(id)
 const deleteUser = async (id: string) => await store.deleteUser(id)
 const getStatus = async (id: string) => {
-  return (await getAuth().getUser(id)).disabled
+  return await store.getStatus(id)
 }
 const selectRow = (user: UsersTableData) => {
   editableUser.push(user);
@@ -478,7 +477,7 @@ onMounted(() => {
                     :class="[
                       'hover:bg-gray-300 cursor-pointer',
                       'bg-gray-500':
-                      getStatus() === true
+                      getStatus(data.uuid) === true
                     ]"
                   >
                     <td class="px-3 py-4 whitespace-nowrap">
@@ -535,7 +534,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                            enableUser(data.id)
+                            enableUser(data.uuid)
                             "
                           >
                             Enable User
@@ -545,7 +544,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              disableUser(data.id)
+                              disableUser(data.uuid)
                             "
                           >
                             Disable User
@@ -555,7 +554,7 @@ onMounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              deleteUser(data.id)
+                              deleteUser(data.uuid)
                             "
                           >
                             Delete User

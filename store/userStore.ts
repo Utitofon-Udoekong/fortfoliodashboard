@@ -89,6 +89,15 @@ export const useUserStore = defineStore('user', {
             const message = data.value
             console.log(message)
         },
+        async getStatus(uid: string){
+            const {data} = await useAsyncData('getStatus', () => $fetch('/api/userStatus', {
+                method: "POST",
+                body: {uid}
+            }))
+            const message = data.value
+            console.log(message)
+        },
+
         // showSnackbar(message: string){
         //     this.snackbarMessage = message
         // },
