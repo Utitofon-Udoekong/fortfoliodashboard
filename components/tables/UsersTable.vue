@@ -377,7 +377,6 @@ onMounted(() => {
     <!-- SHOW TABLE -->
     <div class="table-form">
       <div class="flex mb-3 justify-between items-start">
-        <!-- <p>{{data}}</p> -->
         <div class="flex items-center">
           <span class="mr-1">Show</span>
           <select
@@ -465,8 +464,8 @@ onMounted(() => {
                     @contextmenu.prevent="selectRow(data)"
                     :class="[
                       'hover:bg-gray-300 cursor-pointer',
-                      'bg-gray-500':
-                      getStatus(data.uuid) === true
+                      {'bg-gray-500':
+                      getStatus(data.uuid) === true}
                     ]"
                   >
                     <td class="px-3 py-4 whitespace-nowrap">
