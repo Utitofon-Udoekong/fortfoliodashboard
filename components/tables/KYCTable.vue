@@ -67,9 +67,10 @@ const loading = ref(false)
 
 // methods
 const refresh = async () => {
-  await store.setKyc()
-  const kyc = store.getKyc
-  paginateData(kyc)
+  await store.setKyc().then(() => {
+    const kyc = store.getKyc
+    paginateData(kyc)
+  })
 }
 const approveKYC = async (uid: string) => {
   const batch = writeBatch($firestore);
