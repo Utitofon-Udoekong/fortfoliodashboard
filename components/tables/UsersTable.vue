@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
-import formatter from "~~/helpers/formatIsoDate";
 import { useUserStore } from "~~/store/userStore";
 // states
 
@@ -259,7 +258,7 @@ onMounted(() => {
               Created at:
             </p>
             <span class="font-semibold text-black text-2xl">{{
-              formatter(editableUser[0].createdat)
+              new Date(data.createdat._seconds * 1000).toDateString() + ' at ' + new Date(data.createdat._seconds * 1000).toLocaleTimeString()
             }}</span>
           </span>
           <span class="flex font-semibold flex-col mb-4">
