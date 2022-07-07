@@ -2,7 +2,6 @@
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
-// states
 
 const store = useUserStore()
 const columns = [
@@ -50,9 +49,7 @@ let showUserData = ref(false);
 const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: UsersTableData[] = [];
-// states------------------------------------------------------------------------------
 
-// methods
 const enableUser = async (id: string) => await store.enableUser(id)
 const disableUser = async (id: string) => await store.disableUser(id)
 const deleteUser = async (id: string) => await store.deleteUser(id)
@@ -67,7 +64,6 @@ const selectRow = (user: UsersTableData) => {
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
   leftPos.value = e.pageX - 120;
-  // console.log(top.value, left.value)
 };
 
 const open = async (index: number, e: MouseEvent) => {
@@ -148,11 +144,9 @@ const exportFile = (format: string) => {
   const genString = file.exported(usersData.value, format);
   file.download(genString, format);
 };
-// methods------------------------------------------------------------------------------
 
-// computed
+
 const showInfo = computed(() => {
-  // const getCurrentEntries = getCurrentEntries()
   return array.pageInfo(
     getCurrentUsers(),
     currentPage.value,
@@ -182,19 +176,14 @@ let classObject = computed(() => {
   };
 });
 
-// computed------------------------------------------------------------------------------
-
-// lifecycle
 onMounted(() => {
   paginateData(usersData.value);
 });
-// lifecycle----------------------------------------------------------------------------------
 </script>
 <template>
   <div class="h-auto">
-    <!-- SHOW USER DATA -->
     <div v-if="showUserData" class="w-full h-full">
-      <!-- <div class="bg-white p-10 h-auto relative rounded-md">
+      <div class="bg-white p-10 h-auto relative rounded-md">
         <div
           class="closemodal absolute right-6 top-6 cursor-pointer"
           @click="toggleUserData"
@@ -383,7 +372,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
     <!-- SHOW TABLE -->
     <div class="table-form">
