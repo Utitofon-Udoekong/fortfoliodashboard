@@ -277,7 +277,7 @@ onMounted(() => {
       </div>
     </div>
     <!-- SHOW TABLE -->
-    <div class="table-form" v-else>
+    <div v-else class="table-form" >
       <div class="flex mb-3 justify-between items-start">
         <!-- <p>{{data}}</p> -->
         <div class="flex items-center">

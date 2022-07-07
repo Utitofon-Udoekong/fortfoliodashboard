@@ -65,7 +65,7 @@ watch(firebaseUser, (newVal) => {
           <Meta name="description" content="Fortfolio Admin Signup page" />
         </Head>
       </Html>
-      <p class="text-center" v-if="firebaseUser">logging in</p>
+      <p class="text-center text-black" v-if="firebaseUser">logging in</p>
       <div class="flex justify-center items-center h-full">
         <div class="w-80 flex flex-col border border-gray-600">
           <AuthFirebase title="Sign in" @submit="signin" :form="signinForm" @loading="loadingEvent" />
