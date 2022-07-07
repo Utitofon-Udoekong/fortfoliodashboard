@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
+import formatter from "~~/helpers/formatIsoDate";
 import { useUserStore } from "~~/store/userStore";
 // states
 
