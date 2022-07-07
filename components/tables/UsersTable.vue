@@ -364,7 +364,6 @@ onMounted(() => {
                   <tr
                     v-for="(data, index) in tableData"
                     :key="index"
-                    @contextmenu.prevent="selectRow(data)"
                     :class="[
                       'hover:bg-gray-300 cursor-pointer',
                       {'bg-gray-500':
@@ -420,6 +419,16 @@ onMounted(() => {
                         class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl"
                       >
                         <ul class="py-1">
+                          <li
+                            tabindex="0"
+                            href="#"
+                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                            @click="
+                            selectRow(data)
+                            "
+                          >
+                            Quick View
+                          </li>
                           <li
                             tabindex="0"
                             href="#"
