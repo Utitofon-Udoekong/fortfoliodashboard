@@ -210,7 +210,7 @@ onMounted(() => {
     <!-- SHOW USER DATA -->
     <div v-if="showUserData">
       <div
-        class="bg-white p-10 pt-14 w-full h-auto relative ring-4 ring-brand-light-blue rounded-md"
+        class="bg-white p-10 pt-14 w-full h-auto relative ring-4 ring-brand-light-blue rounded-md "
       >
         <div
           class="closemodal absolute right-6 top-6 cursor-pointer "
@@ -218,42 +218,42 @@ onMounted(() => {
         >
           <i-ion-close-round class="text-black text-xl" />
         </div>
-        <div class="w-full">
-          <span class="flex font-semibold flex-col mb-4">
+        <div class="w-full grid grid-cols-2 gap-8">
+          <span class="flex font-semibold justify-between">
             <p class="text-lg font-semibold text-gray-500 pb-3">First Name:</p>
             <span class="font-semibold text-black text-2xl">{{
               editableUser[0].firstName
             }}</span>
           </span>
-          <span class="flex font-semibold flex-col mb-4">
+          <span class="flex font-semibold justify-between">
             <p class="text-lg font-semibold text-gray-500 pb-3">Last Name:</p>
             <span class="font-semibold text-black text-2xl">{{
               editableUser[0].lastName
             }}</span>
           </span>
-          <span class="flex font-semibold flex-col mb-4">
+          <span class="flex font-semibold justify-between">
             <p class="text-lg font-semibold text-gray-500 pb-3">User ID:</p>
             <span class="font-semibold text-black text-2xl">{{
               editableUser[0].id
             }}</span>
           </span>
           <span class="flex justify-between">
-            <p class="text-sm font-semibold text-gray-400 pb-3">
+            <p class="text-lg font-semibold text-gray-500 pb-3">
               Email Address:
             </p>
-            <span class="font-normal text-black text-base">{{
+            <span class="font-semibold text-black text-2xl">{{
               editableUser[0].email
             }}</span>
           </span>
           <span class="flex justify-between">
-            <p class="text-sm font-semibold text-gray-400 pb-3">
+            <p class="text-lg font-semibold text-gray-500 pb-3">
               Phone Number:
             </p>
-            <span class="font-normal text-black text-base">{{
+            <span class="font-semibold text-black text-2xl">{{
               editableUser[0].phoneNumber
             }}</span>
           </span>
-          <span class="flex font-semibold flex-col mb-4">
+          <span class="flex font-semibold">
             <p class="text-lg font-semibold text-gray-500 pb-3">
               Created at:
             </p>
@@ -261,10 +261,10 @@ onMounted(() => {
               new Date(editableUser[0].createdat._seconds * 1000).toDateString() + ' at ' + new Date(editableUser[0].createdat._seconds * 1000).toLocaleTimeString()
             }}</span>
           </span>
-          <span class="flex font-semibold flex-col mb-4">
+          <span class="flex font-semibold">
             <p class="text-lg font-semibold text-gray-500">Status:</p>
             <span
-              class="font-semibold text-lg px-12 text-center rounded py-1 w-1/4"
+              class="font-semibold text-2xl"
               :class="
                 editableUser[0].isVerified
                             ? 'text-brand-green'
