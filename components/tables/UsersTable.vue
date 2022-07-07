@@ -258,7 +258,7 @@ onMounted(() => {
               Created at:
             </p>
             <span class="font-semibold text-black text-2xl">{{
-              new Date(data.createdat._seconds * 1000).toDateString() + ' at ' + new Date(data.createdat._seconds * 1000).toLocaleTimeString()
+              new Date(editableUser[0].createdat._seconds * 1000).toDateString() + ' at ' + new Date(editableUser[0].createdat._seconds * 1000).toLocaleTimeString()
             }}</span>
           </span>
           <span class="flex font-semibold flex-col mb-4">
