@@ -214,7 +214,7 @@ onMounted(() => {
       >
         <div
           class="closemodal absolute right-6 top-6 cursor-pointer "
-          @click="toggleUserData"
+          @click="showUserData = false"
         >
           <i-ion-close-round class="text-black text-xl" />
         </div>
