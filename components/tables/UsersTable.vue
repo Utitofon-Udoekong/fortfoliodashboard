@@ -218,7 +218,7 @@ onMounted(() => {
         >
           <i-ion-close-round class="text-black text-xl" />
         </div>
-        <div class="w-full grid grid-cols-2 gap-8">
+        <div class="w-full grid grid-cols-2 gap-x-8 gap-y-10">
           <span class="flex font-semibold justify-between">
             <p class="text-lg font-semibold text-gray-500 pb-3">First Name:</p>
             <span class="font-semibold text-black text-2xl">{{
@@ -253,7 +253,7 @@ onMounted(() => {
               editableUser[0].phoneNumber
             }}</span>
           </span>
-          <span class="flex font-semibold">
+          <span class="flex font-semibold justify-between">
             <p class="text-lg font-semibold text-gray-500 pb-3">
               Created at:
             </p>
@@ -261,7 +261,7 @@ onMounted(() => {
               new Date(editableUser[0].createdat._seconds * 1000).toDateString() + ' at ' + new Date(editableUser[0].createdat._seconds * 1000).toLocaleTimeString()
             }}</span>
           </span>
-          <span class="flex font-semibold">
+          <span class="flex font-semibold justify-between">
             <p class="text-lg font-semibold text-gray-500">Status:</p>
             <span
               class="font-semibold text-2xl"
