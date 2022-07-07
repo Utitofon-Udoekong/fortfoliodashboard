@@ -53,9 +53,24 @@ let editableUser: UsersTableData[] = [];
 // states------------------------------------------------------------------------------
 
 // methods
-const enableUser = async (id: string) => await store.enableUser(id)
-const disableUser = async (id: string) => await store.disableUser(id)
-const deleteUser = async (id: string) => await store.deleteUser(id)
+const refresh = async () => {
+  await store.setUsers().then(() => {
+    const users = store.getUsers
+    paginateData(users)
+  })
+}
+const enableUser = async (id: string) => {
+  await store.enableUser(id)
+  await refresh()
+}
+const disableUser = async (id: string) => {
+  await store.disableUser(id)
+  await refresh()
+}
+const deleteUser = async (id: string) => {
+  await store.deleteUser(id)
+  await refresh()
+}
 const getStatus = async (id: string) => {
   return await store.getStatus(id)
 }

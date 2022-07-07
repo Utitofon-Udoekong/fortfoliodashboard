@@ -69,9 +69,10 @@ const loading = ref(false);
 
 // methods
 const refresh = async () => {
-  await store.setInvestments()
-  const investment = store.getInvestments
-  paginateData(investment)
+  await store.setInvestments().then(() => {
+    const investment = store.getInvestments
+    paginateData(investment)
+  })
 }
 const cancelInvestment = async (traxId: string) => {
   const ref = query(

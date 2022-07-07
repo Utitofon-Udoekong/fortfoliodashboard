@@ -81,7 +81,12 @@ const selectRow = (traxId: string) => {
   editableUser.push(withdrawalData);
   showModal.value = true;
 };
-const refresh = async () => {await store.setWithdrawals()}
+const refresh = async () => {
+  await store.setWithdrawals().then(() => {
+    const withdrawals = store.getWithdrawals
+    paginateData(withdrawals)
+  })
+}
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
   leftPos.value = e.pageX - 120;
