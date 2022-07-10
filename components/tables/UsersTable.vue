@@ -207,6 +207,7 @@ watchEffect(() => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
         data.push(change.doc.data())
+        console.log(data)
           snapUsersData(change.doc.data());
           paginateData(usersData.value)
       }
@@ -220,7 +221,6 @@ watchEffect(() => {
       }
     });
   });
-  console.log(data)
 })
 
 // computed------------------------------------------------------------------------------
