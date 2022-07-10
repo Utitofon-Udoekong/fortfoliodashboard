@@ -204,10 +204,10 @@ watchEffect(() => {
   const usersDataList = store.getUsers
   usersDataList.forEach((uid) => {
     console.log(uid)
-    // onSnapshot(doc($firestore,"authUsers",uid), (querySnapshot) => {
-    //   const docData = querySnapshot.data()
-    //   snapUsersData(docData)
-    // });
+    onSnapshot(doc($firestore,"authUsers",uid), (querySnapshot) => {
+      const docData = querySnapshot.data()
+      console.log(docData)
+    });
   })
 })
 
