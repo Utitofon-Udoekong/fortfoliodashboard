@@ -203,10 +203,21 @@ let classObject = computed(() => {
 watchEffect(() => {
   const usersDataList = store.getUsers
   usersDataList.forEach((uid) => {
-    console.log(uid)
     onSnapshot(doc($firestore,"authUsers",uid), (querySnapshot) => {
-      const docData = querySnapshot.data()
-      console.log(docData)
+      querySnapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+            console.log(change.doc.data());
+        }
+        if (change.type === "modified") {
+            console.log("Modified city: ", change.doc.data());
+        }
+        if (change.type === "removed") {
+            console.log("Removed city: ", change.doc.data());
+        }
+      });
+
+      // const docData = querySnapshot.data()
+      // console.log(docData)
     });
   })
 })
