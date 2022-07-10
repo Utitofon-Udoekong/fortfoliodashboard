@@ -5,7 +5,9 @@ import { useUserStore } from "~~/store/userStore";
 import {
   collectionGroup,
   doc,
+  DocumentData,
   getDocs,
+  onSnapshot,
   query,
   where,
   writeBatch,
@@ -46,7 +48,7 @@ let sortCol: InvestmentTableData = reactive({
   paymentMethod: "",
   duration: 0,
 });
-const investmentsData = ref<InvestmentTableData[]>(store.investments);
+const investmentsData = ref<InvestmentTableData[] | DocumentData[]>(store.investments);
 let filteredInvestment = ref<InvestmentTableData[]>([]);
 const showInvestment = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentInvestment = ref<number>(10);
@@ -68,12 +70,7 @@ const loading = ref(false);
 // states------------------------------------------------------------------------------
 
 // methods
-const refresh = async () => {
-  await store.setInvestments().then(() => {
-    const investment = store.getInvestments
-    paginateData(investment)
-  })
-}
+const snapinvestmentsData = (snap) => investmentsData.value.push(snap)
 const cancelInvestment = async (traxId: string) => {
   const ref = query(
     collectionGroup($firestore, "investments"),
@@ -99,7 +96,6 @@ const cancelInvestment = async (traxId: string) => {
     });
     await batch.commit().then(
       async () => {
-        await refresh()
         loading.value = false
         notificationMessage.value = `Investment for ${traxId} cancelled`;
         showSuccess.value = true;
@@ -142,7 +138,6 @@ const approveInvestment = async (traxId: string) => {
     });
     await batch.commit().then(
       async () => {
-        await refresh()
         loading.value = false
         notificationMessage.value = `Investment for ${traxId} Approved`;
         showSuccess.value = true;
@@ -398,10 +393,34 @@ watch(showSuccess, (newVal: boolean) => {
   }
 });
 
+watchEffect(() => {
+  const q = query(collectionGroup($firestore, "investments"));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "added") {
+          snapinvestmentsData(change.doc.data());
+      }
+      if (change.type === "modified") {
+        investmentsData.value = investmentsData.value.map((x: { traxId: string; }) => (x.traxId === change.doc.data()["traxId"]) ? change.doc.data() : x)
+      }
+      if (change.type === "removed") {
+        investmentsData.value = investmentsData.value.filter((x) => x.traxId != change.doc.data()["traxId"])
+      }
+    });
+    console.log(investmentsData.value)
+    paginateData(investmentsData.value)
+  });
+})
+
 // computed------------------------------------------------------------------------------
+
 // lifecycle
-onMounted(() => {
-  paginateData(investmentsData.value);
+onUnmounted(() => {
+  const q = query(collectionGroup($firestore, "investments"));
+  const unsubscribe = onSnapshot(q, (_) => {
+    
+  });
+  unsubscribe()
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>
