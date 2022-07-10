@@ -305,7 +305,7 @@ watchEffect(() => {
       </div>
     </div>
     <!-- SHOW TABLE -->
-    <div class="table-form">
+    <div v-else class="table-form">
       <div class="flex mb-3 justify-between items-start">
         <div class="flex items-center">
           <span class="mr-1">Show</span>
