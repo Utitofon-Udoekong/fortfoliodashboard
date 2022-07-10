@@ -38,7 +38,7 @@ let sortCol = reactive({
   displayName: "",
 });
 
-const usersData = ref<UsersTableData[] | DocumentData[]>(store.users);
+const usersData = ref<UsersTableData[] | DocumentData[]>();
 const filteredUsers = ref<UsersTableData[]>([]);
 const showUsers = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentUsers = ref<number>(10);
