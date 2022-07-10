@@ -1,4 +1,5 @@
 import { getAuth } from "firebase-admin/auth";
+import { db } from "~~/helpers/fireadmin";
 
 export default async (req) => {
     if(req.method !== 'POST') return 'Invalid request'
@@ -8,6 +9,9 @@ export default async (req) => {
         disabled: false,
     })
     .then((_) => {
+        db.collection("authUsers").doc(uid).update({
+            status: "Enabled"
+        })
         return 'Successfully enabled user'
     })
     .catch((error) => {

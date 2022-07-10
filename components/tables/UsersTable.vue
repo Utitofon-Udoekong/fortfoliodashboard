@@ -66,15 +66,12 @@ const snapUsersData = (snap) => {
 }
 const enableUser = async (id: string) => {
   await store.enableUser(id)
-  await refresh()
 }
 const disableUser = async (id: string) => {
   await store.disableUser(id)
-  await refresh()
 }
 const deleteUser = async (id: string) => {
   await store.deleteUser(id)
-  await refresh()
 }
 const getStatus = async (id: string) => {
   return await store.getStatus(id)
@@ -203,7 +200,7 @@ let classObject = computed(() => {
 });
 
 watchEffect(() => {
-  const q = query(collection($firestore, "authUsers"));
+  const q = query(collection($firestore, "authUsers"), where("status","==", "Enabled"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
@@ -216,6 +213,7 @@ watchEffect(() => {
         usersData.value = usersData.value.filter((x) => x.id != change.doc.data()["id"])
       }
     });
+    console.log(usersData.value)
     paginateData(usersData.value)
   });
 })
@@ -223,14 +221,13 @@ watchEffect(() => {
 // computed------------------------------------------------------------------------------
 
 // lifecycle
-// onUnmounted(() => {
-//   const usersDataList = store.getUsers
-//   usersDataList.forEach((uid) => {
-//     const unsub = onSnapshot(doc($firestore,"authUsers",uid), () => {
-//     });
-//     unsub()
-//   })
-// });
+onUnmounted(() => {
+  const q = query(collection($firestore, "authUsers"), where("status","==", "Enabled"));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    
+  });
+  unsubscribe()
+});
 // lifecycle----------------------------------------------------------------------------------
 </script>
 <template>
