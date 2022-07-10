@@ -56,12 +56,12 @@ export const useUserStore = defineStore('user', {
             }
         },
         async login(){
-            await Promise.all([
-                this.setUsers(),
-                this.setKyc(),
-                this.setInvestments(),
-                this.setWithdrawals(),
-            ])
+            // await Promise.all([
+            //     this.setUsers(),
+            //     this.setKyc(),
+            //     this.setInvestments(),
+            //     this.setWithdrawals(),
+            // ])
      
         },
         

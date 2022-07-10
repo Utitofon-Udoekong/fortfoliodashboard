@@ -38,7 +38,7 @@ let sortCol = reactive({
   displayName: "",
 });
 
-const usersData = ref<UsersTableData[] | DocumentData[]>();
+const usersData = ref<UsersTableData[] | DocumentData[]>([]);
 const filteredUsers = ref<UsersTableData[]>([]);
 const showUsers = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentUsers = ref<number>(10);
@@ -201,10 +201,12 @@ let classObject = computed(() => {
 });
 
 watchEffect(() => {
+  const data = []
   const q = query(collection($firestore, "authUsers"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
+        data.push(change.doc.data())
           snapUsersData(change.doc.data());
           paginateData(usersData.value)
       }
@@ -218,6 +220,7 @@ watchEffect(() => {
       }
     });
   });
+  console.log(data)
 })
 
 // computed------------------------------------------------------------------------------
