@@ -2,9 +2,11 @@
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
+import { onSnapshot, doc } from "firebase/firestore";
 // states
 
 const store = useUserStore()
+const {$firestore} = useNuxtApp()
 const columns = [
   { name: "id", text: "User ID" },
   { name: "firstName", text: "User Name" },
@@ -59,6 +61,7 @@ const refresh = async () => {
     paginateData(users)
   })
 }
+const snapUsersData = (snap) => usersData.value.push(snap)
 const enableUser = async (id: string) => {
   await store.enableUser(id)
   await refresh()
@@ -197,18 +200,29 @@ let classObject = computed(() => {
   };
 });
 
+watchEffect(() => {
+  const usersDataList = store.getUsers
+  usersDataList.forEach((uid) => {
+    console.log(uid)
+    // onSnapshot(doc($firestore,"authUsers",uid), (querySnapshot) => {
+    //   const docData = querySnapshot.data()
+    //   snapUsersData(docData)
+    // });
+  })
+})
+
 // computed------------------------------------------------------------------------------
 
 // lifecycle
 onMounted(() => {
-  paginateData(usersData.value);
+  // paginateData(usersData.value);
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>
 <template>
   <div class="h-auto">
     <!-- SHOW USER DATA -->
-    <div v-if="showUserData">
+    <!-- <div v-if="showUserData">
       <div
         class="bg-white p-10 pt-14 w-full h-auto relative ring-4 ring-brand-light-blue rounded-md "
       >
@@ -275,11 +289,10 @@ onMounted(() => {
           </span>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- SHOW TABLE -->
-    <div v-else class="table-form" >
+    <!-- <div class="table-form">
       <div class="flex mb-3 justify-between items-start">
-        <!-- <p>{{data}}</p> -->
         <div class="flex items-center">
           <span class="mr-1">Show</span>
           <select
@@ -298,7 +311,6 @@ onMounted(() => {
           </select>
           <span class="ml-1">Users</span>
         </div>
-        <!-- implement print options -->
         <div class="formaters">
           <div class="print-options flex justify-end mb-3">
             <div
@@ -556,6 +568,6 @@ onMounted(() => {
           </div>
         </div>
       </div>
-    </div>
+    </div>  -->
   </div> 
 </template>
