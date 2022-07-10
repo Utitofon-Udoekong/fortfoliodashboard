@@ -236,7 +236,7 @@ watchEffect(() => {
 <template>
   <div class="h-auto">
     <!-- SHOW USER DATA -->
-    <!-- <div v-if="showUserData">
+    <div v-if="showUserData">
       <div
         class="bg-white p-10 pt-14 w-full h-auto relative ring-4 ring-brand-light-blue rounded-md "
       >
@@ -303,9 +303,9 @@ watchEffect(() => {
           </span>
         </div>
       </div>
-    </div> -->
+    </div>
     <!-- SHOW TABLE -->
-    <!-- <div class="table-form">
+    <div class="table-form">
       <div class="flex mb-3 justify-between items-start">
         <div class="flex items-center">
           <span class="mr-1">Show</span>
@@ -582,6 +582,6 @@ watchEffect(() => {
           </div>
         </div>
       </div>
-    </div>  -->
+    </div> 
   </div> 
 </template>
