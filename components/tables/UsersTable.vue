@@ -2,7 +2,7 @@
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
-import { onSnapshot, doc } from "firebase/firestore";
+import { onSnapshot, doc, collection, query, where } from "firebase/firestore";
 // states
 
 const store = useUserStore()
@@ -201,33 +201,41 @@ let classObject = computed(() => {
 });
 
 watchEffect(() => {
-  const usersDataList = store.getUsers
-  usersDataList.forEach((uid) => {
-    onSnapshot(doc($firestore,"authUsers",uid), (querySnapshot) => {
-      querySnapshot.docChanges().forEach((change) => {
-        if (change.type === "added") {
-            console.log(change.doc.data());
-        }
-        if (change.type === "modified") {
-            console.log("Modified city: ", change.doc.data());
-        }
-        if (change.type === "removed") {
-            console.log("Removed city: ", change.doc.data());
-        }
-      });
+  // const usersDataList = store.getUsers
+  // usersDataList.forEach((uid) => {
+  //   onSnapshot(doc($firestore,"authUsers",uid), (querySnapshot) => {
+  //     const docData = querySnapshot.data()
+  //     console.log(docData)
+  //   });
+  // })
 
-      // const docData = querySnapshot.data()
-      // console.log(docData)
+  const q = query(collection($firestore, "authUsers"));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "added") {
+          console.log("New city: ", change.doc.data());
+      }
+      if (change.type === "modified") {
+          console.log("Modified city: ", change.doc.data());
+      }
+      if (change.type === "removed") {
+          console.log("Removed city: ", change.doc.data());
+      }
     });
-  })
+  });
 })
 
 // computed------------------------------------------------------------------------------
 
 // lifecycle
-onMounted(() => {
-  // paginateData(usersData.value);
-});
+// onUnmounted(() => {
+//   const usersDataList = store.getUsers
+//   usersDataList.forEach((uid) => {
+//     const unsub = onSnapshot(doc($firestore,"authUsers",uid), () => {
+//     });
+//     unsub()
+//   })
+// });
 // lifecycle----------------------------------------------------------------------------------
 </script>
 <template>
