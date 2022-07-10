@@ -2,7 +2,7 @@
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
-import { onSnapshot, doc, collection, query, where } from "firebase/firestore";
+import { onSnapshot, doc, collection, query, where, DocumentData } from "firebase/firestore";
 // states
 
 const store = useUserStore()
@@ -38,7 +38,7 @@ let sortCol = reactive({
   displayName: "",
 });
 
-const usersData = ref<UsersTableData[]>(store.users);
+const usersData = ref<UsersTableData[] | DocumentData[]>(store.users);
 const filteredUsers = ref<UsersTableData[]>([]);
 const showUsers = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentUsers = ref<number>(10);
@@ -201,25 +201,17 @@ let classObject = computed(() => {
 });
 
 watchEffect(() => {
-  // const usersDataList = store.getUsers
-  // usersDataList.forEach((uid) => {
-  //   onSnapshot(doc($firestore,"authUsers",uid), (querySnapshot) => {
-  //     const docData = querySnapshot.data()
-  //     console.log(docData)
-  //   });
-  // })
-
   const q = query(collection($firestore, "authUsers"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-          console.log("New city: ", change.doc.data());
+          snapUsersData(change.doc.data());
       }
       if (change.type === "modified") {
-          console.log("Modified city: ", change.doc.data());
+        usersData.value = usersData.value.map((x: { id: any; }) => (x.id === change.doc.data()["id"]) ? change.doc.data() : x)
       }
       if (change.type === "removed") {
-          console.log("Removed city: ", change.doc.data());
+        usersData.value = usersData.value.filter((x) => x.id != change.doc.data()["id"])
       }
     });
   });
