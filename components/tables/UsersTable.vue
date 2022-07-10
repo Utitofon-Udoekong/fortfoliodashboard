@@ -63,7 +63,6 @@ const refresh = async () => {
 }
 const snapUsersData = (snap) => {
   usersData.value.push(snap)
-  paginateData(usersData.value)
 }
 const enableUser = async (id: string) => {
   await store.enableUser(id)
@@ -206,22 +205,18 @@ let classObject = computed(() => {
 watchEffect(() => {
   const q = query(collection($firestore, "authUsers"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
-    const data = []
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-        data.push(change.doc.data())
           snapUsersData(change.doc.data());
       }
       if (change.type === "modified") {
         usersData.value = usersData.value.map((x: { id: any; }) => (x.id === change.doc.data()["id"]) ? change.doc.data() : x)
-        paginateData(usersData.value)
       }
       if (change.type === "removed") {
         usersData.value = usersData.value.filter((x) => x.id != change.doc.data()["id"])
-        paginateData(usersData.value)
       }
     });
-    console.log(data)
+    paginateData(usersData.value)
   });
 })
 
