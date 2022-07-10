@@ -3,7 +3,7 @@ import { KYCTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
 import formatter from "~~/helpers/formatIsoDate";
-import { doc, updateDoc, writeBatch } from "@firebase/firestore";
+import { collection, doc, DocumentData, onSnapshot, query, updateDoc, where, writeBatch } from "@firebase/firestore";
 const store = useUserStore();
 const { $firestore } = useNuxtApp();
 
@@ -43,7 +43,7 @@ let sortCol: KYCTableData = reactive({
   status: "",
 });
 
-const kycDataList = ref<KYCTableData[]>(store.kyc);
+const kycDataList = ref<KYCTableData[] | DocumentData[]>(store.kyc);
 let filteredKYC = ref<KYCTableData[]>([]);
 const showKYC = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentKYC = ref<number>(10);
@@ -66,12 +66,8 @@ const loading = ref(false)
 // states------------------------------------------------------------------------------
 
 // methods
-const refresh = async () => {
-  await store.setKyc().then(() => {
-    const kyc = store.getKyc
-    paginateData(kyc)
-  })
-}
+
+const snapkycDataList = (snap) => kycDataList.value.push(snap)
 const approveKYC = async (uid: string) => {
   const batch = writeBatch($firestore);
   const userVerifiedQuery = doc($firestore, "authUsers", uid);
@@ -82,7 +78,6 @@ const approveKYC = async (uid: string) => {
     });
     await batch.commit().then(
       async () => {
-        await refresh()
         loading.value = false
         notificationMessage.value = `KYC for ${uid} Approved`;
         showSuccess.value = true;
@@ -109,7 +104,6 @@ const rejectKYC = async (uid: string) => {
       status: "Rejected",
     }).then(
       async () => {
-        await refresh()
         loading.value = false
         notificationMessage.value = `KYC for ${uid} Approved`;
         showSuccess.value = true;
@@ -257,7 +251,7 @@ watch(showError, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {
       showError.value = false;
-    }, 3000);
+    }, 1500);
   }
 });
 
@@ -265,18 +259,41 @@ watch(showSuccess, (newVal) => {
   if (newVal === true) {
     setTimeout(() => {
       showSuccess.value = false;
-    }, 3000);
+    }, 1500);
   }
 });
 
 
+watchEffect(() => {
+  const q = query(collection($firestore, "kyc"));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "added") {
+          snapkycDataList(change.doc.data());
+      }
+      if (change.type === "modified") {
+        kycDataList.value = kycDataList.value.map((x: { id: any; }) => (x.id === change.doc.data()["id"]) ? change.doc.data() : x)
+      }
+      if (change.type === "removed") {
+        kycDataList.value = kycDataList.value.filter((x) => x.id != change.doc.data()["id"])
+      }
+    });
+    console.log(kycDataList.value)
+    paginateData(kycDataList.value)
+  });
+})
+
 // computed------------------------------------------------------------------------------
 
 // lifecycle
-onMounted(() => {
-  paginateData(kycDataList.value);
+onUnmounted(() => {
+  const q = query(collection($firestore, "kyc"));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    
+  });
+  unsubscribe()
 });
-// lifecycle---------------------
+// lifecycle----------------------------------------------------------------------------------
 </script>
 <template>
   <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
