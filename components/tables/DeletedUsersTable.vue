@@ -2,9 +2,9 @@
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
-import { onSnapshot, doc, collection, query, where, DocumentData } from "firebase/firestore";
+import { onSnapshot, collection, query, where, DocumentData } from "firebase/firestore";
+import { daysBetween } from "~~/helpers/daysAgo";
 // states
-
 const store = useUserStore()
 const {$firestore} = useNuxtApp()
 const columns = [
@@ -13,8 +13,8 @@ const columns = [
   { name: "email", text: "Email Address" },
   { name: "phoneNumber", text: "Phone Number" },
   { name: "createdat", text: "Created At" },
+  { name: "daysLeft", text: "Days Left" },
   { name: "isVerified", text: "Verified" },
-  { name: "status", text: "Status" },
 ];
 let col = reactive({
   id: "",
@@ -419,15 +419,7 @@ onUnmounted(() => {
                       >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <span
-                        :class="
-                          data.status === 'Enabled'
-                            ? 'text-brand-green'
-                            : 'text-yellow-500'
-                        "
-                        class="text-sm flex"
-                        >{{ data.isVerified }}</span
-                      >
+                      {{daysBetween(data.createdat.seconds)}}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap relative">
                       <i-mdi-dots-horizontal
@@ -451,26 +443,6 @@ onUnmounted(() => {
                             "
                           >
                             Quick View
-                          </li>
-                          <li
-                            tabindex="0"
-                            href="#"
-                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
-                            @click="
-                            enableUser(data.uuid)
-                            "
-                          >
-                            Enable User
-                          </li>
-                          <li
-                            tabindex="0"
-                            href="#"
-                            class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
-                            @click="
-                              disableUser(data.uuid)
-                            "
-                          >
-                            Disable User
                           </li>
                           <li
                             tabindex="0"
