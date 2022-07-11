@@ -73,6 +73,8 @@ const approveKYC = async (uid: string) => {
     loading.value = true
     batch.update(userVerifiedQuery, {
       isVerified: true,
+      status: "Approved",
+      rejectionReason: null
     });
     await batch.commit().then(
       async () => {

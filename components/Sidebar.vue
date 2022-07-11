@@ -6,9 +6,9 @@ const signOut = async () => {
     router.replace("/login");
   });
 };
-const openNews = ref(false);
+const openUsers = ref(false);
 const openInvestment = ref(false);
-const toggleNews = () => (openNews.value = !openNews.value);
+const toggleUsers = () => (openUsers.value = !openUsers.value);
 const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
 </script>
 <template>
@@ -42,14 +42,36 @@ const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
           <span class="pr-3"><i-mdi-home-variant /></span>
           <li :class="clamp ? 'hidden' : 'block'">Dashboard</li>
         </NuxtLink>
-        <NuxtLink
-          :exact-active-class="'bg-brand-clear_white text-gray-50'"
-          to="/dashboard/users"
-          class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
-        >
-          <span class="pr-3"><i-ph-users-three /></span>
-          <li :class="clamp ? 'hidden' : 'block'">Users</li>
-        </NuxtLink>
+        <div class="">
+          <p
+            @click="toggleInvestment"
+            class="flex justify-between items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+          >
+            <li :class="clamp ? 'hidden' : 'block'">Manage Users</li>
+            <span class="pr-3">
+              <i-ic-round-keyboard-arrow-up v-if="openInvestment" />
+              <i-ic-round-keyboard-arrow-down v-else />
+            </span>
+          </p>
+          <div class="body pl-4" v-if="openInvestment">
+            <NuxtLink
+              :exact-active-class="'bg-brand-clear_white text-gray-50'"
+              class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+              to="/dashboard/users"
+            >
+              <span class="pr-3"><i-ph-users-three /></span>
+              <li :class="clamp ? 'hidden' : 'block'">Users</li>
+            </NuxtLink>
+            <NuxtLink
+              :exact-active-class="'bg-brand-clear_white text-gray-50'"
+              class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
+              to="/dashboard/users/deleted"
+            >
+              <span class="pr-3"><i-material-symbols-auto-delete-outline-rounded/></span>
+              <li :class="clamp ? 'hidden' : 'block'">Deleted Users</li>
+            </NuxtLink>
+          </div>
+        </div>
         <div class="">
           <p
             @click="toggleInvestment"

@@ -111,7 +111,7 @@ exports.webhookHandler = functions.https.onRequest(async (req, res) => {
 
 exports.scheduleUserDeletion = functions.pubsub.schedule('0 0 * * *')
 .onRun((context) => {
-  const userSnap = firestore.collection("authUsers").where("isAccountActive", "==", false)
+  const userSnap = firestore.collection("authUsers").where("isAccountActive","==",false).where("status", "==", "Deleted")
   const now = new Date().toISOString()
   return userSnap.get().then(querySnapshot => {
     if (querySnapshot.empty) {

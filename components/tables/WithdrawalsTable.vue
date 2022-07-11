@@ -287,7 +287,7 @@ let classObject = computed(() => {
 });
 
 watchEffect(() => {
-  const q = query(collectionGroup($firestore, "investments"));
+  const q = query(collectionGroup($firestore, "withdrawals"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
@@ -309,7 +309,7 @@ watchEffect(() => {
 
 // lifecycle
 onUnmounted(() => {
-  const q = query(collectionGroup($firestore, "investments"));
+  const q = query(collectionGroup($firestore, "withdrawals"));
   const unsubscribe = onSnapshot(q, (_) => {
     
   });

@@ -430,7 +430,7 @@ onUnmounted(() => {
                             : 'text-yellow-500'
                         "
                         class="text-sm flex"
-                        >{{ data.isVerified }}</span
+                        >{{ data.status }}</span
                       >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap relative">
