@@ -407,7 +407,7 @@ onUnmounted(() => {
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                       {{new Date(data.createdat.seconds * 1000).toDateString() + ' at ' + new Date(data.createdat.seconds * 1000).toLocaleTimeString()}}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-3 py-4 whitespace-nowrap">
                       <span
                         :class="
                           data.isVerified
@@ -418,10 +418,10 @@ onUnmounted(() => {
                         >{{ data.isVerified ? "Verified" : "Pending" }}</span
                       >
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-3 py-4 whitespace-nowrap">
                       {{daysBetween(data.createdat.seconds)}}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap relative">
+                    <td class="pr-3 py-4 whitespace-nowrap relative">
                       <i-mdi-dots-horizontal
                         @click="open(index, $event)"
                         class="cursor-pointer"

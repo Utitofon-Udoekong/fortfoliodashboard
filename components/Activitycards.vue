@@ -5,7 +5,7 @@ const {$firestore} = useNuxtApp()
 const investments = ref([])
 const users = ref([])
 const userCount = computed(() => {
-  return users.length
+  return users.value.length
 })
 const snapinvestments = (snap) => investments.value.push(snap)
 const snapUsers = (snap) => investments.value.push(snap)
@@ -21,14 +21,14 @@ const dueInvestmentAmount = computed(() => {
     (inv) => new Date(inv.dueDate.slice(0,10)).toString() === new Date(now.slice(0,10)).toString()
   );
   const totaldue = dueNow.reduce((acc, inv) => {
-    return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount) + inv.planYield;
+    return acc + (inv.description.includes("FortShield") ? inv.amount / 590 : inv.amount) + inv.planYield;
   },0)
   return totaldue
 })
 const details = [
   {
     url: "users",
-    numbers: `${userCount}`,
+    numbers: `${userCount.value}`,
     title: "New users",
   },
   {
@@ -82,7 +82,7 @@ onUnmounted(() => {
   const unsubscribe = onSnapshot(q, (_) => {
     
   });
-  const u = query(collectionGroup($firestore, "investments"));
+  const u = query(collection($firestore, "authUsers"));
   const unsubscribe2 = onSnapshot(u, (_) => {
     
   });
