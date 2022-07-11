@@ -192,7 +192,7 @@ let classObject = computed(() => {
 });
 
 watchEffect(() => {
-  const q = query(collection($firestore, "authUsers"), where("status","==", "Enabled"));
+  const q = query(collection($firestore, "authUsers"), where("status","==", "Deleted"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {

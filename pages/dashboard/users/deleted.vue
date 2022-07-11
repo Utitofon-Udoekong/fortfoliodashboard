@@ -10,7 +10,7 @@
       </Head>
     </Html>
     <NuxtLayout name="dashboard">
-      <TablesDeleteUsersTable />
+      <TablesDeletedUsersTable />
     </NuxtLayout>
   </div>
 </template>
