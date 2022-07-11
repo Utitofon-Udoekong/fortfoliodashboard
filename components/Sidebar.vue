@@ -44,16 +44,16 @@ const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
         </NuxtLink>
         <div class="">
           <p
-            @click="toggleInvestment"
+            @click="toggleUsers"
             class="flex justify-between items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
           >
             <li :class="clamp ? 'hidden' : 'block'">Manage Users</li>
             <span class="pr-3">
-              <i-ic-round-keyboard-arrow-up v-if="openInvestment" />
+              <i-ic-round-keyboard-arrow-up v-if="openUsers" />
               <i-ic-round-keyboard-arrow-down v-else />
             </span>
           </p>
-          <div class="body pl-4" v-if="openInvestment">
+          <div class="body pl-4" v-if="openUsers">
             <NuxtLink
               :exact-active-class="'bg-brand-clear_white text-gray-50'"
               class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
