@@ -1,22 +1,25 @@
 <script lang="ts" setup>
-import { useUserStore } from '~~/store/userStore';
+import { query, collectionGroup, onSnapshot, collection } from '@firebase/firestore';
 
-const store = useUserStore()
-const userCount = store.getUserCount
+const {$firestore} = useNuxtApp()
+const investments = ref([])
+const users = ref([])
+const userCount = computed(() => {
+  return users.length
+})
+const snapinvestments = (snap) => investments.value.push(snap)
+const snapUsers = (snap) => investments.value.push(snap)
 const totalInvestments = computed(() => {
-  const amount = store.investments.reduce((acc, inv) => {
+  const amount = investments.reduce((acc, inv) => {
     return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount);
   }, 0)
   return amount
 })
 const dueInvestmentAmount = computed(() => {
   const now = new Date().toISOString()
-  const dueNow = store.investments.filter(
+  const dueNow = investments.filter(
     (inv) => new Date(inv.dueDate.slice(0,10)).toString() === new Date(now.slice(0,10)).toString()
   );
-  // if(dueNow.length === 0){
-  //   return 0
-  // }
   const totaldue = dueNow.reduce((acc, inv) => {
     return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount) + inv.planYield;
   },0)
@@ -39,6 +42,55 @@ const details = [
     title: "Total due investment",
   },
 ];
+const stop = watchEffect(() => {
+  const q = query(collectionGroup($firestore, "investments"));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "added") {
+          snapinvestments(change.doc.data());
+      }
+      if (change.type === "modified") {
+        investments.value = investments.value.map((x: { traxId: string; }) => (x.traxId === change.doc.data()["traxId"]) ? change.doc.data() : x)
+      }
+      if (change.type === "removed") {
+        investments.value = investments.value.filter((x) => x.traxId != change.doc.data()["traxId"])
+      }
+    });
+    console.log(investments.value)
+  });
+})
+const stop2 = watchEffect(() => {
+  const q = query(collection($firestore, "authUsers"));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "added") {
+          snapUsers(change.doc.data());
+      }
+      if (change.type === "modified") {
+        users.value = users.value.map((x: { traxId: string; }) => (x.traxId === change.doc.data()["traxId"]) ? change.doc.data() : x)
+      }
+      if (change.type === "removed") {
+        users.value = users.value.filter((x) => x.traxId != change.doc.data()["traxId"])
+      }
+    });
+    console.log(users.value)
+  });
+})
+
+onUnmounted(() => {
+  const q = query(collectionGroup($firestore, "investments"));
+  const unsubscribe = onSnapshot(q, (_) => {
+    
+  });
+  const u = query(collectionGroup($firestore, "investments"));
+  const unsubscribe2 = onSnapshot(u, (_) => {
+    
+  });
+  unsubscribe()
+  unsubscribe2()
+  stop()
+  stop2()
+});
 </script>
 <template>
   <div class="flex gap-3 mb-12">
