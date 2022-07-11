@@ -48,7 +48,7 @@ let sortCol: InvestmentTableData = reactive({
   paymentMethod: "",
   duration: 0,
 });
-const investmentsData = ref<InvestmentTableData[] | DocumentData[]>(store.investments);
+const investmentsData = ref<InvestmentTableData[] | DocumentData[]>();
 let filteredInvestment = ref<InvestmentTableData[]>([]);
 const showInvestment = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentInvestment = ref<number>(10);

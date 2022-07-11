@@ -6,9 +6,11 @@ import { useUserStore } from "~~/store/userStore";
 import {
   collectionGroup,
   getDocs,
+  onSnapshot,
   query,
   where,
   writeBatch,
+  DocumentData
 } from "@firebase/firestore";
 const store = useUserStore();
 const { $firestore } = useNuxtApp();
@@ -49,7 +51,7 @@ let sortCol: WithdrawalsTableData = reactive({
   planName: "",
   traxId: "",
 });
-const withdrawalsData = ref<WithdrawalsTableData[]>(store.withdrawals);
+const withdrawalsData = ref<WithdrawalsTableData[] | DocumentData[]>();
 let filteredWithdrawals = ref<WithdrawalsTableData[]>([]);
 const showWithdrawals = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentWithdrawals = ref<number>(10);
@@ -70,6 +72,7 @@ const loading = ref(false)
 // states------------------------------------------------------------------------------
 
 // methods
+const snapwithdrawalsData = (snap) => withdrawalsData.value.push(snap)
 const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop();
@@ -296,12 +299,36 @@ let classObject = computed(() => {
   };
 });
 
+watchEffect(() => {
+  const q = query(collectionGroup($firestore, "investments"));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "added") {
+          snapwithdrawalsData(change.doc.data());
+      }
+      if (change.type === "modified") {
+        withdrawalsData.value = withdrawalsData.value.map((x: { traxId: string; }) => (x.traxId === change.doc.data()["traxId"]) ? change.doc.data() : x)
+      }
+      if (change.type === "removed") {
+        withdrawalsData.value = withdrawalsData.value.filter((x) => x.traxId != change.doc.data()["traxId"])
+      }
+    });
+    console.log(withdrawalsData.value)
+    paginateData(withdrawalsData.value)
+  });
+})
+
 // computed------------------------------------------------------------------------------
 
 // lifecycle
-onMounted(() => {
-  paginateData(withdrawalsData.value);
+onUnmounted(() => {
+  const q = query(collectionGroup($firestore, "investments"));
+  const unsubscribe = onSnapshot(q, (_) => {
+    
+  });
+  unsubscribe()
 });
+// lifecycle----------------------------------------------------------------------------------
 // lifecycle---------------------
 </script>
 <template>

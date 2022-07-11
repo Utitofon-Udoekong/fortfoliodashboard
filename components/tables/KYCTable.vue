@@ -43,7 +43,7 @@ let sortCol: KYCTableData = reactive({
   status: "",
 });
 
-const kycDataList = ref<KYCTableData[] | DocumentData[]>(store.kyc);
+const kycDataList = ref<KYCTableData[] | DocumentData[]>();
 let filteredKYC = ref<KYCTableData[]>([]);
 const showKYC = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentKYC = ref<number>(10);
