@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import { WithdrawalsTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
-import { computed, onMounted, reactive, ref } from "vue";
-import { useUserStore } from "~~/store/userStore";
 import {
   collectionGroup,
   getDocs,
@@ -12,7 +10,6 @@ import {
   writeBatch,
   DocumentData
 } from "@firebase/firestore";
-const store = useUserStore();
 const { $firestore } = useNuxtApp();
 
 // states
@@ -51,7 +48,7 @@ let sortCol: WithdrawalsTableData = reactive({
   planName: "",
   traxId: "",
 });
-const withdrawalsData = ref<WithdrawalsTableData[] | DocumentData[]>();
+const withdrawalsData = ref<WithdrawalsTableData[] | DocumentData[]>([]);
 let filteredWithdrawals = ref<WithdrawalsTableData[]>([]);
 const showWithdrawals = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentWithdrawals = ref<number>(10);

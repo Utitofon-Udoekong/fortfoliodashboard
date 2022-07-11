@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { IncomingInvestmentTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
-import { useUserStore } from "~~/store/userStore";
 
 import { daysAhead } from "~~/helpers/daysAgo";
-const store = useUserStore();
+import { query, collectionGroup, onSnapshot, DocumentData } from "@firebase/firestore";
+const {$firestore} = useNuxtApp()
 
 // states
 const columns = [
@@ -31,10 +31,11 @@ let sortCol: IncomingInvestmentTableData = reactive({
   status: "",
   duration: 0,
 });
-const in3days = store.investments.filter(
+const investments = ref<IncomingInvestmentTableData[] | DocumentData[]>([])
+const in3days = investments.value.filter(
     (inv) => inv.dueDate.slice(0,10)  === daysAhead(3, new Date()).slice(0,10)
   );
-const investmentsData = ref<IncomingInvestmentTableData[]>(in3days);
+const investmentsData = ref<IncomingInvestmentTableData[] | DocumentData[]>(in3days);
 let filteredInvestment = ref<IncomingInvestmentTableData[]>([]);
 const showInvestment = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentInvestment = ref<number>(10);
@@ -51,7 +52,7 @@ let editableUser: IncomingInvestmentTableData[] = [];
 // states------------------------------------------------------------------------------
 
 // methods
-
+const snapinvestments =(snap) => investments.value.push(snap)
 const selectRow = (user: IncomingInvestmentTableData) => {
   editableUser.push(user);
   showUserData.value = true;
@@ -196,11 +197,34 @@ let classObject = computed(() => {
   };
 });
 
+watchEffect(() => {
+  const q = query(collectionGroup($firestore, "investments"));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "added") {
+          snapinvestments(change.doc.data());
+      }
+      if (change.type === "modified") {
+        investments.value = investments.value.map((x: { traxId: string; }) => (x.traxId === change.doc.data()["traxId"]) ? change.doc.data() : x)
+      }
+      if (change.type === "removed") {
+        investments.value = investments.value.filter((x) => x.traxId != change.doc.data()["traxId"])
+      }
+    });
+    console.log(investments.value)
+    paginateData(investments.value)
+  });
+})
+
 // computed------------------------------------------------------------------------------
 
 // lifecycle
-onMounted(() => {
-  paginateData(investmentsData.value);
+onUnmounted(() => {
+  const q = query(collectionGroup($firestore, "investments"));
+  const unsubscribe = onSnapshot(q, (_) => {
+    
+  });
+  unsubscribe()
 });
 // lifecycle----------------------------------------------------------------------------------
 </script>

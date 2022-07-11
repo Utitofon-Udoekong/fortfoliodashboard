@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import { KYCTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
-import { useUserStore } from "~~/store/userStore";
 import formatter from "~~/helpers/formatIsoDate";
-import { collection, doc, DocumentData, onSnapshot, query, updateDoc, where, writeBatch } from "@firebase/firestore";
-const store = useUserStore();
+import { collection, doc, DocumentData, onSnapshot, query, updateDoc, writeBatch } from "@firebase/firestore";
 const { $firestore } = useNuxtApp();
 
 
