@@ -77,19 +77,10 @@ const toggleModal = () => {
   showModal.value = !showModal.value;
   editableUser.pop();
 };
-const selectRow = (traxId: string) => {
-  const withdrawalData = store.withdrawals.filter(
-    (data) => data.traxId === traxId
-  );
-  editableUser.push(withdrawalData);
+const selectRow = (data) => {
+  editableUser.push(data);
   showModal.value = true;
 };
-const refresh = async () => {
-  await store.setWithdrawals().then(() => {
-    const withdrawals = store.getWithdrawals
-    paginateData(withdrawals)
-  })
-}
 const getHeight = async (e: MouseEvent) => {
   topPos.value = e.pageY + 20;
   leftPos.value = e.pageX - 120;
@@ -121,7 +112,6 @@ const approveWithdrawal = async (traxId: string) => {
     });
     await batch.commit().then(
       async () => {
-        await refresh()
         loading.value = false
         notificationMessage.value = `Withdrawal for ${traxId} approved`;
         showSuccess.value = true;
@@ -422,7 +412,6 @@ onUnmounted(() => {
                   <tr
                     v-for="(data, index) in tableData"
                     :key="index"
-                    @click="selectRow(data)"
                     class="hover:bg-gray-300 cursor-pointer"
                   >
                     <td class="px-6 py-4 whitespace-nowrap">
@@ -482,7 +471,7 @@ onUnmounted(() => {
                             tabindex="0"
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
-                            @click="selectRow(data.traxId)"
+                            @click="selectRow(data)"
                           >
                             Quick View
                           </li>

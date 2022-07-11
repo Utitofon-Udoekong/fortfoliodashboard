@@ -55,12 +55,6 @@ let editableUser: UsersTableData[] = [];
 // states------------------------------------------------------------------------------
 
 // methods
-const refresh = async () => {
-  await store.setUsers().then(() => {
-    const users = store.getUsers
-    paginateData(users)
-  })
-}
 const snapUsersData = (snap) => {
   usersData.value.push(snap)
 }
@@ -72,9 +66,6 @@ const disableUser = async (id: string) => {
 }
 const deleteUser = async (id: string) => {
   await store.deleteUser(id)
-}
-const getStatus = async (id: string) => {
-  return await store.getStatus(id)
 }
 const selectRow = (user: UsersTableData) => {
   editableUser.push(user);
@@ -387,11 +378,7 @@ onUnmounted(() => {
                   <tr
                     v-for="(data, index) in tableData"
                     :key="index"
-                    :class="[
-                      'hover:bg-gray-300 cursor-pointer',
-                      {'bg-gray-500':
-                      getStatus(data.uuid) === true}
-                    ]"
+                    class=" hover:bg-gray-300 cursor-pointer "
                   >
                     <td class="px-3 py-4 whitespace-nowrap">
                       <div class="flex items-center">
@@ -416,6 +403,7 @@ onUnmounted(() => {
                       {{ data.phoneNumber }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
+                      {{data.createdat.toLocaleDateString("en-GB")}}
                       {{new Date(data.createdat._seconds * 1000).toDateString() + ' at ' + new Date(data.createdat._seconds * 1000).toLocaleTimeString()}}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">

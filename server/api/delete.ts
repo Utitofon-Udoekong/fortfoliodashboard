@@ -7,10 +7,8 @@ export default async (req) => {
     const {uid} = await useBody(req)
     await getAuth()
             .deleteUser(uid)
-            .then(() => {
-                db.collection("authUsers").doc(uid).update({
-                    status: "Deleted"
-                })
+            .then(async () => {
+                await db.collection("authUsers").doc(uid).delete()
                 return 'Successfully deleted user';
             })
             .catch((error) => {
