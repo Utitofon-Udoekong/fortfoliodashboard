@@ -17,7 +17,7 @@ const totalInvestments = computed(() => {
 })
 const dueInvestmentAmount = computed(() => {
   const now = new Date().toISOString()
-  const dueNow = investments.filter(
+  const dueNow = investments.value.filter(
     (inv) => new Date(inv.dueDate.slice(0,10)).toString() === new Date(now.slice(0,10)).toString()
   );
   const totaldue = dueNow.reduce((acc, inv) => {
