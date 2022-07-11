@@ -68,7 +68,7 @@ const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
               to="/dashboard/users/deleted"
             >
               <span class="pr-3"><i-material-symbols-auto-delete-outline-rounded/></span>
-              <li :class="clamp ? 'hidden' : 'block'">Deleted Users</li>
+              <li :class="clamp ? 'hidden' : 'block'">Deleted</li>
             </NuxtLink>
           </div>
         </div>
