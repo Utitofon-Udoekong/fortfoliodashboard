@@ -380,7 +380,7 @@ onUnmounted(() => {
                     v-for="(data, index) in tableData"
                     :key="index"
                     :class="[ 'hover:bg-gray-300 cursor-pointer',
-                    'bg-[#ffe9ab]': data.status === 'Disabled' ]"
+                    {'bg-[#ffe9ab]': data.status === 'Disabled'} ]"
                   >
                     <td class="px-3 py-4 whitespace-nowrap">
                       <div class="flex items-center">
