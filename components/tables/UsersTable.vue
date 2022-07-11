@@ -405,8 +405,7 @@ onUnmounted(() => {
                       {{ data.phoneNumber }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{data.createdat.toLocaleDateString("en-GB")}}
-                      {{new Date(data.createdat._seconds * 1000).toDateString() + ' at ' + new Date(data.createdat._seconds * 1000).toLocaleTimeString()}}
+                      {{new Date(data.createdat.seconds * 1000).toDateString() + ' at ' + new Date(data.createdat.seconds * 1000).toLocaleTimeString()}}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span

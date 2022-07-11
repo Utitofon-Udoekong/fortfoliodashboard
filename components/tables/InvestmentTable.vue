@@ -13,7 +13,6 @@ import {
   writeBatch,
 } from "@firebase/firestore";
 import formatter from "~~/helpers/formatIsoDate";
-const store = useUserStore();
 const { $firestore } = useNuxtApp();
 const batch = writeBatch($firestore);
 
@@ -48,7 +47,7 @@ let sortCol: InvestmentTableData = reactive({
   paymentMethod: "",
   duration: 0,
 });
-const investmentsData = ref<InvestmentTableData[] | DocumentData[]>();
+const investmentsData = ref<InvestmentTableData[] | DocumentData[]>([]);
 let filteredInvestment = ref<InvestmentTableData[]>([]);
 const showInvestment = ref<number[]>([5, 10, 15, 20, 30, 50, 100]);
 const currentInvestment = ref<number>(10);
