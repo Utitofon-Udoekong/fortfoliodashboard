@@ -89,10 +89,8 @@ export const initUser = async () => {
 
   const router = useRouter();
 
-  const store = useUserStore()
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      await store.login()
     } else {
       router.replace("/login")
     }

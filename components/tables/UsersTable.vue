@@ -14,6 +14,7 @@ const columns = [
   { name: "phoneNumber", text: "Phone Number" },
   { name: "createdat", text: "Created At" },
   { name: "isVerified", text: "Verified" },
+  { name: "status", text: "Status" },
 ];
 let col = reactive({
   id: "",
@@ -370,7 +371,7 @@ onUnmounted(() => {
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-bold text-brand-ash uppercase tracking-wider"
                     >
-                      Action
+                      <i-tabler-edit/>
                     </th>
                   </tr>
                 </thead>

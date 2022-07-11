@@ -26,6 +26,7 @@ export interface UsersTableData{
     createdat: object
     balance: number
     displayName: string,
+    status: string
 }
 
 interface Documentbody{
