@@ -450,7 +450,8 @@ onUnmounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                            selectRow(data)
+                            selectRow(data),
+                            open(index, $event)
                             "
                           >
                             Quick View
@@ -460,7 +461,8 @@ onUnmounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                            enableUser(data.uuid)
+                            enableUser(data.uuid),
+                            open(index, $event)
                             "
                           >
                             Enable User
@@ -470,7 +472,8 @@ onUnmounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              disableUser(data.uuid)
+                              disableUser(data.uuid),
+                              open(index, $event)
                             "
                           >
                             Disable User
@@ -480,7 +483,8 @@ onUnmounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              deleteUser(data.uuid)
+                              deleteUser(data.uuid),
+                              open(index, $event)
                             "
                           >
                             Delete User
