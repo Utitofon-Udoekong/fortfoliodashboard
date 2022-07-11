@@ -379,7 +379,8 @@ onUnmounted(() => {
                   <tr
                     v-for="(data, index) in tableData"
                     :key="index"
-                    class=" hover:bg-gray-300 cursor-pointer "
+                    :class="[ 'hover:bg-gray-300 cursor-pointer',
+                    'bg-yellow-300': data.status === 'Disabled' ]"
                   >
                     <td class="px-3 py-4 whitespace-nowrap">
                       <div class="flex items-center">
@@ -416,6 +417,17 @@ onUnmounted(() => {
                         "
                         class="text-sm flex"
                         >{{ data.isVerified ? "Verified" : "Pending" }}</span
+                      >
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        :class="
+                          data.status === 'Disabled'
+                            ? 'text-brand-green'
+                            : 'text-yellow-500'
+                        "
+                        class="text-sm flex"
+                        >{{ data.isVerified }}</span
                       >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap relative">
