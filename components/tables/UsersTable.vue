@@ -209,7 +209,6 @@ watchEffect(() => {
         usersData.value = usersData.value.filter((x) => x.id != change.doc.data()["id"])
       }
     });
-    console.log(usersData.value)
     paginateData(usersData.value)
   });
 })

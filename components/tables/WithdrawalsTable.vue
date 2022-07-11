@@ -300,7 +300,6 @@ watchEffect(() => {
         withdrawalsData.value = withdrawalsData.value.filter((x) => x.traxId != change.doc.data()["traxId"])
       }
     });
-    console.log(withdrawalsData.value)
     paginateData(withdrawalsData.value)
   });
 })

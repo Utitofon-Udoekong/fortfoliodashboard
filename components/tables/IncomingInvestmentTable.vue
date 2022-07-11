@@ -211,7 +211,6 @@ watchEffect(() => {
         investments.value = investments.value.filter((x) => x.traxId != change.doc.data()["traxId"])
       }
     });
-    console.log(investments.value)
     paginateData(investments.value)
   });
 })

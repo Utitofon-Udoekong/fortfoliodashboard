@@ -278,7 +278,6 @@ watchEffect(() => {
         kycDataList.value = kycDataList.value.filter((x) => x.id != change.doc.data()["id"])
       }
     });
-    console.log(kycDataList.value)
     paginateData(kycDataList.value)
   });
 })
