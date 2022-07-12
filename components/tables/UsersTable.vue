@@ -201,6 +201,10 @@ watchEffect(() => {
   const unsubscribe = onSnapshot(q, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
+        const data = {
+          uuid: change.doc.ref,
+          ...change.doc.data()
+        }
           snapUsersData(change.doc.data());
       }
       if (change.type === "modified") {
