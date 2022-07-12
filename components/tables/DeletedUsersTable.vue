@@ -59,12 +59,6 @@ let editableUser: UsersTableData[] = [];
 const snapUsersData = (snap) => {
   usersData.value.push(snap)
 }
-const enableUser = async (id: string) => {
-  await store.enableUser(id)
-}
-const disableUser = async (id: string) => {
-  await store.disableUser(id)
-}
 const deleteUser = async (id: string) => {
   await store.deleteUser(id)
 }
@@ -196,7 +190,11 @@ watchEffect(() => {
   const unsubscribe = onSnapshot(q, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-          snapUsersData(change.doc.data());
+        const data = {
+          uuid: change.doc.id,
+          ...change.doc.data()
+        }
+          snapUsersData(data);
       }
       if (change.type === "modified") {
         usersData.value = usersData.value.map((x: { id: any; }) => (x.id === change.doc.data()["id"]) ? change.doc.data() : x)

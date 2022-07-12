@@ -64,9 +64,8 @@ const snapUsersData = (snap) => {
 const enableUser = async (id: string) => {
   await store.enableUser(id)
 }
-const disableUser = (id: string) => {
-  console.log("page id", id)
-  store.disableUser(id)
+const disableUser = async (id: string) => {
+  await store.disableUser(id)
 }
 const deleteUser = async (id: string) => {
   await store.deleteUser(id)

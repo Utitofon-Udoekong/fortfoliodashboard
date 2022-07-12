@@ -269,7 +269,11 @@ watchEffect(() => {
   const unsubscribe = onSnapshot(q, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-          snapkycDataList(change.doc.data());
+        const data = {
+          uuid: change.doc.id,
+          ...change.doc.data()
+        }
+          snapkycDataList(data);
       }
       if (change.type === "modified") {
         kycDataList.value = kycDataList.value.map((x: { id: any; }) => (x.id === change.doc.data()["id"]) ? change.doc.data() : x)

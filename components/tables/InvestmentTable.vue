@@ -396,7 +396,11 @@ watchEffect(() => {
   const unsubscribe = onSnapshot(q, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
-          snapinvestmentsData(change.doc.data());
+        const data = {
+          uuid: change.doc.id,
+          ...change.doc.data()
+        }
+          snapinvestmentsData(data);
       }
       if (change.type === "modified") {
         investmentsData.value = investmentsData.value.map((x: { traxId: string; }) => (x.traxId === change.doc.data()["traxId"]) ? change.doc.data() : x)
