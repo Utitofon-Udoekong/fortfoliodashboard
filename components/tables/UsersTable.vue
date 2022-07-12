@@ -205,6 +205,7 @@ watchEffect(() => {
           uuid: change.doc.ref,
           ...change.doc.data()
         }
+        console.log("data",data)
           snapUsersData(change.doc.data());
       }
       if (change.type === "modified") {
@@ -214,6 +215,7 @@ watchEffect(() => {
         usersData.value = usersData.value.filter((x) => x.id != change.doc.data()["id"])
       }
     });
+    console.log(usersData.value)
     paginateData(usersData.value)
   });
 })
