@@ -15,6 +15,7 @@ const totalInvestments = computed(() => {
   }, 0)
   return amount
 })
+console.log(totalInvestments.value)
 const dueInvestmentAmount = computed(() => {
   const now = new Date().toISOString()
   const dueNow = investments.value.filter(
