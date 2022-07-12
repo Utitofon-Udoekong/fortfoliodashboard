@@ -1,9 +1,8 @@
-import { getAuth } from "firebase-admin/auth";
-import { db } from "~~/helpers/fireadmin";
+import { auth, db } from "~~/helpers/fireadmin";
 
 export default defineEventHandler(async (event) => {
     const uid = await useBody(event)
-    await getAuth()
+    await auth
             .updateUser(uid, {
                 disabled: true,
             })

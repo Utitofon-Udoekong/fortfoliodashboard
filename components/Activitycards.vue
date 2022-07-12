@@ -56,7 +56,7 @@ const stop = watchEffect(() => {
         investments.value = investments.value.filter((x) => x.traxId != change.doc.data()["traxId"])
       }
     });
-    console.log(investments.value)
+    console.log("inv",investments.value)
   });
 })
 const stop2 = watchEffect(() => {
@@ -73,7 +73,7 @@ const stop2 = watchEffect(() => {
         users.value = users.value.filter((x) => x.traxId != change.doc.data()["traxId"])
       }
     });
-    console.log(users.value)
+    console.log("users",users.value)
   });
 })
 
