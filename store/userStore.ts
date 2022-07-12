@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', {
                 body: {uid}
             }))
             const message = data.value
-            console.log(message)
+            console.log("store",message)
         },
         async enableUser(uid: string){
             const {data} = await useAsyncData('enable', () => $fetch('/api/enable', {

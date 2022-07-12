@@ -19,6 +19,6 @@
 //             })}
 export default defineEventHandler(async (event) => {
     const uid = await useBody(event)
-    console.log(uid)
+    console.log("server",uid)
     return uid
 })
