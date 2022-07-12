@@ -67,7 +67,7 @@ const toggleInvestment = () => (openInvestment.value = !openInvestment.value);
               class="flex items-center text-gray-400 mb-3 p-2 hover:bg-brand-clear_white cursor-pointer rounded-xl"
               to="/dashboard/users/deleted"
             >
-              <span class="pr-3"><i-material-symbols-auto-delete-outline-rounded/></span>
+              <span class="pr-3"><i-ic-round-auto-delete/></span>
               <li :class="clamp ? 'hidden' : 'block'">Deleted</li>
             </NuxtLink>
           </div>

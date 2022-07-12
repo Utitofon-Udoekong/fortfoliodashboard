@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
         disabled: false,
     })
     .then((_) => {
-        db.collection("authUsers").doc(uid).update({
+        db.collection("authUsers").doc(`${uid}`).update({
             status: "Enabled"
         })
         return 'Successfully enabled user'
