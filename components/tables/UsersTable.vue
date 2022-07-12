@@ -202,7 +202,7 @@ watchEffect(() => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
         const data = {
-          uuid: change.doc.ref,
+          uuid: change.doc.id,
           ...change.doc.data()
         }
         console.log("data",data)
