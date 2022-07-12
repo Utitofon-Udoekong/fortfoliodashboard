@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
                 db.collection("authUsers").doc(uid).update({
                     status: "Disabled"
                 })
-                // return 'Successfully disabled user'
+                return 'Successfully disabled user'
             })
             .catch((error) => {
                 return "Error disabling user " + error

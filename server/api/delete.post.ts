@@ -1,16 +1,14 @@
 import { getAuth } from "firebase-admin/auth";
-import { getFirestore } from "firebase-admin/firestore";
 import { db } from "~~/helpers/fireadmin";
 
-export default async (req) => {
-    const {uid} = await useBody(req)
+export default defineEventHandler(async (event) => {
+    const uid = await useBody(event)
     await getAuth()
             .deleteUser(uid)
             .then(async () => {
-                await db.collection("authUsers").doc(uid).delete()
-                return 'Successfully deleted user';
+                await db.collection("authUsers").doc(uid).delete().then(() => 'Successfully deleted user')
             })
             .catch((error) => {
                 return `Error deleting user: ${error}`
             });
-}
+})

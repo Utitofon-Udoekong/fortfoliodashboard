@@ -1,8 +1,8 @@
 import { getAuth } from "firebase-admin/auth";
 import { db } from "~~/helpers/fireadmin";
 
-export default async (req) => {
-    const {uid} = await useBody(req)
+export default defineEventHandler(async (event) => {
+    const uid = await useBody(event)
     await getAuth()
     .updateUser(uid, {
         disabled: false,
@@ -16,4 +16,4 @@ export default async (req) => {
     .catch((error) => {
         return "Error enabling userz: " + error
     });
-}
+})
