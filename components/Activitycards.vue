@@ -8,7 +8,7 @@ const userCount = computed(() => {
   return users.value.length
 })
 const snapinvestments = (snap) => investments.value.push(snap)
-const snapUsers = (snap) => investments.value.push(snap)
+const snapUsers = (snap) => users.value.push(snap)
 const totalInvestments = computed(() => {
   const amount = investments.value.reduce((acc, inv) => {
     return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount);
