@@ -3,7 +3,6 @@ import { getFirestore } from "firebase-admin/firestore";
 import { db } from "~~/helpers/fireadmin";
 
 export default async (req) => {
-    if(req.method !== 'POST') return 'Invalid request'
     const {uid} = await useBody(req)
     await getAuth()
             .deleteUser(uid)

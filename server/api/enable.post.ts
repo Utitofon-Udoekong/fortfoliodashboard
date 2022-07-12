@@ -2,7 +2,6 @@ import { getAuth } from "firebase-admin/auth";
 import { db } from "~~/helpers/fireadmin";
 
 export default async (req) => {
-    if(req.method !== 'POST') return 'Invalid request'
     const {uid} = await useBody(req)
     await getAuth()
     .updateUser(uid, {
