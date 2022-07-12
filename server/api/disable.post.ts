@@ -1,5 +1,5 @@
-import { getAuth } from "firebase-admin/auth";
-import { db } from "~~/helpers/fireadmin";
+// import { getAuth } from "firebase-admin/auth";
+// import { db } from "~~/helpers/fireadmin";
 
 // export default async (req) => {
 //     const {uid} = await useBody(req)
@@ -20,5 +20,5 @@ import { db } from "~~/helpers/fireadmin";
 export default defineEventHandler(async (event) => {
     const uid = await useBody(event)
     console.log(uid)
-    return {uid}
+    return uid
 })
