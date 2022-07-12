@@ -205,7 +205,7 @@ watchEffect(() => {
           uuid: change.doc.id,
           ...change.doc.data()
         }
-          snapUsersData(change.doc.data());
+          snapUsersData(data);
       }
       if (change.type === "modified") {
         usersData.value = usersData.value.map((x: { id: any; }) => (x.id === change.doc.data()["id"]) ? change.doc.data() : x)
