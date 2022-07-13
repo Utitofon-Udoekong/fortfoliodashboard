@@ -54,6 +54,9 @@ const showUserData = ref(false);
 const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: UsersTableData[] = [];
+const actionModalBoundingClient = ref(0)
+const modalHeight = ref(0)
+const windowObject = ref<Window & typeof globalThis>(null)
 // states------------------------------------------------------------------------------
 
 // methods
@@ -69,9 +72,11 @@ const selectRow = (user: UsersTableData) => {
 };
 
 const getHeight = async (e: MouseEvent) => {
-  topPos.value = e.pageY + 20;
+  const isAtBottom = (window.innerHeight - actionModalBoundingClient.value) < 100
+
+  topPos.value = isAtBottom ? e.pageY - modalHeight.value - 20 : e.pageY + 20;
   leftPos.value = e.pageX - 120;
-  // console.log(top.value, left.value)
+
 };
 
 const open = async (index: number, e: MouseEvent) => {
@@ -213,6 +218,11 @@ watchEffect(() => {
 // computed------------------------------------------------------------------------------
 
 // lifecycle
+onMounted(() => {
+  windowObject.value = window
+  actionModalBoundingClient.value = document.getElementById("actionModal").getBoundingClientRect().bottom
+  modalHeight.value = document.getElementById("actionModal").getBoundingClientRect().height
+})
 onUnmounted(() => {
   const q = query(collection($firestore, "authUsers"), where("status","!=", "Deleted"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -440,6 +450,7 @@ onUnmounted(() => {
                       />
                       <div
                         v-if="show === index"
+                        id="actionModal"
                         :style="classObject"
                         class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl"
                       >
