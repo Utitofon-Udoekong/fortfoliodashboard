@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-interface Props {
-  loading: false;
-}
-const props = defineProps<Props>();
+import { useUserStore } from '~~/store/userStore';
+
+const {loading} = useUserStore()
 </script>
 <template>
   <div
-    v-if="props.loading"
+    v-if="loading"
     class="loader flex justify-center items-center fixed h-screen w-screen z-50 inset-0 bg-gray-800/25"
   >
     <svg

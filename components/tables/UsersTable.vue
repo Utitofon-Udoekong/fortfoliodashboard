@@ -2,7 +2,7 @@
 import { TableHeader, UsersTableData } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import { useUserStore } from "~~/store/userStore";
-import { onSnapshot, doc, collection, query, where, DocumentData } from "firebase/firestore";
+import { onSnapshot, collection, query, where, DocumentData } from "firebase/firestore";
 // states
 
 const store = useUserStore()
@@ -51,11 +51,6 @@ const currentPage = ref<number>(1);
 const totalPages = ref<number>(1);
 const show = ref<number | null>(null);
 const showUserData = ref(false);
-const showError = ref(false);
-const showSuccess = ref(false);
-const notificationMessage = ref("");
-const loading = ref(false)
-
 const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: UsersTableData[] = [];
@@ -65,20 +60,9 @@ let editableUser: UsersTableData[] = [];
 const snapUsersData = (snap) => {
   usersData.value.push(snap)
 }
-const enableUser = async (id: string) => {
-  loading.value = false
-  notificationMessage.value = await store.enableUser(id)
-  showSuccess.value = true;
-}
-const disableUser = async (id: string) => {
-  loading.value = false
-  notificationMessage.value = await store.disableUser(id)
-  showSuccess.value = true;
-}
-const deleteUser = async (id: string) => {
-  loading.value = false
-  notificationMessage.value = await store.deleteUser(id)
-}
+const enableUser = async (id: string) => await store.enableUser(id)
+const disableUser = async (id: string) => await store.disableUser(id)
+const deleteUser = async (id: string) => await store.deleteUser(id)
 const selectRow = (user: UsersTableData) => {
   editableUser.push(user);
   showUserData.value = true;
@@ -240,8 +224,8 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="h-auto">
-    <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
-    <Loader :loading="loading"/>
+    <Notifications/>
+    <Loader/>
     <!-- SHOW USER DATA -->
     <div v-if="showUserData">
       <div

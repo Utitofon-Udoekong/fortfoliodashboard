@@ -12,8 +12,10 @@ import {
   writeBatch,
 } from "@firebase/firestore";
 import formatter from "~~/helpers/formatIsoDate";
+import { useUserStore } from "~~/store/userStore";
 const { $firestore } = useNuxtApp();
 const batch = writeBatch($firestore);
+const {showFailure, showSuccess, loading, setLoading} = useUserStore()
 
 // states
 const columns = [
@@ -61,10 +63,6 @@ const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: InvestmentTableData[] = [];
 const openTab = ref(1);
-const showError = ref(false);
-const showSuccess = ref(false);
-const notificationMessage = ref("");
-const loading = ref(false);
 // states------------------------------------------------------------------------------
 
 // methods
@@ -375,22 +373,6 @@ const currentMonthsInvestmentAmount = computed(() => {
   return totalSum;
 });
 
-watch(showError, (newVal: boolean) => {
-  if (newVal === true) {
-    setTimeout(() => {
-      showError.value = false;
-    }, 1500);
-  }
-});
-
-watch(showSuccess, (newVal: boolean) => {
-  if (newVal === true) {
-    setTimeout(() => {
-      showSuccess.value = false;
-    }, 1500);
-  }
-});
-
 watchEffect(() => {
   const q = query(collectionGroup($firestore, "investments"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -426,8 +408,8 @@ onUnmounted(() => {
 // lifecycle----------------------------------------------------------------------------------
 </script>
 <template>
-  <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
-  <Loader :loading="loading"/>
+  <Notifications/>
+  <Loader/>
   <div class="h-auto">
     <div class="table-form">
       <div class="flex mb-3 justify-between">
