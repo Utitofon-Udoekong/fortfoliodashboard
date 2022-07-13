@@ -1,10 +1,12 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { KYCTableData, TableHeader } from "~~/utils/types/table";
 import { array, file } from "alga-js";
 import formatter from "~~/helpers/formatIsoDate";
 import { collection, doc, DocumentData, onSnapshot, query, updateDoc, writeBatch } from "@firebase/firestore";
+import { useUserStore } from "~~/store/userStore";
 const { $firestore } = useNuxtApp();
 
+const {setLoading, setNotificationMessage, setshowSuccess, setshowFailure} = useUserStore()
 
 // states
 const columns = [
@@ -57,10 +59,6 @@ const topPos = ref(0);
 const leftPos = ref(0);
 let showImageModal = ref(false);
 let imageSource = ref("");
-const showError = ref(false);
-const showSuccess = ref(false);
-const notificationMessage = ref("");
-const loading = ref(false)
 // states------------------------------------------------------------------------------
 
 // methods
@@ -70,7 +68,7 @@ const approveKYC = async (uid: string) => {
   const batch = writeBatch($firestore);
   const userVerifiedQuery = doc($firestore, "authUsers", uid);
   try {
-    loading.value = true
+    setLoading(true)
     batch.update(userVerifiedQuery, {
       isVerified: true,
       status: "Approved",
@@ -78,46 +76,46 @@ const approveKYC = async (uid: string) => {
     });
     await batch.commit().then(
       async () => {
-        loading.value = false
-        notificationMessage.value = `KYC for ${uid} Approved`;
-        showSuccess.value = true;
+        setLoading(false)
+        setNotificationMessage(`KYC for ${uid} Approved`)
+        setshowSuccess(true)
       },
       (d) => {
-        loading.value = false
-        notificationMessage.value = `An error occured: ${d}`;
-        showError.value = true;
+        setLoading(false)
+        setNotificationMessage(`An error occured: ${d}`)
+        setshowFailure(true)
       }
     );
   } catch (error) {
-    loading.value = false
-    notificationMessage.value = `An error occured: ${error}`;
-    showError.value = true;
+    setLoading(false)
+    setNotificationMessage(`An error occured: ${error}`)
+    setshowFailure(true)
   }
 };
 
 const rejectKYC = async (uid: string) => {
   const ref = doc($firestore, "kyc", uid);
   try {
-    loading.value = true
+    setLoading(true)
     await updateDoc(ref, {
       isVerified: false,
       status: "Rejected",
     }).then(
       async () => {
-        loading.value = false
-        notificationMessage.value = `KYC for ${uid} Approved`;
-        showSuccess.value = true;
+        setLoading(false)
+        setNotificationMessage(`KYC for ${uid} Approved`)
+        setshowSuccess(true)
       },
       (d) => {
-        loading.value = false
-        notificationMessage.value = `An error occured: ${d}`;
-        showError.value = true;
+        setLoading(false)
+        setNotificationMessage(`An error occured: ${d}`)
+        setshowFailure(true)
       }
     );
   } catch (error) {
-    loading.value = false
-    notificationMessage.value = `An error occured: ${error}`;
-    showError.value = true;
+    setLoading(false)
+    setNotificationMessage(`An error occured: ${error}`)
+    setshowFailure(true)
   }
 };
 const toggleImageModal = () => {
@@ -246,23 +244,6 @@ let classObject = computed(() => {
     left,
   };
 });
-
-watch(showError, (newVal) => {
-  if (newVal === true) {
-    setTimeout(() => {
-      showError.value = false;
-    }, 1500);
-  }
-});
-
-watch(showSuccess, (newVal) => {
-  if (newVal === true) {
-    setTimeout(() => {
-      showSuccess.value = false;
-    }, 1500);
-  }
-});
-
 
 watchEffect(() => {
   const q = query(collection($firestore, "kyc"));

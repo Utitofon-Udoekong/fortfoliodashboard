@@ -10,8 +10,9 @@ import {
   writeBatch,
   DocumentData
 } from "@firebase/firestore";
+import { useUserStore } from "~~/store/userStore";
 const { $firestore } = useNuxtApp();
-
+const {setLoading, setNotificationMessage, setshowSuccess, setshowFailure} = useUserStore()
 // states
 const columns = [
   { name: "traxId", text: "Trax ID" },
@@ -62,10 +63,6 @@ const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: any[];
 let showModal = ref(false);
-const showError = ref(false);
-const showSuccess = ref(false);
-const notificationMessage = ref("");
-const loading = ref(false)
 // states------------------------------------------------------------------------------
 
 // methods
@@ -96,7 +93,7 @@ const approveWithdrawal = async (traxId: string) => {
   const querySnapshot = await getDocs(ref);
   const notSnapshot = await getDocs(notref);
   try {
-    loading.value = true
+    setLoading(true)
     querySnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Successful",
@@ -109,20 +106,20 @@ const approveWithdrawal = async (traxId: string) => {
     });
     await batch.commit().then(
       async () => {
-        loading.value = false
-        notificationMessage.value = `Withdrawal for ${traxId} approved`;
-        showSuccess.value = true;
+        setLoading(false)
+        setNotificationMessage(`Withdrawal for ${traxId} approved`)
+        setshowSuccess(true)
       },
       (d) => {
-        loading.value = false
-        notificationMessage.value = `An error occured: ${d}`;
-        showError.value = true;
+        setLoading(false)
+        setNotificationMessage(`An error occured: ${d}`)
+        setshowFailure(true)
       }
     );
   } catch (error) {
-    loading.value = false
-    notificationMessage.value = `An error occured: ${error}`;
-    showError.value = true;
+    setLoading(false)
+    setNotificationMessage(`An error occured: ${error}`)
+    setshowFailure(true)
   }
 };
 const cancelWithdrawal = async (traxId: string) => {
@@ -138,7 +135,7 @@ const cancelWithdrawal = async (traxId: string) => {
   );
   const notSnapshot = await getDocs(notref);
   try {
-    loading.value = true
+    setLoading(true)
     querySnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Cancelled",
@@ -151,20 +148,20 @@ const cancelWithdrawal = async (traxId: string) => {
     });
     await batch.commit().then(
       () => {
-        loading.value = false
-        notificationMessage.value = `Withdrawal for ${traxId} cancelled`;
-        showSuccess.value = true;
+        setLoading(false)
+        setNotificationMessage(`Withdrawal for ${traxId} cancelled`)
+        setshowSuccess(true)
       },
       (d) => {
-        loading.value = false
-        notificationMessage.value = `An error occured: ${d}`;
-        showError.value = true;
+        setLoading(false)
+        setNotificationMessage(`An error occured: ${d}`)
+        setshowFailure(true)
       }
     );
   } catch (error) {
-    loading.value = false
-    notificationMessage.value = `An error occured: ${error}`;
-    showError.value = true;
+    setLoading(false)
+    setNotificationMessage(`An error occured: ${error}`)
+    setshowFailure(true)
   }
 };
 const open = async (index: number, e: MouseEvent) => {
