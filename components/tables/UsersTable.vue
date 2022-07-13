@@ -54,7 +54,7 @@ const showUserData = ref(false);
 const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: UsersTableData[] = [];
-const actionModalBoundingClient = ref(0)
+const actionModal = ref<HTMLDivElement | null>()
 const modalHeight = ref(0)
 const windowObject = ref<Window & typeof globalThis>(null)
 // states------------------------------------------------------------------------------
@@ -72,8 +72,8 @@ const selectRow = (user: UsersTableData) => {
 };
 
 const getHeight = async (e: MouseEvent) => {
-  console.log(window.innerHeight, actionModalBoundingClient.value, modalHeight.value)
-  const isAtBottom = (window.innerHeight - actionModalBoundingClient.value) < 100
+  console.log(window.innerHeight, actionModal.value, modalHeight.value)
+  const isAtBottom = (window.innerHeight - actionModal.value.getBoundingClientRect().bottom) < 100
   console.log(isAtBottom)
   topPos.value = isAtBottom ? e.pageY - modalHeight.value - 20 : e.pageY + 20;
   leftPos.value = e.pageX - 120;
@@ -221,7 +221,7 @@ watchEffect(() => {
 // lifecycle
 onMounted(() => {
   windowObject.value = window
-  actionModalBoundingClient.value = document.getElementById("actionModal").getBoundingClientRect().bottom
+  // actionModal.value = document.getElementById("actionModal")
   modalHeight.value = document.getElementById("actionModal").getBoundingClientRect().height
 })
 onUnmounted(() => {
@@ -452,6 +452,7 @@ onUnmounted(() => {
                       <div
                         v-if="show === index"
                         id="actionModal"
+                        :ref="actionModal"
                         :style="classObject"
                         class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl"
                       >
