@@ -8,7 +8,8 @@ export const useUserStore = defineStore('user', {
                 body: uid
             }))
             const message = data.value
-            console.log("store",message)
+            console.log(message)
+            return message
         },
         async enableUser(uid: string){
             const {data} = await useAsyncData('enable', () => $fetch('/api/enable', {
@@ -17,6 +18,7 @@ export const useUserStore = defineStore('user', {
             }))
             const message = data.value
             console.log(message)
+            return message
         },
         async deleteUser(uid: string){
             const {data} = await useAsyncData('delete', () => $fetch('/api/delete', {
@@ -25,6 +27,7 @@ export const useUserStore = defineStore('user', {
             }))
             const message = data.value
             console.log(message)
+            return message
         }
     }
 })
