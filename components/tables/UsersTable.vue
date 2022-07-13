@@ -72,8 +72,9 @@ const selectRow = (user: UsersTableData) => {
 };
 
 const getHeight = async (e: MouseEvent) => {
+  console.log(window.innerHeight, actionModalBoundingClient.value)
   const isAtBottom = (window.innerHeight - actionModalBoundingClient.value) < 100
-
+  console.log(isAtBottom)
   topPos.value = isAtBottom ? e.pageY - modalHeight.value - 20 : e.pageY + 20;
   leftPos.value = e.pageX - 120;
 
