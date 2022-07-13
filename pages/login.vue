@@ -19,12 +19,11 @@ const signin = async () => {
 };
 
 const signinForm = ref({ email: "", password: "" });
-watchEffect(() => {
-  if (firebaseUser) {
+watch(firebaseUser, (newVal) => {
+  setLoading(true)
+  if (newVal) {
     setLoading(false)
     router.push("/dashboard")
-  }else{
-    setLoading(true)
   }
 });
 
