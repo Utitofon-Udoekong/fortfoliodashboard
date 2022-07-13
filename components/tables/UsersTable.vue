@@ -240,6 +240,8 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="h-auto">
+    <Notifications :showError="showError" :showSuccess="showSuccess" :message="notificationMessage"/>
+    <Loader :loading="loading"/>
     <!-- SHOW USER DATA -->
     <div v-if="showUserData">
       <div

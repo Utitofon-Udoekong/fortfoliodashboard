@@ -15,7 +15,6 @@ const totalInvestments = computed(() => {
   }, 0)
   return amount
 })
-console.log(totalInvestments.value)
 const dueInvestmentAmount = computed(() => {
   const now = new Date().toISOString()
   const dueNow = investments.value.filter(
@@ -57,7 +56,6 @@ const stop = watchEffect(() => {
         investments.value = investments.value.filter((x) => x.traxId != change.doc.data()["traxId"])
       }
     });
-    console.log("inv",investments.value)
   });
 })
 const stop2 = watchEffect(() => {
@@ -67,14 +65,10 @@ const stop2 = watchEffect(() => {
       if (change.type === "added") {
           snapUsers(change.doc.data());
       }
-      if (change.type === "modified") {
-        users.value = users.value.map((x: { traxId: string; }) => (x.traxId === change.doc.data()["traxId"]) ? change.doc.data() : x)
-      }
       if (change.type === "removed") {
         users.value = users.value.filter((x) => x.traxId != change.doc.data()["traxId"])
       }
     });
-    console.log("users",users.value)
   });
 })
 
