@@ -9,23 +9,15 @@ const userCount = computed(() => {
 })
 const snapinvestments = (snap) => investments.value.push(snap)
 const snapUsers = (snap) => users.value.push(snap)
-const totalInvestments = computed(() => {
-  const amount = investments.value.reduce((acc, inv) => {
+const totalInvestments = investments.value.reduce((acc, inv) => {
     return acc + (inv.description.includes("FortShield")? inv.amount / 590 : inv.amount);
   }, 0)
-  return amount
-})
 console.log(totalInvestments.value)
-const dueInvestmentAmount = computed(() => {
-  const now = new Date().toISOString()
-  const dueNow = investments.value.filter(
-    (inv) => new Date(inv.dueDate.slice(0,10)).toString() === new Date(now.slice(0,10)).toString()
-  );
-  const totaldue = dueNow.reduce((acc, inv) => {
+const dueInvestmentAmount = investments.value.filter(
+    (inv) => new Date(inv.dueDate.slice(0,10)).toString() === new Date(new Date().toISOString().slice(0,10)).toString()
+  ).reduce((acc, inv) => {
     return acc + (inv.description.includes("FortShield") ? inv.amount / 590 : inv.amount) + inv.planYield;
   },0)
-  return totaldue
-})
 const details = [
   {
     url: "users",
