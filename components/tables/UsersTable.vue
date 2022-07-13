@@ -196,7 +196,7 @@ let classObject = computed(() => {
 });
 
 watchEffect(() => {
-  const q = query(collection($firestore, "authUsers"), where("status","==", "Enabled"), where("status","==", "Disabled"));
+  const q = query(collection($firestore, "authUsers"), where("status","!=", "Deleted"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
@@ -208,7 +208,7 @@ watchEffect(() => {
       }
       if (change.type === "modified") {
         usersData.value = usersData.value.map((x: { id: any; }) => (x.id === change.doc.data()["id"]) ? change.doc.data() : x)
-      }
+      }  
       if (change.type === "removed") {
         usersData.value = usersData.value.filter((x) => x.id != change.doc.data()["id"])
       }
@@ -221,7 +221,7 @@ watchEffect(() => {
 
 // lifecycle
 onUnmounted(() => {
-  const q = query(collection($firestore, "authUsers"), where("status","==", "Enabled"), where("status","==", "Disabled"));
+  const q = query(collection($firestore, "authUsers"), where("status","!=", "Deleted"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
     
   });
