@@ -26,12 +26,12 @@ const details = [
   },
   {
     url: "chart",
-    numbers: `$${totalInvestments.value.toLocaleString('en-US', {minimumFractionDigits: 2})}`,
+    numbers: `$${totalInvestments.toLocaleString('en-US', {minimumFractionDigits: 2})}`,
     title: "Total investment",
   },
   {
     url: "graph",
-    numbers: `$${dueInvestmentAmount.value.toLocaleString('en-US', {minimumFractionDigits: 2})}`,
+    numbers: `$${dueInvestmentAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}`,
     title: "Total due investment",
   },
 ];
