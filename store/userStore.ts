@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', () => {
     const setLoading = (val: boolean) => loading.value = val
     const setshowFailure = (val: boolean) => showFailure.value = val
     const setshowSuccess = (val: boolean) => showSuccess.value = val
+    const setNotificationMessage = (val: string) => notificationMessage.value = val
 
     const enableUser = async (uid: string) => {
         loading.value = true
@@ -73,6 +74,7 @@ export const useUserStore = defineStore('user', () => {
         setLoading,
         setshowFailure,
         setshowSuccess,
+        setNotificationMessage,
         enableUser,
         disableUser,
         deleteUser

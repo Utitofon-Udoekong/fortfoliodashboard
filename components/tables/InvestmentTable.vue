@@ -15,7 +15,7 @@ import formatter from "~~/helpers/formatIsoDate";
 import { useUserStore } from "~~/store/userStore";
 const { $firestore } = useNuxtApp();
 const batch = writeBatch($firestore);
-const {showFailure, showSuccess, loading, setLoading} = useUserStore()
+const {setshowFailure, setshowSuccess, setLoading, setNotificationMessage} = useUserStore()
 
 // states
 const columns = [
@@ -79,7 +79,7 @@ const cancelInvestment = async (traxId: string) => {
   const querySnapshot = await getDocs(ref);
   const notifiSnap = await getDocs(notificationRef)
   try {
-    loading.value = true
+    setLoading(true)
     querySnapshot.forEach((doc) => {
       batch.update(doc.ref, {
         status: "Cancelled",
@@ -92,20 +92,20 @@ const cancelInvestment = async (traxId: string) => {
     });
     await batch.commit().then(
       async () => {
-        loading.value = false
-        notificationMessage.value = `Investment for ${traxId} cancelled`;
-        showSuccess.value = true;
+        setLoading(false)
+        setNotificationMessage(`Investment for ${traxId} cancelled`)
+        setshowSuccess(true)
       },
       (d) => {
-        loading.value = false
-        notificationMessage.value = `An error occured: ${d}`;
-        showError.value = true;
+        setLoading(false)
+        setNotificationMessage(`An error occured: ${d}`)
+        setshowFailure(true)
       }
     );
   } catch (error) {
-    loading.value = false
-    notificationMessage.value = `An error occured: ${error}`;
-    showError.value = true;
+    setLoading(false)
+    setNotificationMessage(`An error occured: ${error}`)
+    setshowFailure(true)
   }
 };
 
@@ -119,7 +119,7 @@ const approveInvestment = async (traxId: string) => {
     where('id','==',traxId)
   )
   try {
-    loading.value = true
+    setLoading(true)
     const querySnapshot = await getDocs(ref);
     const notifiSnap = await getDocs(notificationRef)
     querySnapshot.forEach((doc) => {
@@ -134,20 +134,20 @@ const approveInvestment = async (traxId: string) => {
     });
     await batch.commit().then(
       async () => {
-        loading.value = false
-        notificationMessage.value = `Investment for ${traxId} Approved`;
-        showSuccess.value = true;
+        setLoading(false)
+        setNotificationMessage(`Investment for ${traxId} Approved`)
+        setshowSuccess(true)
       },
       (d) => {
-        loading.value = false
-        notificationMessage.value = `An error occured: ${d}`;
-        showError.value = true;
+        setLoading(false)
+        setNotificationMessage(`An error occured: ${d}`)
+        setshowFailure(true)
       }
     );
   } catch (error) {
-    loading.value = false
-    notificationMessage.value = `An error occured: ${error}`;
-    showError.value = true;
+    setLoading(false)
+    setNotificationMessage(`An error occured: ${error}`)
+    setshowFailure(true)
   }
 };
 
