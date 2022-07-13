@@ -385,7 +385,7 @@ onUnmounted(() => {
                 <tbody class="bg-white divide-y divide-gray-200">
                   <tr
                     v-for="(data, index) in tableData"
-                    :key="index"
+                    :key="data.id"
                     :class="[ 'hover:bg-gray-300 cursor-pointer',
                     {'bg-[#ffe9ab]': data.status === 'Disabled'} ]"
                   >

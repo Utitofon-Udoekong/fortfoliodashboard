@@ -2,16 +2,21 @@ import { db, auth } from "~~/helpers/fireadmin";
 
 export default defineEventHandler(async (event) => {
     const uid: string = await useBody(event)
-    let message = ""
-    await db.collection("authUsers").doc(uid).update({
-        status: "Enabled"
-    }).then(async () => {
-        await auth.updateUser(uid, {
-            disabled: false,
-        })
-        message = "Successfully enabled user"
-    }).catch((error) => {
-        message = "Error enabling user " + error
-    })
+    const isDisabled: boolean = (await auth.getUser(uid)).disabled
+    let message = "User already enabled"
+    if(isDisabled){
+        try{
+            await auth.updateUser(uid, {
+                disabled: false,
+            })
+            await db.collection("authUsers").doc(uid).update({
+                status: "Enabled"
+            })
+            message = "Successfully enabled user"
+        }catch(e){
+            message = "Error enabling user " + e
+        }
+
+    }
     return message
 })
