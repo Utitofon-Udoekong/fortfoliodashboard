@@ -2,7 +2,7 @@ import { auth, db } from "~~/helpers/fireadmin";
 
 export default defineEventHandler(async (event) => {
     const uid = await useBody(event)
-    await db.collection("authUsers").doc(uid).update({
+    await db.collection("authUsers").doc(`${uid}`).update({
         status: "Disabled"
     })
     return 'Successfully disabled user'
