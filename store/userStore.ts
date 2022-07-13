@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 export const useUserStore = defineStore('user', {
     actions: {        
         async disableUser(uid: string){
+            console.log(uid)
             const {data} = await useAsyncData('disable', () => $fetch('/api/disable', {
                 method: "POST",
                 body: {uid}
