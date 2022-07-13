@@ -54,7 +54,7 @@ const showUserData = ref(false);
 const topPos = ref(0);
 const leftPos = ref(0);
 let editableUser: UsersTableData[] = [];
-const actionModal = ref<HTMLDivElement | null>()
+const actionModal = ref<HTMLDivElement | null>(null)
 const modalHeight = ref(0)
 const windowObject = ref<Window & typeof globalThis>(null)
 // states------------------------------------------------------------------------------
@@ -221,7 +221,7 @@ watchEffect(() => {
 // lifecycle
 onMounted(() => {
   windowObject.value = window
-  // actionModal.value = document.getElementById("actionModal")
+  console.log(actionModal.value)
   modalHeight.value = document.getElementById("actionModal").getBoundingClientRect().height
 })
 onUnmounted(() => {
@@ -452,7 +452,7 @@ onUnmounted(() => {
                       <div
                         v-if="show === index"
                         id="actionModal"
-                        :ref="actionModal"
+                        ref="actionModal"
                         :style="classObject"
                         class="fixed z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-xl"
                       >
