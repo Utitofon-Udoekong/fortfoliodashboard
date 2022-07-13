@@ -430,9 +430,9 @@ onUnmounted(() => {
                         :class="
                           data.status === 'Enabled'
                             ? 'text-brand-green'
-                            : 'text-yellow-500'
+                            : 'text-yellow-900'
                         "
-                        class="text-sm flex"
+                        class="text-sm flex font-semibold"
                         >{{ data.status }}</span
                       >
                     </td>
