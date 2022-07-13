@@ -1,50 +1,30 @@
 <script setup lang="ts">
+import { useUserStore } from "~~/store/userStore";
 import AuthFirebase from "../components/AuthFirebase.vue";
 const router = useRouter();
 const firebaseUser = useFirebaseUser()
-const showError = ref(false);
-const showSuccess = ref(false);
-const notificationMessage = ref("");
-const loading = ref(false);
-const loadingEvent = (e) => (loading.value = e);
+const {setLoading, setshowSuccess, setshowFailure, setNotificationMessage} = useUserStore()
+const loadingEvent = (e: boolean) => (setLoading(e));
 const signin = async () => {
   await signInUser(signinForm.value.email, signinForm.value.password)
     .then(async (_) => {
-      showSuccess.value = true;
-      notificationMessage.value = "Login successful";
+      setshowSuccess(true)
+      setNotificationMessage("Login successful")
     })
     .catch((error) => {
-      notificationMessage.value = error;
-      showError.value = true;
+      setNotificationMessage(error)
+      setshowFailure(true)
     });
   signinForm.value = { email: "", password: "" };
 };
 
 const signinForm = ref({ email: "", password: "" });
-
-watch(showError, (newVal) => {
-  if (newVal === true) {
-    loading.value = false
-    setTimeout(() => {
-      showError.value = false;
-    }, 1500);
-  }
-});
-
-watch(showSuccess, (newVal) => {
-  loading.value = false
-  if (newVal === true) {
-    setTimeout(() => {
-      showSuccess.value = false;
-    }, 1500);
-  }
-});
-watch(firebaseUser, (newVal) => {
-  if (newVal) {
-    loading.value = false
+watchEffect(() => {
+  if (firebaseUser) {
+    setLoading(false)
     router.push("/dashboard")
   }else{
-    loading.value = false
+    setLoading(true)
   }
 });
 
@@ -52,12 +32,8 @@ watch(firebaseUser, (newVal) => {
 
 <template>
   <div>
-    <Notifications
-      :showError="showError"
-      :showSuccess="showSuccess"
-      :message="notificationMessage"
-    />
-    <Loader :loading="loading" />
+    <Notifications />
+    <Loader />
     <div class="h-screen">
       <Html>
         <Head>
