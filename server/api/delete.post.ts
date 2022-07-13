@@ -1,13 +1,13 @@
 import { db, auth } from "~~/helpers/fireadmin";
 
 export default defineEventHandler(async (event) => {
-    const uid = await useBody(event)
-    await auth
-            .deleteUser(`${uid}`)
-            .then(async () => {
-                await db.collection("authUsers").doc(`${uid}`).delete().then(() => 'Successfully deleted user')
-            })
-            .catch((error) => {
-                return `Error deleting user: ${error}`
-            });
+    const uid: string = await useBody(event)
+    let message = ""
+    await db.collection("authUsers").doc(uid).delete().then(async () => {
+        await auth.deleteUser(uid)
+        message = "Successfully deleted user"
+    }).catch((error) => {
+        message = "Error deleting user " + error
+    })
+    return message
 })
