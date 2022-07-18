@@ -22,6 +22,8 @@ exports.scheduleInvestments = functions.pubsub.schedule('0 0 * * *')
         querySnapshot.forEach(doc => {
           const documentData = doc.data()
           const amountInvested = documentData["amount"] ?? 0
+          const userId = documentData["refId"]
+          const userRef = firestore.collection("authUsers").doc(userId)
           const roi = documentData["roi"] ?? 0
           const duration = documentData["duration"]
           const numberOfDays = documentData["numberOfDays"]
@@ -31,6 +33,9 @@ exports.scheduleInvestments = functions.pubsub.schedule('0 0 * * *')
           const dueDate = documentData["dueDate"]
           if (new Date(now.slice(0, 10)) < new Date(dueDate.slice(0, 10)) || new Date(now.slice(0, 10)).toString() === new Date(dueDate.slice(0, 10)).toString()) {
             batch.update(doc.ref, { planYield: admin.firestore.FieldValue.increment(returnsPerDay) });
+            if(new Date(now.slice(0, 10)).toString() === new Date(dueDate.slice(0, 10)).toString()){
+              batch.update(userRef, {balance: admin.firestore.FieldValue.increment(documentData["planYield"])})
+            }
           } else {
             return null;
           }

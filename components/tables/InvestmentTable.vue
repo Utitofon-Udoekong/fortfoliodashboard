@@ -109,7 +109,7 @@ const cancelInvestment = async (traxId: string) => {
   }
 };
 
-const approveInvestment = async (traxId: string) => {
+const approveInvestment = async (traxId: string, userId: string, amount: number) => {
   const ref = query(
     collectionGroup($firestore, "investments"),
     where("traxId", "==", traxId)
@@ -118,6 +118,7 @@ const approveInvestment = async (traxId: string) => {
     collectionGroup($firestore, 'notifications'),
     where('id','==',traxId)
   )
+  const userRef = doc($firestore, "authUsers", userId)
   try {
     setLoading(true)
     const querySnapshot = await getDocs(ref);
@@ -132,6 +133,7 @@ const approveInvestment = async (traxId: string) => {
         status: "Successful",
       });
     });
+    batch.update(userRef, {balance: amount})
     await batch.commit().then(
       async () => {
         setLoading(false)
@@ -572,7 +574,7 @@ onUnmounted(() => {
                             href="#"
                             class="block py-2 px-4 text-sm text-black hover:bg-gray-100 cursor-pointer"
                             @click="
-                              approveInvestment(investments.traxId),
+                              approveInvestment(investments.traxId, investments.refId, investments.amount),
                                 open(index, $event)
                             "
                           >
